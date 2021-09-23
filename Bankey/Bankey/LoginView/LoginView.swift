@@ -15,11 +15,8 @@ class LoginView: UIView {
     let passwordTextField = UITextField()
     let dividerView = UIView()
     
-    let signInButton = UIButton(type: .system)
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         style()
         layout()
     }
@@ -35,7 +32,7 @@ class LoginView: UIView {
 
 extension LoginView {
     
-    func style() {
+    private func style() {
         translatesAutoresizingMaskIntoConstraints = false
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -53,35 +50,23 @@ extension LoginView {
         passwordTextField.placeholder = "Password"
         passwordTextField.delegate = self
                 
-        signInButton.translatesAutoresizingMaskIntoConstraints = false
-        signInButton.configuration = .filled()
-        signInButton.setTitle("Sign In", for: [])
-        
         layer.cornerRadius = 5
         clipsToBounds = true
     }
     
-    func layout() {
+    private func layout() {
         stackView.addArrangedSubview(usernameTextField)
         stackView.addArrangedSubview(dividerView)
         stackView.addArrangedSubview(passwordTextField)
 
         addSubview(stackView)
-        addSubview(signInButton)
         
         // StackView
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
             stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
             trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 1),
-        ])
-        
-        // Button
-        NSLayoutConstraint.activate([
-            signInButton.topAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 1),
-            signInButton.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
-            trailingAnchor.constraint(equalToSystemSpacingAfter: signInButton.trailingAnchor, multiplier: 1),
-            bottomAnchor.constraint(equalToSystemSpacingBelow: signInButton.bottomAnchor, multiplier: 1),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 1)
         ])
         
         dividerView.heightAnchor.constraint(equalToConstant: 1).isActive = true
