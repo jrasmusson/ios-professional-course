@@ -50,7 +50,7 @@ extension LoginView {
         passwordTextField.delegate = self
         
         dividerView.translatesAutoresizingMaskIntoConstraints = false
-        dividerView.backgroundColor = .systemGray5
+        dividerView.backgroundColor = .secondarySystemFill
         
         layer.cornerRadius = 5
         clipsToBounds = true

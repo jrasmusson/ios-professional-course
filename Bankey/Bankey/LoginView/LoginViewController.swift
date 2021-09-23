@@ -7,20 +7,23 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class LoginViewController: UIViewController {
 
     let loginView = LoginView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .secondarySystemFill
+        
         loginView.translatesAutoresizingMaskIntoConstraints = false
+        loginView.backgroundColor = .white
         
         view.addSubview(loginView)
         
         NSLayoutConstraint.activate([
-            loginView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
-            view.trailingAnchor.constraint(equalToSystemSpacingAfter: loginView.trailingAnchor, multiplier: 1),
+            loginView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: loginView.trailingAnchor, multiplier: 2),
             view.centerYAnchor.constraint(equalTo: loginView.centerYAnchor),
         ])
     }
