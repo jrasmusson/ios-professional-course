@@ -96,6 +96,8 @@ extension LoginView: UITextFieldDelegate {
             print(username)
         }
         
-        usernameTextField.text = ""
+//        usernameTextField.text = ""
     }
 }
+
+// U R HERE figure out how to get username and password...you may have created a video on this in combine
