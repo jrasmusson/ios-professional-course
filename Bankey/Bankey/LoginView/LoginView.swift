@@ -48,6 +48,7 @@ extension LoginView {
 
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         passwordTextField.placeholder = "Password"
+        passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
                 
         layer.cornerRadius = 5

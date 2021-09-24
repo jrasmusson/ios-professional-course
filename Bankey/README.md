@@ -153,7 +153,7 @@ extension LoginViewController {
         view.backgroundColor = .secondarySystemFill
         
         loginView.translatesAutoresizingMaskIntoConstraints = false
-        loginView.backgroundColor = .white
+        loginView.backgroundColor = .systemBackground
 
         signInButton.translatesAutoresizingMaskIntoConstraints = false
         signInButton.configuration = .filled()
@@ -206,7 +206,7 @@ Add the error message
         
         errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
         errorMessageLabel.textAlignment = .center
-        errorMessageLabel.textColor = .red
+        errorMessageLabel.textColor = .systemRed
         errorMessageLabel.numberOfLines = 0
         errorMessageLabel.isHidden = true
     }
@@ -266,18 +266,58 @@ extension LoginViewController {
 - Discuss `assertionFailure`.
 - Discuss activity indicator
 
-### Adding a gradient
+### Adding titles
+
+- Excersise for reader
+- Setup variables `titleLabel` `subtitleLabel`.
 
 **LoginViewController**
 
 ```swift
-let gradientLayer = CAGradientLayer()
+    let titleLabel = UILabel()
+    let subtitleLabel = UILabel()
 
-gradientLayer.frame = view.bounds
-gradientLayer.colors = [UIColor.systemTeal.cgColor, UIColor.systemBlue.cgColor]
-gradientLayer.zPosition = -1
-gradientLayer.startPoint = CGPoint(x: 0.07, y: -0.15)
-gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.25)
+titleLabel.translatesAutoresizingMaskIntoConstraints = false
+titleLabel.textAlignment = .center
+titleLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+titleLabel.adjustsFontForContentSizeCategory = true
 
-view.layer.addSublayer(gradientLayer)
+subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+subtitleLabel.textAlignment = .center
+subtitleLabel.font = UIFont.preferredFont(forTextStyle: .title1)
+subtitleLabel.adjustsFontForContentSizeCategory = true
 ```
+
+```swift
+private func layout() {
+    view.addSubview(titleLabel)
+    view.addSubview(subtitleLabel)
+
+    // Title
+    NSLayoutConstraint.activate([
+        subtitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: titleLabel.bottomAnchor, multiplier: 3),
+        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+    ])
+    
+    // Subtitle
+    NSLayoutConstraint.activate([
+        loginView.topAnchor.constraint(equalToSystemSpacingBelow: subtitleLabel.bottomAnchor, multiplier: 3),
+        subtitleLabel.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
+        subtitleLabel.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
+    ])
+}
+```
+
+- Let them try. Show what you want.
+
+### Discussion
+
+This is a bit tricker than it looks because we want the labels to group nicely with the `loginView` in the middel.
+
+So instead of pinning to the top, we pin relative to the `loginView` in the middle. Starting with the subtitle.
+
+
+
+
+
+

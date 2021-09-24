@@ -9,10 +9,12 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    let titleLabel = UILabel()
+    let subtitleLabel = UILabel()
+    
     let loginView = LoginView()
     let signInButton = UIButton(type: .system)
     let errorMessageLabel = UILabel()
-    let gradientLayer = CAGradientLayer()
     
     var username: String? {
         return loginView.usernameTextField.text
@@ -32,10 +34,23 @@ class LoginViewController: UIViewController {
 extension LoginViewController {
     
     private func style() {
-        view.backgroundColor = .secondarySystemFill
+        view.backgroundColor = .systemBackground
         
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.text = "Bankey"
+
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .title3)
+        subtitleLabel.adjustsFontForContentSizeCategory = true
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.text = "Your premium source for all things banking!"
+
         loginView.translatesAutoresizingMaskIntoConstraints = false
-        loginView.backgroundColor = .white
+        loginView.backgroundColor = .secondarySystemBackground
 
         signInButton.translatesAutoresizingMaskIntoConstraints = false
         signInButton.configuration = .filled()
@@ -45,23 +60,31 @@ extension LoginViewController {
         
         errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
         errorMessageLabel.textAlignment = .center
-        errorMessageLabel.textColor = .red
+        errorMessageLabel.textColor = .systemRed
         errorMessageLabel.numberOfLines = 0
         errorMessageLabel.isHidden = true
-        
-        gradientLayer.frame = view.bounds
-        gradientLayer.colors = [UIColor.systemTeal.cgColor, UIColor.systemBlue.cgColor]
-        gradientLayer.zPosition = -1
-        gradientLayer.startPoint = CGPoint(x: 0.07, y: -0.15)
-        gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.25)
     }
     
     private func layout() {
+        view.addSubview(titleLabel)
+        view.addSubview(subtitleLabel)
         view.addSubview(loginView)
         view.addSubview(signInButton)
         view.addSubview(errorMessageLabel)
-        view.layer.addSublayer(gradientLayer)
 
+        // Title
+        NSLayoutConstraint.activate([
+            subtitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: titleLabel.bottomAnchor, multiplier: 3),
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+        
+        // Subtitle
+        NSLayoutConstraint.activate([
+            loginView.topAnchor.constraint(equalToSystemSpacingBelow: subtitleLabel.bottomAnchor, multiplier: 3),
+            subtitleLabel.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
+            subtitleLabel.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
+        ])
+        
         // Login
         NSLayoutConstraint.activate([
             loginView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
