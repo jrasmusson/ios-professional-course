@@ -197,9 +197,24 @@ extension LoginView {
 ![](images/5.png)
 
 
-### Adding remaining elements and rounding corners
+### Challenge: Add password field
 
-	- Add password field
+Get students to add `passwordTextField` to view embedded in stackview just like `usernameTextField`.
+
+```swift
+let passwordTextField = UITextField()
+
+passwordTextField.translatesAutoresizingMaskIntoConstraints = false
+passwordTextField.placeholder = "Password"
+passwordTextField.isSecureTextEntry = true
+passwordTextField.delegate = self
+
+stackView.addArrangedSubview(passwordTextField)
+```
+
+
+
+
 	- Add divider
 		- Show other way constraint can be added `isActive`
 	- Round corners
