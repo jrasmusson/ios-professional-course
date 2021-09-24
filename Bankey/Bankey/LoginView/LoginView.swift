@@ -79,6 +79,7 @@ extension LoginView: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         usernameTextField.endEditing(true)
+        passwordTextField.endEditing(true)
         return true
     }
     
@@ -86,7 +87,6 @@ extension LoginView: UITextFieldDelegate {
         if textField.text != "" {
             return true
         } else {
-            textField.placeholder = "Enter username here..."
             return false
         }
     }
@@ -95,9 +95,5 @@ extension LoginView: UITextFieldDelegate {
         if let username = usernameTextField.text {
             print(username)
         }
-        
-//        usernameTextField.text = ""
     }
 }
-
-// U R HERE figure out how to get username and password...you may have created a video on this in combine
