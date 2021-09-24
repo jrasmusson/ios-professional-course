@@ -6,12 +6,103 @@ A canonical banking app for iOS developers.
 
 ### Create the UI
 
-- Create a new project
+- Create a new project `Bankey`
 - Remove story boards
+  - Code snippets
 - Rename `ViewController` to `LoginViewController`
+ - Use built in Xcode refactoring  
 - Create a `LoginView`
-	- Start with just empty `UIView` orange background
-	- Add single `textfield` and delegate
+   - Create a `Files` directory
+   - Create a `Login` directory
+
+Create `LoginView` use snippet
+
+- explain what's going on with `UIVIew`
+- Start with just empty `UIView` orange background
+
+
+**Loginview**
+
+```swift
+import Foundation
+import UIKit
+
+class LoginView: UIView {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        style()
+        layout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: 200, height: 200)
+    }
+}
+
+extension LoginView {
+    
+    func style() {
+        translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = .orange
+    }
+    
+    func layout() {
+        
+    }
+}
+```
+
+**LoginViewController**
+
+```swift
+//
+//  ViewController.swift
+//  Test1
+//
+//  Created by jrasmusson on 2021-09-24.
+//
+
+import UIKit
+
+class LoginViewController: UIViewController {
+
+    let loginView = LoginView()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        style()
+        layout()
+    }
+}
+
+extension LoginViewController {
+    private func style() {
+        loginView.translatesAutoresizingMaskIntoConstraints = false
+        
+    }
+    
+    private func layout() {
+        view.addSubview(loginView)
+        
+        NSLayoutConstraint.activate([
+            loginView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            loginView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: loginView.trailingAnchor, multiplier: 1)
+        ])
+    }
+}
+```
+
+Add single `textfield` and delegate
+
+
+
 	- Then embed within `stackView`
 	- Add password field
 	- Add divider
