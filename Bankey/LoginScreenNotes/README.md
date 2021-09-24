@@ -15,6 +15,7 @@ A canonical banking app for iOS developers.
    - Create a `Files` directory
    - Create a `Login` directory
 
+### Plain UIView
 Create `LoginView` use snippet
 
 - explain what's going on with `UIVIew`
@@ -99,6 +100,8 @@ extension LoginViewController {
 }
 ```
 
+### Adding a textfield
+
 Add single `textfield` and delegate
 
 - Comment on how nice it is to access anchors directly compared to view controller
@@ -158,12 +161,44 @@ extension LoginView: UITextFieldDelegate {
 
 ![](images/4.png)
 
-Not bad. But we see that what the layout really needs is a stack view. So let's add that.
+### Embedding in a stack view
+
+Not bad. But these elements would fit nicely in a `UIStackView`. Let's try that.
+
+```swift
+class LoginView: UIView {
+    
+    let stackView = UIStackView()
+```
+
+```swift
+extension LoginView {
+    
+    func style() {        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 8
+    }
+
+    func layout() {
+        stackView.addArrangedSubview(usernameTextField)
+        addSubview(stackView)
+        
+        // StackView
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
+            stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 1),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 1)
+        ])
+    }
+```
+
+![](images/5.png)
 
 
+### Adding remaining elements and rounding corners
 
-
-	- Then embed within `stackView`
 	- Add password field
 	- Add divider
 		- Show other way constraint can be added `isActive`
