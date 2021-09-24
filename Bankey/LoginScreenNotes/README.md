@@ -212,7 +212,15 @@ passwordTextField.delegate = self
 stackView.addArrangedSubview(passwordTextField)
 ```
 
+![](images/6.png)
 
+## Getting rid of intrinsic content size
+
+Now that we have our elements embedded in a stack view, and each has their own intrinsic content size, our view itself doesn't need to override. Can delete.
+
+Explain what intrinisc content size is, and how it works. To learn more about it and autolayout in general consider taking my [Auto Layout Course](https://www.udemy.com/course/level-up-in-swift/?referralCode=BBCF1340150A86E7F6C4).
+
+ 
 
 
 	- Add divider
