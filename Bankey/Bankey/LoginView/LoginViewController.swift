@@ -50,7 +50,6 @@ extension LoginViewController {
         subtitleLabel.text = "Your premium source for all things banking!"
 
         loginView.translatesAutoresizingMaskIntoConstraints = false
-        loginView.backgroundColor = .secondarySystemBackground
 
         signInButton.translatesAutoresizingMaskIntoConstraints = false
         signInButton.configuration = .filled()
@@ -85,7 +84,7 @@ extension LoginViewController {
             subtitleLabel.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
         ])
         
-        // Login
+        // LoginView
         NSLayoutConstraint.activate([
             loginView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: loginView.trailingAnchor, multiplier: 2),

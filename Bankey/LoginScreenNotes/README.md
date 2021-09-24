@@ -220,20 +220,48 @@ Now that we have our elements embedded in a stack view, and each has their own i
 
 Explain what intrinisc content size is, and how it works. To learn more about it and autolayout in general consider taking my [Auto Layout Course](https://www.udemy.com/course/level-up-in-swift/?referralCode=BBCF1340150A86E7F6C4).
 
- 
+![](images/7.png)
 
+## Add a divider
 
-	- Add divider
-		- Show other way constraint can be added `isActive`
-	- Round corners
-	
+Add a one point divider like this.
+
+```swift
+let dividerView = UIView()
+
+dividerView.translatesAutoresizingMaskIntoConstraints = false
+dividerView.backgroundColor = .secondarySystemFill
+
+stackView.addArrangedSubview(dividerView)
+
+dividerView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+```
+
+Explain that last constraint `isActive` and how the array works.
+
+Let's also change our background color.
+
+```swift
+backgroundColor = .secondarySystemBackground
+```
+
+![](images/8.png)
+
+## Round the corners
+
+```swift
+layer.cornerRadius = 5
+clipsToBounds = true
+```	
+
+At this point our `LoginView` should look like this.
 	
 ```swift
 //
 //  LoginView.swift
-//  Bankey
+//  Test1
 //
-//  Created by jrasmusson on 2021-09-23.
+//  Created by jrasmusson on 2021-09-24.
 //
 
 import Foundation
@@ -248,6 +276,7 @@ class LoginView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         style()
         layout()
     }
@@ -255,16 +284,13 @@ class LoginView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric)
-    }
 }
 
 extension LoginView {
     
-    private func style() {
+    func style() {
         translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = .secondarySystemBackground
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -273,23 +299,23 @@ extension LoginView {
         usernameTextField.translatesAutoresizingMaskIntoConstraints = false
         usernameTextField.placeholder = "Username"
         usernameTextField.delegate = self
-
+        
         dividerView.translatesAutoresizingMaskIntoConstraints = false
         dividerView.backgroundColor = .secondarySystemFill
 
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         passwordTextField.placeholder = "Password"
+        passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
-                
+        
         layer.cornerRadius = 5
         clipsToBounds = true
     }
     
-    private func layout() {
+    func layout() {
         stackView.addArrangedSubview(usernameTextField)
         stackView.addArrangedSubview(dividerView)
         stackView.addArrangedSubview(passwordTextField)
-
         addSubview(stackView)
         
         // StackView
@@ -305,12 +331,10 @@ extension LoginView {
 }
 
 // MARK: - UITextFieldDelegate
-
 extension LoginView: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         usernameTextField.endEditing(true)
-        passwordTextField.endEditing(true)
         return true
     }
     
@@ -323,74 +347,50 @@ extension LoginView: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if let username = usernameTextField.text {
-            print(username)
-        }
     }
 }
 ```
 
-Switch to `LoginViewController`.
+![](images/9.png)
 
-- add `signInButton`
+
+### SignIn Button Challenge
+
+Switch to `LoginViewController`. Here is the sign-in button we want to add.
+
+**LoginViewController**
 
 ```swift
-//
-//  ViewController.swift
-//  Bankey
-//
-//  Created by jrasmusson on 2021-09-23.
-//
+let signInButton = UIButton(type: .system)
 
-import UIKit
+signInButton.translatesAutoresizingMaskIntoConstraints = false
+signInButton.configuration = .filled()
+signInButton.configuration?.imagePadding = 8 // for indicator spacing
+signInButton.setTitle("Sign In", for: [])
+signInButton.addTarget(self, action: #selector(signInTapped), for: .primaryActionTriggered)
 
-class LoginViewController: UIViewController {
+view.addSubview(signInButton)
 
-    let loginView = LoginView()
-    let signInButton = UIButton(type: .system)
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        style()
-        layout()
-    }
-}
-
+// MARK: Actions
 extension LoginViewController {
-    
-    private func style() {
-        view.backgroundColor = .secondarySystemFill
-        
-        loginView.translatesAutoresizingMaskIntoConstraints = false
-        loginView.backgroundColor = .systemBackground
-
-        signInButton.translatesAutoresizingMaskIntoConstraints = false
-        signInButton.configuration = .filled()
-        signInButton.setTitle("Sign In", for: [])
-    }
-    
-    private func layout() {
-        view.addSubview(loginView)
-        view.addSubview(signInButton)
-        
-        // Login
-        NSLayoutConstraint.activate([
-            loginView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
-            view.trailingAnchor.constraint(equalToSystemSpacingAfter: loginView.trailingAnchor, multiplier: 2),
-            view.centerYAnchor.constraint(equalTo: loginView.centerYAnchor),
-        ])
-        
-        // Button
-        NSLayoutConstraint.activate([
-            signInButton.topAnchor.constraint(equalToSystemSpacingBelow: loginView.bottomAnchor, multiplier: 2),
-            signInButton.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
-            signInButton.trailingAnchor.constraint(equalTo: loginView.trailingAnchor),
-        ])
+    @objc func signInTapped(sender: UIButton) {
     }
 }
 ```
 
-![](images/0.png)
+See if you can position this button x2 multiplers beneath the `loginView` and the same width. 
+
+```swift
+// Button
+NSLayoutConstraint.activate([
+    signInButton.topAnchor.constraint(equalToSystemSpacingBelow: loginView.bottomAnchor, multiplier: 2),
+    signInButton.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
+    signInButton.trailingAnchor.constraint(equalTo: loginView.trailingAnchor),
+])
+```
+
+![](images/10.png)
+
 
 ### Handle login
 
