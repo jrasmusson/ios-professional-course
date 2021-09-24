@@ -267,3 +267,17 @@ extension LoginViewController {
 - Discuss activity indicator
 
 ### Adding a gradient
+
+**LoginViewController**
+
+```swift
+let gradientLayer = CAGradientLayer()
+
+gradientLayer.frame = view.bounds
+gradientLayer.colors = [UIColor.systemTeal.cgColor, UIColor.systemBlue.cgColor]
+gradientLayer.zPosition = -1
+gradientLayer.startPoint = CGPoint(x: 0.07, y: -0.15)
+gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.25)
+
+view.layer.addSublayer(gradientLayer)
+```

@@ -12,6 +12,7 @@ class LoginViewController: UIViewController {
     let loginView = LoginView()
     let signInButton = UIButton(type: .system)
     let errorMessageLabel = UILabel()
+    let gradientLayer = CAGradientLayer()
     
     var username: String? {
         return loginView.usernameTextField.text
@@ -47,13 +48,20 @@ extension LoginViewController {
         errorMessageLabel.textColor = .red
         errorMessageLabel.numberOfLines = 0
         errorMessageLabel.isHidden = true
+        
+        gradientLayer.frame = view.bounds
+        gradientLayer.colors = [UIColor.systemTeal.cgColor, UIColor.systemBlue.cgColor]
+        gradientLayer.zPosition = -1
+        gradientLayer.startPoint = CGPoint(x: 0.07, y: -0.15)
+        gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.25)
     }
     
     private func layout() {
         view.addSubview(loginView)
         view.addSubview(signInButton)
         view.addSubview(errorMessageLabel)
-        
+        view.layer.addSublayer(gradientLayer)
+
         // Login
         NSLayoutConstraint.activate([
             loginView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
