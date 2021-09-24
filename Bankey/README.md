@@ -316,6 +316,8 @@ This is a bit tricker than it looks because we want the labels to group nicely w
 
 So instead of pinning to the top, we pin relative to the `loginView` in the middle. Starting with the subtitle.
 
+Also show them what they get for free sticking to `DynamicFont`. Like and dark mode. Control+Shift+A to toggle.
+
 
 
 
