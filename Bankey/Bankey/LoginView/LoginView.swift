@@ -75,7 +75,6 @@ extension LoginView {
 }
 
 // MARK: - UITextFieldDelegate
-
 extension LoginView: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -93,8 +92,5 @@ extension LoginView: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if let username = usernameTextField.text {
-            print(username)
-        }
     }
 }

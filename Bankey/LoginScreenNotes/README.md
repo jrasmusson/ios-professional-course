@@ -101,6 +101,66 @@ extension LoginViewController {
 
 Add single `textfield` and delegate
 
+- Comment on how nice it is to access anchors directly compared to view controller
+
+**LoginView**
+
+```swift
+class LoginView: UIView {
+    
+    let usernameTextField = UITextField()
+```
+
+```swift
+extension LoginView {
+    
+    func style() {        
+        usernameTextField.translatesAutoresizingMaskIntoConstraints = false
+        usernameTextField.placeholder = "Username"
+        usernameTextField.delegate = self
+    }
+    
+    func layout() {
+        addSubview(usernameTextField)
+        
+        NSLayoutConstraint.activate([
+            usernameTextField.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
+            usernameTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: usernameTextField.trailingAnchor, multiplier: 1)
+        ])
+    }
+}
+```
+
+And the text field delegate.
+
+```swift
+// MARK: - UITextFieldDelegate
+extension LoginView: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        usernameTextField.endEditing(true)
+        return true
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if textField.text != "" {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+    }
+}
+```
+
+![](images/4.png)
+
+Not bad. But we see that what the layout really needs is a stack view. So let's add that.
+
+
 
 
 	- Then embed within `stackView`
