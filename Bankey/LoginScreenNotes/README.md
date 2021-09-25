@@ -1,6 +1,6 @@
 # Login Screen
 
-![](images/11.png)
+![](images/12.png)
 
 ## Prep for instructor
 

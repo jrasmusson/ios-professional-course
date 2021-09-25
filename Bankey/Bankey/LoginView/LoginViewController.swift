@@ -80,7 +80,8 @@ extension LoginViewController {
         // Subtitle
         NSLayoutConstraint.activate([
             loginView.topAnchor.constraint(equalToSystemSpacingBelow: subtitleLabel.bottomAnchor, multiplier: 3),
-            subtitleLabel.widthAnchor.constraint(equalTo: loginView.widthAnchor)
+            subtitleLabel.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
+            subtitleLabel.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
         ])
         
         // LoginView
