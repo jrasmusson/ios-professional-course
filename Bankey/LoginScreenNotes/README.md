@@ -2,7 +2,7 @@
 
 ![](images/11.png)
 
-## Prep
+## Prep for instructor
 
 - Create a fresh clone of the `ios-professional` repos.
 - When you create your new project, save it into there.
