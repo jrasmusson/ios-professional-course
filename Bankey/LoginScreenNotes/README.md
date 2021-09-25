@@ -212,6 +212,15 @@ passwordTextField.delegate = self
 stackView.addArrangedSubview(passwordTextField)
 ```
 
+Good. One more addition. To make our password give up the keyboard (resign first responder) we will signal end editting.
+
+```swift
+func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    passwordTextField.endEditing(true)
+    return true
+}
+```
+
 ![](images/6.png)
 
 ## Getting rid of intrinsic content size
@@ -335,6 +344,7 @@ extension LoginView: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         usernameTextField.endEditing(true)
+        passwordTextField.endEditing(true)
         return true
     }
     
@@ -394,25 +404,20 @@ NSLayoutConstraint.activate([
 
 ### Handle login
 
-Add the error message
+Next, we want to hook our button up so when users click it, we check the username and password, and then add a spinning indicator to show we are checking the user credentials and logging in.
+
+#### Error message challenge
+
+Here is the error message with want to add. 
+
+**LoginViewController**
 
 ```swift
     let errorMessageLabel = UILabel()
-    
-    var username: String? {
-        return loginView.usernameTextField.text
-    }
-
-    var password: String? {
-        return loginView.passwordTextField.text
-    }
 ```
 
 ```swift
     private func style() {
-        signInButton.configuration?.imagePadding = 8 // for indicator spacing
-        signInButton.addTarget(self, action: #selector(signInTapped), for: .primaryActionTriggered)
-        
         errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
         errorMessageLabel.textAlignment = .center
         errorMessageLabel.textColor = .systemRed
@@ -420,6 +425,11 @@ Add the error message
         errorMessageLabel.isHidden = true
     }
 ```
+
+- Talk about colors and `systemRed`.
+- [HIG Color](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/)
+
+See if you can lay it out x2 system spaces beneath the sign in button. Same width as the `loginView`.
 
 ```swift
     private func layout() {
@@ -437,6 +447,32 @@ Add the error message
         ])
     }
 ```
+
+#### Logging in
+
+Next let's login.
+
+```swift
+    var username: String? {
+        return loginView.usernameTextField.text
+    }
+
+    var password: String? {
+        return loginView.passwordTextField.text
+    }
+```
+
+```swift
+    private func style() {
+        signInButton.configuration?.imagePadding = 8 // for indicator spacing
+        signInButton.addTarget(self, action: #selector(signInTapped), for: .primaryActionTriggered)
+    }
+```
+
+When we login, we want to display the error message if:
+
+- username and password are blank
+- show spinning indicator if valid
 
 ```swift
 // MARK: Actions
@@ -458,7 +494,6 @@ extension LoginViewController {
         }
         
         if username == "Kevin" && password == "Welcome" {
-            print("Welcome!")
             signInButton.configuration?.showsActivityIndicator = true
         } else {
             configureView(withMessage: "Incorrect username / password")
@@ -473,29 +508,44 @@ extension LoginViewController {
 ```
 
 - Discuss `assertionFailure`.
-- Discuss activity indicator
+- Discuss [named parameters](https://github.com/jrasmusson/level-up-swift/tree/master/2-functions)
+- Discuss activity indicator and image spacing
+- How to toggle keyboard (Shift+Command+K)
+
+![](images/11.png)
 
 ### Adding titles
 
-- Excersise for reader
-- Setup variables `titleLabel` `subtitleLabel`.
+- Show students labels we'd like to add.
+- Setup up for them as follows
+
 
 **LoginViewController**
 
 ```swift
-    let titleLabel = UILabel()
-    let subtitleLabel = UILabel()
+let titleLabel = UILabel()
+let subtitleLabel = UILabel()
 
 titleLabel.translatesAutoresizingMaskIntoConstraints = false
 titleLabel.textAlignment = .center
 titleLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle)
 titleLabel.adjustsFontForContentSizeCategory = true
+titleLabel.text = "Bankey"
 
 subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
 subtitleLabel.textAlignment = .center
-subtitleLabel.font = UIFont.preferredFont(forTextStyle: .title1)
+subtitleLabel.font = UIFont.preferredFont(forTextStyle: .title3)
 subtitleLabel.adjustsFontForContentSizeCategory = true
+subtitleLabel.numberOfLines = 0
+subtitleLabel.text = "Your premium source for all things banking!"
 ```
+
+- Discuss varable ordering in file and why you put at the top
+- Discuss [dynamic fonts](https://github.com/jrasmusson/ios-starter-kit/tree/master/basics/DynamicFont)
+
+#### Title challenge
+
+Challenge students to layout title and subtitle. Don't tell them how to do it. Just say subtitle x3 system spaces above login view, and title x3 system spaces above subtitle. Way width as `loginView`.
 
 ```swift
 private func layout() {
@@ -519,17 +569,41 @@ private func layout() {
 
 - Let them try. Show what you want.
 
-### Discussion
+- Discuss how to keep things groupe and sometimes working from the top vs sometimes working from the middle
+- Discuss width, vs center, vs pinning to the sides
 
-This is a bit tricker than it looks because we want the labels to group nicely with the `loginView` in the middel.
+```swift
+// Subtitle - centerX - multi-line
+NSLayoutConstraint.activate([
+    loginView.topAnchor.constraint(equalToSystemSpacingBelow: subtitleLabel.bottomAnchor, multiplier: 3),
+    subtitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+])
 
-So instead of pinning to the top, we pin relative to the `loginView` in the middle. Starting with the subtitle.
+// Subtitle - width - alignment off
+NSLayoutConstraint.activate([
+    loginView.topAnchor.constraint(equalToSystemSpacingBelow: subtitleLabel.bottomAnchor, multiplier: 3),
+    subtitleLabel.widthAnchor.constraint(equalTo: loginView.widthAnchor)
+])
+    
+// Subtitle - pinning leading trailing
+NSLayoutConstraint.activate([
+    loginView.topAnchor.constraint(equalToSystemSpacingBelow: subtitleLabel.bottomAnchor, multiplier: 3),
+    subtitleLabel.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
+    subtitleLabel.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
+])
+```
 
-Also show them what they get for free sticking to `DynamicFont`. Like and dark mode. Control+Shift+A to toggle.
+- Point here is all three work. Some just work better than others and you need to experiment. In this case third option works best.
+
+
+- Demo Dark mode and what they get for free with dynamic fonts (Control+Shift+A)
+
 
 ![](images/2.png)
 
 ![](images/3.png)
+
+Congratultions 🎉. You have now built your own login screen.
 
 ## Full Source
 
@@ -588,7 +662,6 @@ extension LoginViewController {
         subtitleLabel.text = "Your premium source for all things banking!"
 
         loginView.translatesAutoresizingMaskIntoConstraints = false
-        loginView.backgroundColor = .secondarySystemBackground
 
         signInButton.translatesAutoresizingMaskIntoConstraints = false
         signInButton.configuration = .filled()
@@ -619,11 +692,10 @@ extension LoginViewController {
         // Subtitle
         NSLayoutConstraint.activate([
             loginView.topAnchor.constraint(equalToSystemSpacingBelow: subtitleLabel.bottomAnchor, multiplier: 3),
-            subtitleLabel.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
-            subtitleLabel.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
+            subtitleLabel.widthAnchor.constraint(equalTo: loginView.widthAnchor)
         ])
         
-        // Login
+        // LoginView
         NSLayoutConstraint.activate([
             loginView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: loginView.trailingAnchor, multiplier: 2),
@@ -684,9 +756,9 @@ extension LoginViewController {
 ```swift
 //
 //  LoginView.swift
-//  Bankey
+//  Test1
 //
-//  Created by jrasmusson on 2021-09-23.
+//  Created by jrasmusson on 2021-09-24.
 //
 
 import Foundation
@@ -701,23 +773,21 @@ class LoginView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         style()
         layout()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric)
+        fatalError("init(coder:) has not been iamplemented")
     }
 }
 
 extension LoginView {
     
-    private func style() {
+    func style() {
         translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = .secondarySystemBackground
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -726,7 +796,7 @@ extension LoginView {
         usernameTextField.translatesAutoresizingMaskIntoConstraints = false
         usernameTextField.placeholder = "Username"
         usernameTextField.delegate = self
-
+        
         dividerView.translatesAutoresizingMaskIntoConstraints = false
         dividerView.backgroundColor = .secondarySystemFill
 
@@ -734,16 +804,15 @@ extension LoginView {
         passwordTextField.placeholder = "Password"
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
-                
+        
         layer.cornerRadius = 5
         clipsToBounds = true
     }
     
-    private func layout() {
+    func layout() {
         stackView.addArrangedSubview(usernameTextField)
         stackView.addArrangedSubview(dividerView)
         stackView.addArrangedSubview(passwordTextField)
-
         addSubview(stackView)
         
         // StackView
@@ -759,7 +828,6 @@ extension LoginView {
 }
 
 // MARK: - UITextFieldDelegate
-
 extension LoginView: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -777,13 +845,17 @@ extension LoginView: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if let username = usernameTextField.text {
-            print(username)
-        }
     }
 }
 ```
 
+### Level Up
+
+- [HIG Color](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/)
+- [Apple UI Element Colors](https://developer.apple.com/documentation/uikit/uicolor/ui_element_colors)
+- [Apple Design Resources](https://developer.apple.com/design/resources/)
+- [WWDC What's new in iOS](https://developer.apple.com/videos/play/wwdc2019/808/)
+- [Argument Labels in Swift](https://github.com/jrasmusson/level-up-swift/tree/master/2-functions)
 
 
 
