@@ -1,8 +1,11 @@
-# Bankey
+# Login Screen
 
-A canonical banking app for iOS developers.
+![](images/11.png)
 
-## Login
+## Prep
+
+- Create a fresh clone of the `ios-professional` repos.
+- When you create your new project, save it into there.
 
 ### Create the UI
 
@@ -603,7 +606,39 @@ NSLayoutConstraint.activate([
 
 ![](images/3.png)
 
+
+## Save your work
+
+Let's now save your work in your repos.
+
+### gitignore
+
+There is an annoying file `.DS_Store` we would rather not include in our repos. We can ignore it by adding it to our `.gitignore`.
+
+```
+> cd ios-professional
+> git status
+> vi .gitignore
+
+## User settings
+xcuserdata/
+.DS_Store
+
+> git status (.DS_Store should be gone)
+```
+
+Now we can add and save our repos.
+
+```
+> cd ios-professional
+> git add .
+> git commit -m "Add login screen"
+> git push
+> git log
+```
+
 Congratultions 🎉. You have now built your own login screen.
+
 
 ## Full Source
 
