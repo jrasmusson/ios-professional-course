@@ -17,8 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.backgroundColor = .systemBackground
-        window?.rootViewController = LoginViewController()
-        
+//        window?.rootViewController = LoginViewController()
+//        window?.rootViewController = OnboardingContainerViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        window?.rootViewController = Foo()
+
         return true
     }
 }

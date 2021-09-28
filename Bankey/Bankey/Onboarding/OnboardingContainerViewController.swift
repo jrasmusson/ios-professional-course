@@ -1,17 +1,10 @@
-# Onboarding
+//
+//  OnboardingViewController.swift
+//  Bankey
+//
+//  Created by jrasmusson on 2021-09-28.
+//
 
-- Create a new group in project `Onboarding`
-- Move Files to bottom
-
-## Create Onboarding View Controller
-
-- This view controller is going to be the container for our onboarding view controllers
-- Create a new `OnboardingViewController`
-- Switch to dark mode
-
-**OnboardingContainerViewController**
-
-```swift
 import UIKit
 
 class OnboardingContainerViewController: UIPageViewController {
@@ -142,30 +135,3 @@ class ViewController3: UIViewController {
         view.backgroundColor = .systemBlue
     }
 }
-```
-
-Update `AppDelegate` to call.
-
-**AppDelegate**
-
-```swift
-window?.rootViewController = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-```
-
-## Create first onboarding screen
-
-- Drag art assets into catalog
-- Show how to use pdf
- - Preserve Vector Data
- - Scales > Single Scale
-
- 
-
-
-
-
-
-
-### Level Up
-
-
