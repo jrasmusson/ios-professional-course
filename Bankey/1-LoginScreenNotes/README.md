@@ -889,8 +889,8 @@ extension LoginView: UITextFieldDelegate {
 - [HIG Color](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/)
 - [Apple UI Element Colors](https://developer.apple.com/documentation/uikit/uicolor/ui_element_colors)
 - [Apple Design Resources](https://developer.apple.com/design/resources/)
-- [WWDC What's new in iOS](https://developer.apple.com/videos/play/wwdc2019/808/)
+- [WWDC What's new in iOS UIButton](https://developer.apple.com/videos/play/wwdc2019/808/)
 - [Argument Labels in Swift](https://github.com/jrasmusson/level-up-swift/tree/master/2-functions)
-
+- [Dynamic Type](https://developer.apple.com/documentation/uikit/uifont/scaling_fonts_automatically)
 
 
