@@ -35,6 +35,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		717ADC0B2703B77F00C89FDB /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		71A0F7B726FD2B75008EAFD8 = {
 			isa = PBXGroup;
 			children = (
@@ -54,9 +61,10 @@
 		71A0F7C226FD2B75008EAFD8 /* Bankey */ = {
 			isa = PBXGroup;
 			children = (
-				71A0F7DA26FD327C008EAFD8 /* Files */,
+				717ADC0B2703B77F00C89FDB /* Onboarding */,
 				71A0F7D926FD2C91008EAFD8 /* LoginView */,
 				71A0F7C326FD2B75008EAFD8 /* AppDelegate.swift */,
+				71A0F7DA26FD327C008EAFD8 /* Files */,
 			);
 			path = Bankey;
 			sourceTree = "<group>";
