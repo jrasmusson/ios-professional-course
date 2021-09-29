@@ -1,17 +1,40 @@
 # Onboarding
 
-- Create a new group in project `Onboarding`
-- Move Files to bottom
+## Setup
+
+### Agile storyboard
+
+- Introduce Agile story board
+- Explain mechanics of how it works with stories
+- Move over story
+
+### Git branching
+
+- Next, create a git branch
+- Demo and explain how git branching works
+- Create a git branch for this work
 
 ## Create Onboarding View Controller
 
 - This view controller is going to be the container for our onboarding view controllers
+
+- Create a new group in project `Onboarding`
+- Move Files to bottom
+- Rename LoginView Login
 - Create a new `OnboardingViewController`
+- Copy and paste in code incrementally explaining as you go
 - Switch to dark mode
 
 **OnboardingContainerViewController**
 
 ```swift
+//
+//  OnboardingViewController.swift
+//  Bankey
+//
+//  Created by jrasmusson on 2021-09-28.
+//
+
 import UIKit
 
 class OnboardingContainerViewController: UIPageViewController {
@@ -152,15 +175,109 @@ Update `AppDelegate` to call.
 window?.rootViewController = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 ```
 
-## Create first onboarding screen
+- Demo explaining how it work (use iPad).
+- Git add/commit your work
+
+## Bring in the art
 
 - Drag art assets into catalog
 - Show how to use pdf
  - Preserve Vector Data
  - Scales > Single Scale
+ 
+### Discusson
+
+- Explain pdf vs retina display
+  - pdf scale better
+  - take less memory and space
+  - don't alias like an image 
+  - reason why is vectors and their pdf representation can compactly be represented as a series of equations and numbers
+
+- Why Apple has retina
+ - need retina for photographs
+ - photographs cant be easily represented as equations 
+
+- So unless the image you are displaying is a photograph always ask for pdfs - else take scaled retina images
+
+## Creating our first onboarding screen
+
+- Explain your thinking behind this layout
+ - Want centered in screen
+ - `StackView` is good for general spacing
+ - Want to avoid hard pinning to top
+ - Control and buttons can be directly pinned
+ - But image and label we will put in a stack
+
+ **OnboardingViewController1**
+ 
+```swift
+//
+//  OnboardingViewController1.swift
+//  Bankey
+//
+//  Created by jrasmusson on 2021-09-29.
+//
+
+import UIKit
+
+class OnboardingViewController1: UIViewController {
+    
+    let stackView = UIStackView()
+    let imageView = UIImageView()
+    let label = UILabel()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        style()
+        layout()
+    }
+}
+
+extension OnboardingViewController1 {
+    func style() {
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        
+        // Image
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(named: "delorean")
+        
+        // Label
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.font = UIFont.preferredFont(forTextStyle: .title3)
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+        label.text = "Bankey is faster, easier to use, and has a brand new look and feel that will make you feel like you are back in 1989."
+    }
+    
+    func layout() {
+        stackView.addArrangedSubview(imageView)
+        stackView.addArrangedSubview(label)
+        
+        view.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 1)
+        ])
+    }
+}
+```
+
+- Adjust `AppDelegate` to display.
+- Explain why overriding view controller in app delegate is such a powerful technique
+
+![](images/0.png)
+
+- Save your work.
 
  
-
+ 
 
 
 
