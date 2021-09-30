@@ -7,18 +7,12 @@
 
 import UIKit
 
-protocol OnboardingDelegate: AnyObject {
-    func didTapClose()
-}
-
 class OnboardingContainerViewController: UIPageViewController {
 
     var pages = [UIViewController]()
     let pageControl = UIPageControl()
     let initialPage = 0
-    
-    weak var onboardingDelegate: OnboardingDelegate?
-        
+            
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -116,28 +110,5 @@ extension OnboardingContainerViewController: UIPageViewControllerDelegate {
         guard let currentIndex = pages.firstIndex(of: viewControllers[0]) else { return }
         
         pageControl.currentPage = currentIndex
-    }
-}
-
-// MARK: - ViewControllers
-
-class ViewController1: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemRed
-    }
-}
-
-class ViewController2: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemGreen
-    }
-}
-
-class ViewController3: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemBlue
     }
 }
