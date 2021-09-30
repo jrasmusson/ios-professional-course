@@ -408,6 +408,29 @@ Open up and lets programmatically add the buttons one at a time. Starting with `
 
 **OnboardingContainerViewController**
 
+```swift
+let nextButton = UIButton(type: .system)
+
+nextButton.translatesAutoresizingMaskIntoConstraints = false
+nextButton.setTitle("Next", for: [])
+nextButton.addTarget(self, action: #selector(nextTapped), for: .primaryActionTriggered)
+
+view.addSubview(nextButton)
+
+NSLayoutConstraint.activate([
+    view.trailingAnchor.constraint(equalToSystemSpacingAfter: nextButton.trailingAnchor, multiplier: 2),
+    view.bottomAnchor.constraint(equalToSystemSpacingBelow: nextButton.bottomAnchor, multiplier: 2)
+])
+
+@objc func nextTapped(_ sender: UIButton) {
+    // Ensure we aren't at the end
+    guard pageControl.currentPage < pages.count - 1 else { return }
+            
+    setViewControllers([pages[pageControl.currentPage + 1]], direction: .forward, animated: true, completion: nil)
+    pageControl.currentPage += 1
+}
+```
+
 
 
 #### Close button

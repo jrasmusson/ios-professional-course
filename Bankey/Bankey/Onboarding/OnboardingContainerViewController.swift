@@ -93,15 +93,9 @@ extension OnboardingContainerViewController {
     }
     
     @objc func nextTapped(_ sender: UIButton) {
-        let currentIndex = pageControl.currentPage
-        
-        if currentIndex >= 0 {
-            // next
-        }
-        
-        if currentIndex == pages.count - 1 {
-            // ignore
-        }
+        // Ensure we aren't at the end
+        guard pageControl.currentPage < pages.count - 1 else { return }
+                
         setViewControllers([pages[pageControl.currentPage + 1]], direction: .forward, animated: true, completion: nil)
         pageControl.currentPage += 1
     }
