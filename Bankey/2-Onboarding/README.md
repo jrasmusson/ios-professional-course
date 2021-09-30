@@ -406,6 +406,8 @@ Open up and lets programmatically add the buttons one at a time. Starting with `
 
 ### Next
 
+First let's add the action.
+
 **OnboardingContainerViewController**
 
 ```swift
@@ -428,6 +430,24 @@ NSLayoutConstraint.activate([
             
     setViewControllers([pages[pageControl.currentPage + 1]], direction: .forward, animated: true, completion: nil)
     pageControl.currentPage += 1
+}
+```
+
+Then let's hide `next` on the last page. Tie `nextButton` visibility to the pageControl count.
+
+```swift
+@objc func pageControlTapped(_ sender: UIPageControl) {
+	...    
+    showOrHideNextButton(newIndex)
+    previousIndex = newIndex
+}
+
+private func showOrHideNextButton(_ currentIndex: Int) {
+    if currentIndex == pages.count - 1 {
+        nextButton.isHidden = true
+    } else {
+        nextButton.isHidden = false
+    }
 }
 ```
 

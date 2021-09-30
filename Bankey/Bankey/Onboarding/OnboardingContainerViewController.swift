@@ -89,7 +89,16 @@ extension OnboardingContainerViewController {
         }
         setViewControllers([pages[sender.currentPage]], direction: direction, animated: true, completion: nil)
         
+        showOrHideNextButton(newIndex)
         previousIndex = newIndex
+    }
+    
+    private func showOrHideNextButton(_ currentIndex: Int) {
+        if currentIndex == pages.count - 1 {
+            nextButton.isHidden = true
+        } else {
+            nextButton.isHidden = false
+        }
     }
     
     @objc func nextTapped(_ sender: UIButton) {
