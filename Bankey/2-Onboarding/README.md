@@ -14,14 +14,14 @@
 - Demo and explain how git branching works
 - Create a git branch for this work
 
-## Create Onboarding View Controller
+## Create Container View Controller
 
-- This view controller is going to be the container for our onboarding view controllers
-
+- Explain how `UIPageViewController` works
+ - Illustrator or iPad 
 - Create a new group in project `Onboarding`
 - Move Files to bottom
 - Rename LoginView Login
-- Create a new `OnboardingViewController`
+- Create a new `OnboardingContainerViewController`
 - Copy and paste in code incrementally explaining as you go
 - Switch to dark mode
 
@@ -178,7 +178,7 @@ window?.rootViewController = OnboardingViewController(transitionStyle: .scroll, 
 - Demo explaining how it work (use iPad).
 - Git add/commit your work
 
-## Bring in the art
+## Not all art is created equal
 
 - Drag art assets into catalog
 - Show how to use pdf
@@ -199,7 +199,7 @@ window?.rootViewController = OnboardingViewController(transitionStyle: .scroll, 
 
 - So unless the image you are displaying is a photograph always ask for pdfs - else take scaled retina images
 
-## Creating our first onboarding screen
+## Your first onboarding screen
 
 - Explain your thinking behind this layout
  - Want centered in screen
@@ -274,9 +274,13 @@ extension OnboardingViewController1 {
 
 ![](images/0.png)
 
-- Save your work.
+- Save your work - `First onboarding page`.
 
+ ### Boss Challenge
  
+ - Your turn. Create the next screen.
+ - Create a new view controller called `OnboardingViewController2`.
+ - Use the 
  
 
 
