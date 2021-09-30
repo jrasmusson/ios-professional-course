@@ -31,9 +31,13 @@ extension OnboardingContainerViewController {
         pageControl.addTarget(self, action: #selector(pageControlTapped(_:)), for: .valueChanged)
 
         // add the individual viewControllers to the pageViewController
-        let page1 = ViewController1()
-        let page2 = ViewController2()
-        let page3 = ViewController3()
+//        let page1 = ViewController1()
+//        let page2 = ViewController2()
+//        let page3 = ViewController3()
+
+        let page1 = OnboardingViewController(heroImageName: "delorean", titleText: "Bankey is faster, easier to use, and has a brand new look and feel that will make you feel like you are back in the 80s.")
+        let page2 = OnboardingViewController(heroImageName: "world", titleText: "Move your money around the world quickly and securely.")
+        let page3 = OnboardingViewController(heroImageName: "thumbs", titleText: "Learn more at www.bankey.com.")
 
         pages.append(page1)
         pages.append(page2)

@@ -278,12 +278,88 @@ extension OnboardingViewController1 {
 
  ### Boss Challenge
  
- - Your turn. Create the next screen.
- - Create a new view controller called `OnboardingViewController2`.
- - Use the 
- 
+- Your turn. Create the next screen.
+- Create a new view controller called `OnboardingViewController2`.
+- Use the `world` pdf as art
+- Add the text `Move your money around the world quickly and securely.`
+- Update the `AppDelegate` to test it out.
+- Good luck!
 
+Solution 
+- Copy and paste view controller 1
+- Change image, and text.
+- Run
 
+![](images/1.png)
+
+## Refactoring - the art of writing less code
+
+- Copy and paste is a perfectly fine way to get started, but we don't want to do it too much because then we have a lot of code to update when something changes
+- Let's see if we can refactor our view controllers to put all this onboarding code in one place, and reuse it three times
+
+### Create base view controller
+
+- Create a new swift class `OnboardingViewController`.
+- Copy view controller 1 entirely / rename
+- Explain how you want to parameterize this view controller
+- Meaning pass in the name of the image and text you want displayed, and then have this base view controller just use it
+
+### What is required init?
+
+```swift
+init(heroImageName: String, titleText: String) {
+    self.heroImageName = heroImageName
+    self.titleText = titleText
+    
+    super.init(nibName: nil, bundle: nil)
+}
+```
+
+Explain 
+
+```swift
+required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+}
+```
+
+- This is here because `UIViewController` has an initializer defined in its base class to deserialize view controllers in story boars
+
+```swift
+init(coder aDecoder: NSCoder) {
+    // Deserialize your object here
+}
+```
+
+- Because it defines it, and it is required, we need to override it here - even though we aren't using it.
+- Annoying but something we have to do.
+- It has been there since the dawn of time. Something we just need to do.
+
+```swift
+@available(iOS 2.0, *)
+open class UIViewController : UIResponder, NSCoding, UIAppearanceContainer, UITraitEnvironment, UIContentContainer, UIFocusEnvironment {
+    public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
+    public init?(coder: NSCoder)
+```
+
+Use the parameters
+
+`heroImageView.image = UIImage(named: heroImageName)`
+`titleLabel.text = titleText`
+
+Use the new view controller
+
+**OnboardingContainerViewController**
+
+```swift
+let page1 = OnboardingViewController(heroImageName: "delorean", titleText: "Bankey is faster, easier to use, and has a brand new look and feel that will make you feel like you are back in the 80s.")
+let page2 = OnboardingViewController(heroImageName: "world", titleText: "Move your money around the world quickly and securely.")
+let page3 = OnboardingViewController(heroImageName: "thumbs", titleText: "Learn more at www.bankey.com.")
+```
+
+- Update AppDelegate.
+- Run
+- Delete onboard 1 and 2 view controllers
 
 
 
