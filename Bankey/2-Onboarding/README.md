@@ -400,7 +400,7 @@ We want:
 
 - `Close` on all x3 screens
 - `Next` and `Back` on the middle screen
-- `Back` and `Done` on last screen
+- `Done` on last screen
 
 Open up and lets programmatically add the buttons one at a time. Starting with `Next` and `Back`.
 
@@ -433,7 +433,7 @@ NSLayoutConstraint.activate([
 }
 ```
 
-Then let's hide `next` on the last page. Tie `nextButton` visibility to the pageControl count.
+Then let's hide `next` on the last page. First we need to hide on `pageControl` taps.
 
 ```swift
 @objc func pageControlTapped(_ sender: UIPageControl) {
@@ -451,6 +451,18 @@ private func showOrHideNextButton(_ currentIndex: Int) {
 }
 ```
 
+Then we need to show and hide on swipes.
+
+
+
+### Back Challenge
+
+See if you can do the same thing with `Back` then we did with `Next`.
+
+- Create a `backButton`
+- Style and layout it out with system spacing of 2 on leading and bottom edges
+- Add an action `backTapped`
+- And then hide it if we are on the first page
 
 
 #### Close button

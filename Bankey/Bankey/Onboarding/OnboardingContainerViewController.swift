@@ -117,7 +117,9 @@ extension OnboardingContainerViewController: UIPageViewControllerDataSource {
         
         // Get the currentIndex from the view controller currently being displayed
         guard let currentIndex = pages.firstIndex(of: viewController) else { return nil }
+        
         previousIndex = currentIndex
+        showOrHideNextButton(currentIndex)
         
         if currentIndex == 0 {
             return nil                      // Stay on first page
@@ -128,7 +130,9 @@ extension OnboardingContainerViewController: UIPageViewControllerDataSource {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let currentIndex = pages.firstIndex(of: viewController) else { return nil }
+        
         previousIndex = currentIndex
+        showOrHideNextButton(currentIndex)
         
         if currentIndex < pages.count - 1 {
             return pages[currentIndex + 1]  // Go next
