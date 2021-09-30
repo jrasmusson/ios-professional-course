@@ -371,6 +371,31 @@ Sometimes we want to say more about our commits. In those cases you can do the f
 > git add .
 > git commit
 ```
+
+This will open up vi, or whatever text edit you have automatically setup to edit text files, and put you into a mode where you can freely type free form git message.
+
+Start with a title and then add a message
+
+```
+refactor: added base onboarding view controller
+
+Realizing there was a lot of code duplication, I created a base
+onboarding view controller taking an image name and text as arguments.
+
+This made the other two view controllers redundant and were deleted.
+```
+
+Once complete esc :wq.
+
+`> git log`
+
+Handy for when you want to add further detail.
+
+`> git push`
+
+
+
+
 ## Adding the buttons
 
 Before we can add the buttons, we need a home screen to login or dismiss too. Let's create that now, then when someone taps `Close` we can dismiss the onboarding and take the there.
