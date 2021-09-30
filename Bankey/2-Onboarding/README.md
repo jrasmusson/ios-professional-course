@@ -292,6 +292,8 @@ Solution
 
 ![](images/1.png)
 
+- Save your work - `Added second onboarding page`.
+
 ## Refactoring - the art of writing less code
 
 - Copy and paste is a perfectly fine way to get started, but we don't want to do it too much because then we have a lot of code to update when something changes
@@ -360,6 +362,31 @@ let page3 = OnboardingViewController(heroImageName: "thumbs", titleText: "Learn 
 - Update AppDelegate.
 - Run
 - Delete onboard 1 and 2 view controllers
+
+#### Saving your work with a longer commit message
+
+Sometimes we want to say more about our commits. In those cases you can do the following:
+
+```
+> git add .
+> git commit
+```
+## Adding the buttons
+
+Before we can add the buttons, we need a home screen to login or dismiss too. Let's create that now, then when someone taps `Close` we can dismiss the onboarding and take the there.
+
+- Create a new group `Home`.
+- Create view controller `AccountSummaryViewController`
+- Use stack code snippet
+- Test it out via app delegate
+
+
+
+
+
+## Onboard only once
+
+## Turn off onboarding via debug screen
 
 
 

@@ -18,8 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         window?.backgroundColor = .systemBackground
 //        window?.rootViewController = LoginViewController()
-        window?.rootViewController = OnboardingContainerViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-//        window?.rootViewController = OnboardingViewController2()
+        window?.rootViewController = AccountSummaryViewController()
+//        window?.rootViewController = OnboardingContainerViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 
         return true
     }
