@@ -120,14 +120,14 @@ extension LoginViewController {
             return
         }
 
-        if username.isEmpty || password.isEmpty {
-            configureView(withMessage: "Username / password cannot be blank")
-            return
-        }
+//        if username.isEmpty || password.isEmpty {
+//            configureView(withMessage: "Username / password cannot be blank")
+//            return
+//        }
         
-        if username == "Kevin" && password == "Welcome" {
-            print("Welcome!")
+        if username == "" && password == "" {
             signInButton.configuration?.showsActivityIndicator = true
+            presentOnboarding()
         } else {
             configureView(withMessage: "Incorrect username / password")
         }
@@ -136,5 +136,19 @@ extension LoginViewController {
     private func configureView(withMessage message: String) {
         errorMessageLabel.isHidden = false
         errorMessageLabel.text = message
+    }
+    
+    private func presentOnboarding() {
+        let vc = OnboardingContainerViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        vc.modalPresentationStyle = .fullScreen
+        vc.onboardingDelegate = self
+        
+        present(vc, animated: true)
+    }
+}
+
+extension LoginViewController: OnboardingDelegate {
+    func didTapClose() {
+        present(DummyViewController(), animated: true)
     }
 }

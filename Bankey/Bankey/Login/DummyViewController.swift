@@ -1,5 +1,5 @@
 //
-//  AccountSummaryViewController.swift
+//  DummyViewController.swift
 //  Bankey
 //
 //  Created by jrasmusson on 2021-09-30.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AccountSummaryViewController: UIViewController {
+class DummyViewController: UIViewController {
     
     let stackView = UIStackView()
     let label = UILabel()
@@ -19,14 +19,14 @@ class AccountSummaryViewController: UIViewController {
     }
 }
 
-extension AccountSummaryViewController {
+extension DummyViewController {
     func style() {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = 20
         
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Account summary"
+        label.text = "Dummy view controller"
         label.font = UIFont.preferredFont(forTextStyle: .title1)
     }
     

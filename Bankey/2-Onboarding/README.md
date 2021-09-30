@@ -394,31 +394,25 @@ Handy for when you want to add further detail.
 
 ## Adding the buttons
 
-Before we can add the buttons, we need a home screen to login or dismiss too. Let's create that now, then when someone taps `Close` we can dismiss the onboarding and take the there.
-
-### Create Home screen
-
-- Create a new group `Home`.
-- Create view controller `AccountSummaryViewController`
-- Use stack code snippet
-- Test it out via app delegate
-
-Commit and save (no push).
-
 ### Buttons
 
-We want
+We want:
+
 - `Close` on all x3 screens
 - `Next` and `Back` on the middle screen
 - `Back` and `Done` on last screen
 
-Way we are going to tackle first we are going to add all x4 buttons to the main onboarding controller. And then after we will figure out which ones to show depending on state.
+Open up and lets programmatically add the buttons one at a time. Starting with `Next` and `Back`.
 
-Turn on `OnboardingContainerViewController` in AppDelegate.
+### Next
 
-Open up and lets programmatically add the buttons one at a time.
+**OnboardingContainerViewController**
 
-#### Close
+
+
+#### Close button
+
+
 
 
 ## Onboard only once

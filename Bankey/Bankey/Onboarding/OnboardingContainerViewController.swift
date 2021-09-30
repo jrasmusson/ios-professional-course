@@ -7,16 +7,20 @@
 
 import UIKit
 
+protocol OnboardingDelegate: AnyObject {
+    func didTapClose()
+}
+
 class OnboardingContainerViewController: UIPageViewController {
 
     var pages = [UIViewController]()
     let pageControl = UIPageControl()
     let initialPage = 0
     
-    
+    weak var onboardingDelegate: OnboardingDelegate?
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setup()
         style()
         layout()
@@ -53,6 +57,7 @@ extension OnboardingContainerViewController {
     func layout() {
         view.addSubview(pageControl)
         
+        // Page
         NSLayoutConstraint.activate([
             pageControl.widthAnchor.constraint(equalTo: view.widthAnchor),
             pageControl.heightAnchor.constraint(equalToConstant: 20),
