@@ -13,8 +13,13 @@ class OnboardingContainerViewController: UIViewController {
     var pages = [UIViewController]()
     var currentVC: UIViewController {
         didSet {
+            guard let index = pages.firstIndex(of: currentVC) else { return }
+            nextButton.isHidden = index == pages.count - 1
         }
     }
+    
+    let nextButton = UIButton(type: .system)
+    
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -39,6 +44,12 @@ class OnboardingContainerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setup()
+        style()
+        layout()
+    }
+    
+    private func setup() {
         view.backgroundColor = .systemPurple
         
         addChild(pageViewController)
@@ -57,6 +68,21 @@ class OnboardingContainerViewController: UIViewController {
         
         pageViewController.setViewControllers([pages.first!], direction: .forward, animated: false, completion: nil)
         currentVC = pages.first!
+    }
+    
+    private func style() {
+        nextButton.translatesAutoresizingMaskIntoConstraints = false
+        nextButton.setTitle("Next", for: [])
+        nextButton.addTarget(self, action: #selector(nextTapped), for: .primaryActionTriggered)
+    }
+    
+    private func layout() {
+        view.addSubview(nextButton)
+
+        NSLayoutConstraint.activate([
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: nextButton.trailingAnchor, multiplier: 2),
+            view.bottomAnchor.constraint(equalToSystemSpacingBelow: nextButton.bottomAnchor, multiplier: 4)
+        ])
     }
 }
 
@@ -89,6 +115,14 @@ extension OnboardingContainerViewController: UIPageViewControllerDataSource {
 
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         return pages.firstIndex(of: self.currentVC) ?? 0
+    }
+}
+
+// MARK: Actions
+extension OnboardingContainerViewController {
+    @objc func nextTapped(_ sender: UIButton) {
+        guard let nextVC = getNextViewController(from: self.currentVC) else { return }
+        pageViewController.setViewControllers([nextVC], direction: .forward, animated: true, completion: nil)
     }
 }
 

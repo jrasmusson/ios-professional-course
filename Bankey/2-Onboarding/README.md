@@ -384,7 +384,11 @@ Open up and lets programmatically add the buttons one at a time. Starting with `
 
 ### Next
 
-First let's add the action.
+First lets do a little refactoring and break these methods up a bit in `viewDidLoad`:
+
+- setup()
+- style()
+- layout()
 
 **OnboardingContainerViewController**
 
@@ -399,37 +403,20 @@ view.addSubview(nextButton)
 
 NSLayoutConstraint.activate([
     view.trailingAnchor.constraint(equalToSystemSpacingAfter: nextButton.trailingAnchor, multiplier: 2),
-    view.bottomAnchor.constraint(equalToSystemSpacingBelow: nextButton.bottomAnchor, multiplier: 2)
+    view.bottomAnchor.constraint(equalToSystemSpacingBelow: nextButton.bottomAnchor, multiplier: 4)
 ])
 
-@objc func nextTapped(_ sender: UIButton) {
-    // Ensure we aren't at the end
-    guard pageControl.currentPage < pages.count - 1 else { return }
-            
-    setViewControllers([pages[pageControl.currentPage + 1]], direction: .forward, animated: true, completion: nil)
-    pageControl.currentPage += 1
-}
-```
-
-Then let's hide `next` on the last page. First we need to hide on `pageControl` taps.
-
-```swift
-@objc func pageControlTapped(_ sender: UIPageControl) {
-	...    
-    showOrHideNextButton(newIndex)
-    previousIndex = newIndex
-}
-
-private func showOrHideNextButton(_ currentIndex: Int) {
-    if currentIndex == pages.count - 1 {
-        nextButton.isHidden = true
-    } else {
-        nextButton.isHidden = false
+// MARK: Actions
+extension OnboardingContainerViewController {
+    @objc func nextTapped(_ sender: UIButton) {
+        guard let nextVC = getNextViewController(from: self.currentVC) else { return }
+        pageViewController.setViewControllers([nextVC], direction: .forward, animated: true, completion: nil)
     }
 }
 ```
 
-Then we need to show and hide on swipes.
+Then let's hide `next` on the last page. Can do this in `didSet`.
+
 
 
 
