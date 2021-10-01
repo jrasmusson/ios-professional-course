@@ -44,6 +44,7 @@ extension OnboardingContainerViewController {
     }
     
     func style() {
+        view.backgroundColor = .systemPurple
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.currentPageIndicatorTintColor = .black
         pageControl.pageIndicatorTintColor = .systemGray2
