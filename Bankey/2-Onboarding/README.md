@@ -372,7 +372,7 @@ Handy for when you want to add further detail.
 
 ## Adding the buttons
 
-### Buttons
+### Next button
 
 We want:
 
@@ -381,8 +381,6 @@ We want:
 - `Done` on last screen
 
 Open up and lets programmatically add the buttons one at a time. Starting with `Next` and `Back`.
-
-### Next
 
 First lets do a little refactoring and break these methods up a bit in `viewDidLoad`:
 
@@ -401,6 +399,7 @@ nextButton.addTarget(self, action: #selector(nextTapped), for: .primaryActionTri
 
 view.addSubview(nextButton)
 
+// Next
 NSLayoutConstraint.activate([
     view.trailingAnchor.constraint(equalToSystemSpacingAfter: nextButton.trailingAnchor, multiplier: 2),
     view.bottomAnchor.constraint(equalToSystemSpacingBelow: nextButton.bottomAnchor, multiplier: 4)
@@ -409,7 +408,7 @@ NSLayoutConstraint.activate([
 // MARK: Actions
 extension OnboardingContainerViewController {
     @objc func nextTapped(_ sender: UIButton) {
-        guard let nextVC = getNextViewController(from: self.currentVC) else { return }
+        guard let nextVC = getNextViewController(from: currentVC) else { return }
         pageViewController.setViewControllers([nextVC], direction: .forward, animated: true, completion: nil)
     }
 }
@@ -417,29 +416,101 @@ extension OnboardingContainerViewController {
 
 Then let's hide `next` on the last page. Can do this in `didSet`.
 
+```swift
+didSet {
+    guard let index = pages.firstIndex(of: currentVC) else { return }
+    nextButton.isHidden = index == pages.count - 1
+}
+```
 
+Save our work `Added next button to onboarding`.
 
+### Back button challenge
 
-### Back Challenge
+Let's get you in the game. See if you can add the back button.
 
-See if you can do the same thing with `Back` then we did with `Next`.
+- Position like next only on left hand side
+- When tapped make it go to the previous page
+- Hide if on the first page
 
-- Create a `backButton`
-- Style and layout it out with system spacing of 2 on leading and bottom edges
-- Add an action `backTapped`
-- And then hide it if we are on the first page
+Good luck!
 
+```swift
+let backButton = UIButton(type: .system)
+
+backButton.translatesAutoresizingMaskIntoConstraints = false
+backButton.setTitle("Back", for: [])
+backButton.addTarget(self, action: #selector(backTapped), for: .primaryActionTriggered)
+
+view.addSubview(backButton)
+
+// Back
+NSLayoutConstraint.activate([
+    backButton.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+    view.bottomAnchor.constraint(equalToSystemSpacingBelow: backButton.bottomAnchor, multiplier: 4)
+])
+
+@objc func backTapped(_ sender: UIButton) {
+    guard let previousVC = getPreviousViewController(from: currentVC) else { return }
+    pageViewController.setViewControllers([previousVC], direction: .reverse, animated: true, completion: nil)
+}
+
+backButton.isHidden = index == 0
+```
+
+![](images/2.png)
 
 #### Close button
 
+Close is just like the others. Only we want this one to always appear on all pages.
 
+```swift
+let closeButton = UIButton(type: .system)
 
+closeButton.translatesAutoresizingMaskIntoConstraints = false
+closeButton.setTitle("Close", for: [])
+backButton.addTarget(self, action: #selector(closeTapped), for: .primaryActionTriggered)
+
+view.addSubview(closeButton)
+
+// Close
+NSLayoutConstraint.activate([
+    closeButton.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+    closeButton.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2)
+])
+
+@objc func closeTapped(_ sender: UIButton) {
+    dismiss(animated: true, completion: nil)
+}
+```
+
+Don't worry about close not dismissing. We will handle that in the next section.
+
+## Protocol Delegate
+
+Before we can go any further, we need a way of signally back to our `AppDelegate` when certain events in our app occur. For example it would be nice to know when the user has clicked `Signin` so we can present onboarding. Or when the click `Close` on onboarding, that's a signal for us to continue and move them onto the next stage in our app.
+
+There are lots of ways we could solve this problem (`NotificationCenter`, `ResponderChain`, `Closures`). But the simplest, and most elegant and in my opinion `UIKit` consist way is to communicate back via the `protocol-delegate` pattern.
+
+Let's quickly review this pattern. See how it works. And then apply it to our login screen and onboarding process.
+
+## New section called Protocol-Delegate
+
+### Explain how protocol delegate works
+
+### Show how we want to use it in our app
+
+### Add protocol delegate to login
+
+### User it in app delegate to display onboarding
+
+### Challenge - get students to add to onboarding for close button
+
+### Use it to display a temporary DummyView
 
 ## Onboard only once
 
 ## Turn off onboarding via debug screen
-
-
 
 ### Level Up
 
