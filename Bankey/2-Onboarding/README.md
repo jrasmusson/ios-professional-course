@@ -29,7 +29,7 @@
 
 ```swift
 //
-//  OnboardingViewController.swift
+//  OnboardingContainerViewController.swift
 //  Bankey
 //
 //  Created by jrasmusson on 2021-09-28.
@@ -37,114 +37,92 @@
 
 import UIKit
 
-class OnboardingContainerViewController: UIPageViewController {
+class OnboardingContainerViewController: UIViewController {
 
+    let pageViewController: UIPageViewController
     var pages = [UIViewController]()
-    let pageControl = UIPageControl()
-    let initialPage = 0
+    var currentVC: UIViewController {
+        didSet {
+        }
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        
+        let page1 = ViewController1()
+        let page2 = ViewController2()
+        let page3 = ViewController3()
+        
+        self.pages.append(page1)
+        self.pages.append(page2)
+        self.pages.append(page3)
+        
+        self.currentVC = pages.first!
+        
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setup()
-        style()
-        layout()
-    }
-}
-
-extension OnboardingContainerViewController {
-    
-    func setup() {
-        dataSource = self
-        delegate = self
+        view.backgroundColor = .systemPurple
         
-        pageControl.addTarget(self, action: #selector(pageControlTapped(_:)), for: .valueChanged)
-
-        // add the individual viewControllers to the pageViewController
-        let page1 = ViewController1()
-        let page2 = ViewController2()
-        let page3 = ViewController3()
-
-        pages.append(page1)
-        pages.append(page2)
-        pages.append(page3)
-        setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
-    }
-    
-    func style() {
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.currentPageIndicatorTintColor = .black
-        pageControl.pageIndicatorTintColor = .systemGray2
-        pageControl.numberOfPages = pages.count
-        pageControl.currentPage = initialPage
-    }
-    
-    func layout() {
-        view.addSubview(pageControl)
+        addChild(pageViewController)
+        view.addSubview(pageViewController.view)
+        pageViewController.didMove(toParent: self)
+        
+        pageViewController.dataSource = self
+        pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            pageControl.widthAnchor.constraint(equalTo: view.widthAnchor),
-            pageControl.heightAnchor.constraint(equalToConstant: 20),
-            view.bottomAnchor.constraint(equalToSystemSpacingBelow: pageControl.bottomAnchor, multiplier: 1),
+            view.topAnchor.constraint(equalTo: pageViewController.view.topAnchor),
+            view.leadingAnchor.constraint(equalTo: pageViewController.view.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: pageViewController.view.trailingAnchor),
+            view.bottomAnchor.constraint(equalTo: pageViewController.view.bottomAnchor),
         ])
+        
+        pageViewController.setViewControllers([pages.first!], direction: .forward, animated: false, completion: nil)
+        currentVC = pages.first!
     }
 }
 
-// MARK: - Actions
-
-extension OnboardingContainerViewController {
-    
-    // How we change page when pageControl tapped.
-    // Note - Can only skip ahead on page at a time.
-    @objc func pageControlTapped(_ sender: UIPageControl) {
-        setViewControllers([pages[sender.currentPage]], direction: .forward, animated: true, completion: nil)
-    }
-}
-
-// MARK: - DataSources
-
+// MARK: - UIPageViewControllerDataSource
 extension OnboardingContainerViewController: UIPageViewControllerDataSource {
-    
+
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        
-        // Get the currentIndex from the view controller currently being displayed
-        guard let currentIndex = pages.firstIndex(of: viewController) else { return nil }
-        
-        if currentIndex == 0 {
-            return nil                      // Stay on first page
-        } else {
-            return pages[currentIndex - 1]  // Go previous
-        }
+        return getPreviousViewController(from: viewController)
     }
-    
+
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        
-        guard let currentIndex = pages.firstIndex(of: viewController) else { return nil }
-
-        if currentIndex < pages.count - 1 {
-            return pages[currentIndex + 1]  // Go next
-        } else {
-            return nil                      // Stay on last page
-        }
+        return getNextViewController(from: viewController)
     }
-}
 
-// MARK: - Delegates
+    private func getPreviousViewController(from viewController: UIViewController) -> UIViewController? {
+        guard let index = pages.firstIndex(of: viewController), index - 1 >= 0 else { return nil }
+        self.currentVC = pages[index - 1]
+        return pages[index - 1]
+    }
 
-extension OnboardingContainerViewController: UIPageViewControllerDelegate {
-    
-    // How we keep our pageControl in sync with viewControllers
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        
-        guard let viewControllers = pageViewController.viewControllers else { return }
-        guard let currentIndex = pages.firstIndex(of: viewControllers[0]) else { return }
-        
-        pageControl.currentPage = currentIndex
+    private func getNextViewController(from viewController: UIViewController) -> UIViewController? {
+        guard let index = pages.firstIndex(of: viewController), index + 1 < pages.count else { return nil }
+        self.currentVC = pages[index + 1]
+        return pages[index + 1]
+    }
+
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return pages.count
+    }
+
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        return pages.firstIndex(of: self.currentVC) ?? 0
     }
 }
 
 // MARK: - ViewControllers
-
 class ViewController1: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -172,11 +150,10 @@ Update `AppDelegate` to call.
 **AppDelegate**
 
 ```swift
-window?.rootViewController = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+window?.rootViewController = OnboardingViewController()
 ```
 
-- Demo explaining how it work (use iPad).
-- Git add/commit your work
+- Git add/commit your work `Added onboarding view controller`
 
 ## Not all art is created equal
 
@@ -299,7 +276,7 @@ Solution
 - Copy and paste is a perfectly fine way to get started, but we don't want to do it too much because then we have a lot of code to update when something changes
 - Let's see if we can refactor our view controllers to put all this onboarding code in one place, and reuse it three times
 
-### Create base view controller
+### Create reusable view controller
 
 - Create a new swift class `OnboardingViewController`.
 - Copy view controller 1 entirely / rename
@@ -336,6 +313,7 @@ init(coder aDecoder: NSCoder) {
 - Because it defines it, and it is required, we need to override it here - even though we aren't using it.
 - Annoying but something we have to do.
 - It has been there since the dawn of time. Something we just need to do.
+- Ask them if they know what NS means? [Interface Builder](https://arstechnica.com/gadgets/2012/12/the-legacy-of-next-lives-on-in-os-x/2/).
 
 ```swift
 @available(iOS 2.0, *)

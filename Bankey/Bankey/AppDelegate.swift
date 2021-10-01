@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = .systemBackground
 //        window?.rootViewController = LoginViewController()
 //        window?.rootViewController = AccountSummaryViewController()
-        window?.rootViewController = OnboardingContainerViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        window?.rootViewController = OnboardingContainerViewController()
 
         return true
     }
