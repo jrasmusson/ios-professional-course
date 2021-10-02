@@ -167,11 +167,6 @@ window?.rootViewController = OnboardingViewController()
 
 ## Not all art is created equal
 
-- Drag art assets into catalog
-- Show how to use pdf
- - Preserve Vector Data
- - Scales > Single Scale
- 
 ### Discusson iPad demo
 
 - Explain pdf vs retina display
@@ -186,6 +181,14 @@ window?.rootViewController = OnboardingViewController()
  - photographs cant be easily represented as equations 
 
 - So unless the image you are displaying is a photograph always ask for pdfs - else take scaled retina images
+
+### Add art to project
+
+- Drag art assets into catalog
+- Show how to use pdf
+ - Preserve Vector Data
+ - Scales > Single Scale
+ 
 
 ## Your first onboarding screen
 
