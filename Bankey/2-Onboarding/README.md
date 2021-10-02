@@ -14,6 +14,9 @@
 
 - Explain how `UIPageViewController` works
  - Illustrator or iPad 
+
+ ![](images/uipageviewcontroller.png)
+ 
 - Create a new group in project `Onboarding`
 - Move Files to bottom
 - Rename LoginView Login

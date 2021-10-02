@@ -10,7 +10,9 @@ import UIKit
 class OnboardingContainerViewController: UIViewController {
 
     let pageViewController: UIPageViewController
+    
     var pages = [UIViewController]()
+    
     var currentVC: UIViewController {
         didSet {
             guard let index = pages.firstIndex(of: currentVC) else { return }
