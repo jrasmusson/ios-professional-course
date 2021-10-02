@@ -4,15 +4,11 @@
 
 ### Agile storyboard
 
-- Introduce Agile story board
+- Introduce [Agile story board](https://trello.com/b/vU5ETuV5/ios-professional)
 - Explain mechanics of how it works with stories
+- Mention Jira
+- Go over story
 - Move over story
-
-### Git branching
-
-- Next, create a git branch
-- Demo and explain how git branching works
-- Create a git branch for this work
 
 ## Create Container View Controller
 
@@ -457,21 +453,23 @@ NSLayoutConstraint.activate([
     pageViewController.setViewControllers([previousVC], direction: .reverse, animated: true, completion: nil)
 }
 
-backButton.isHidden = index == 0
+backButton.isHidden = index == 0 // hide if on last page
 ```
 
 ![](images/2.png)
 
-#### Close button
+#### Close and Done buttons
 
-Close is just like the others. Only we want this one to always appear on all pages.
+Close and Done are just like the others. Close appears always. Done only when we are on the last page.
+
+First let's do close.
 
 ```swift
 let closeButton = UIButton(type: .system)
 
 closeButton.translatesAutoresizingMaskIntoConstraints = false
 closeButton.setTitle("Close", for: [])
-backButton.addTarget(self, action: #selector(closeTapped), for: .primaryActionTriggered)
+closeButton.addTarget(self, action: #selector(closeTapped), for: .primaryActionTriggered)
 
 view.addSubview(closeButton)
 
@@ -482,11 +480,35 @@ NSLayoutConstraint.activate([
 ])
 
 @objc func closeTapped(_ sender: UIButton) {
-    dismiss(animated: true, completion: nil)
+    // TODO
 }
 ```
 
-Don't worry about close not dismissing. We will handle that in the next section.
+Then let's add Done.
+
+```swift
+let doneButton = UIButton(type: .system)
+
+doneButton.translatesAutoresizingMaskIntoConstraints = false
+doneButton.setTitle("Done", for: [])
+doneButton.addTarget(self, action: #selector(doneTapped), for: .primaryActionTriggered)
+
+view.addSubview(doneButton)
+
+// Done
+NSLayoutConstraint.activate([
+    view.trailingAnchor.constraint(equalToSystemSpacingAfter: doneButton.trailingAnchor, multiplier: 2),
+    view.bottomAnchor.constraint(equalToSystemSpacingBelow: doneButton.bottomAnchor, multiplier: 4)
+])
+
+@objc func doneTapped(_ sender: UIButton) {
+    // TODO
+}
+
+doneButton.isHidden = !(index == pages.count - 1) // show if on last page
+```
+
+Don't worry about Close and Done not doing anything. We will handle that in the next section.
 
 ## Protocol Delegate
 

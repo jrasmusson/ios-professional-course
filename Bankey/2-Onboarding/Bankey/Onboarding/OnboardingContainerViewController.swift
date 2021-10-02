@@ -14,14 +14,16 @@ class OnboardingContainerViewController: UIViewController {
     var currentVC: UIViewController {
         didSet {
             guard let index = pages.firstIndex(of: currentVC) else { return }
-            nextButton.isHidden = index == pages.count - 1
+            nextButton.isHidden = index == pages.count - 1 // hide if on last page
             backButton.isHidden = index == 0
+            doneButton.isHidden = !(index == pages.count - 1) // show if on last page
         }
     }
     
     let nextButton = UIButton(type: .system)
     let backButton = UIButton(type: .system)
     let closeButton = UIButton(type: .system)
+    let doneButton = UIButton(type: .system)
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -30,11 +32,11 @@ class OnboardingContainerViewController: UIViewController {
         let page2 = OnboardingViewController(heroImageName: "world", titleText: "Move your money around the world quickly and securely.")
         let page3 = OnboardingViewController(heroImageName: "thumbs", titleText: "Learn more at www.bankey.com.")
 
-        self.pages.append(page1)
-        self.pages.append(page2)
-        self.pages.append(page3)
+        pages.append(page1)
+        pages.append(page2)
+        pages.append(page3)
         
-        self.currentVC = pages.first!
+        currentVC = pages.first!
         
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -83,13 +85,18 @@ class OnboardingContainerViewController: UIViewController {
         
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.setTitle("Close", for: [])
-        backButton.addTarget(self, action: #selector(closeTapped), for: .primaryActionTriggered)
+        closeButton.addTarget(self, action: #selector(closeTapped), for: .primaryActionTriggered)
+        
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
+        doneButton.setTitle("Done", for: [])
+        doneButton.addTarget(self, action: #selector(doneTapped), for: .primaryActionTriggered)
     }
     
     private func layout() {
         view.addSubview(nextButton)
         view.addSubview(backButton)
         view.addSubview(closeButton)
+        view.addSubview(doneButton)
 
         // Next
         NSLayoutConstraint.activate([
@@ -107,6 +114,12 @@ class OnboardingContainerViewController: UIViewController {
         NSLayoutConstraint.activate([
             closeButton.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             closeButton.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2)
+        ])
+        
+        // Close
+        NSLayoutConstraint.activate([
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: doneButton.trailingAnchor, multiplier: 2),
+            view.bottomAnchor.constraint(equalToSystemSpacingBelow: doneButton.bottomAnchor, multiplier: 4)
         ])
     }
 }
@@ -156,6 +169,10 @@ extension OnboardingContainerViewController {
     }
     
     @objc func closeTapped(_ sender: UIButton) {
-        dismiss(animated: true, completion: nil)
+        // TODO
+    }
+    
+    @objc func doneTapped(_ sender: UIButton) {
+        // TODO
     }
 }
