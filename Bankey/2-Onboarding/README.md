@@ -225,6 +225,8 @@ class OnboardingViewController: UIViewController {
 
 extension OnboardingViewController {
     func style() {
+        view.backgroundColor = .systemBackground // ! dont forget
+    
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = 20
@@ -337,7 +339,7 @@ Use the parameters
 - `imageView.image = UIImage(named: heroImageName)`
 - `label.text = titleText`
 
-Use the new view controller
+Use the new view controller (copy from notes).
 
 **OnboardingContainerViewController**
 
@@ -429,10 +431,14 @@ extension OnboardingContainerViewController {
 
 Then let's hide `next` on the last page. Can do this in `didSet`.
 
+Explain [property observer](https://github.com/jrasmusson/level-up-swift/tree/master/7-properties).
+
 ```swift
-didSet {
-    guard let index = pages.firstIndex(of: currentVC) else { return }
-    nextButton.isHidden = index == pages.count - 1
+var currentVC: UIViewController { // stored property
+    didSet { // property observer
+        guard let index = pages.firstIndex(of: currentVC) else { return }
+            nextButton.isHidden = index == pages.count - 1 // Hide if last page
+    }
 }
 ```
 
@@ -451,6 +457,7 @@ Good luck!
 ```swift
 let backButton = UIButton(type: .system)
 
+// Back
 backButton.translatesAutoresizingMaskIntoConstraints = false
 backButton.setTitle("Back", for: [])
 backButton.addTarget(self, action: #selector(backTapped), for: .primaryActionTriggered)
@@ -468,7 +475,7 @@ NSLayoutConstraint.activate([
     pageViewController.setViewControllers([previousVC], direction: .reverse, animated: true, completion: nil)
 }
 
-backButton.isHidden = index == 0 // hide if on last page
+backButton.isHidden = index == 0 // Hide if on first page
 ```
 
 ![](images/2.png)
@@ -482,6 +489,7 @@ First let's do close.
 ```swift
 let closeButton = UIButton(type: .system)
 
+// Close
 closeButton.translatesAutoresizingMaskIntoConstraints = false
 closeButton.setTitle("Close", for: [])
 closeButton.addTarget(self, action: #selector(closeTapped), for: .primaryActionTriggered)
@@ -520,10 +528,12 @@ NSLayoutConstraint.activate([
     // TODO
 }
 
-doneButton.isHidden = !(index == pages.count - 1) // show if on last page
+doneButton.isHidden = !(index == pages.count - 1) // Show if on last page
 ```
 
 Don't worry about Close and Done not doing anything. We will handle that in the next section.
+
+Go ahead and commit and add and save your work `Add onboarding buttons`.
 
 ## Protocol Delegate
 
