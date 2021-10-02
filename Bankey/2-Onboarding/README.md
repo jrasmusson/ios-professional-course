@@ -21,8 +21,19 @@
 - Move Files to bottom
 - Rename LoginView Login
 - Create a new `OnboardingContainerViewController`
-- Copy and paste in code incrementally explaining as you go
-- Switch to dark mode
+- Copy and paste in code from professional repos
+ - Explain that you don't want them typing this stuff
+ - When working professionally explain how you go to a repos of examples you have built up and you copy and paste from there. 
+ - Encourge them to either star yourself, or even better create their own
+ - Show them your course repos - explain the show notes - copy from there 
+
+Discussion
+
+- adding child view controllers
+- protocol-delegate
+- convenience routines `getPrevious` and `getNext`
+
+Demo and switch simulator to dark mode (Command+Shift+A).
 
 **OnboardingContainerViewController**
 
@@ -52,11 +63,11 @@ class OnboardingContainerViewController: UIViewController {
         let page2 = ViewController2()
         let page3 = ViewController3()
         
-        self.pages.append(page1)
-        self.pages.append(page2)
-        self.pages.append(page3)
+        pages.append(page1)
+        pages.append(page2)
+        pages.append(page3)
         
-        self.currentVC = pages.first!
+        currentVC = pages.first!
         
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -152,7 +163,7 @@ Update `AppDelegate` to call.
 window?.rootViewController = OnboardingViewController()
 ```
 
-- Git add/commit your work `Added onboarding view controller`
+- Git add/commit your work `Add onboarding view controller`
 
 ## Not all art is created equal
 
@@ -161,7 +172,7 @@ window?.rootViewController = OnboardingViewController()
  - Preserve Vector Data
  - Scales > Single Scale
  
-### Discusson
+### Discusson off camera
 
 - Explain pdf vs retina display
   - pdf scale better
