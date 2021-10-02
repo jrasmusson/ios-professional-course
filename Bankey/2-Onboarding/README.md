@@ -103,13 +103,13 @@ extension OnboardingContainerViewController: UIPageViewControllerDataSource {
 
     private func getPreviousViewController(from viewController: UIViewController) -> UIViewController? {
         guard let index = pages.firstIndex(of: viewController), index - 1 >= 0 else { return nil }
-        self.currentVC = pages[index - 1]
+        currentVC = pages[index - 1]
         return pages[index - 1]
     }
 
     private func getNextViewController(from viewController: UIViewController) -> UIViewController? {
         guard let index = pages.firstIndex(of: viewController), index + 1 < pages.count else { return nil }
-        self.currentVC = pages[index + 1]
+        currentVC = pages[index + 1]
         return pages[index + 1]
     }
 
@@ -324,8 +324,8 @@ open class UIViewController : UIResponder, NSCoding, UIAppearanceContainer, UITr
 
 Use the parameters
 
-`heroImageView.image = UIImage(named: heroImageName)`
-`titleLabel.text = titleText`
+- `heroImageView.image = UIImage(named: heroImageName)`
+- `titleLabel.text = titleText`
 
 Use the new view controller
 
@@ -352,22 +352,22 @@ Sometimes we want to say more about our commits. In those cases you can do the f
 
 This will open up vi, or whatever text edit you have automatically setup to edit text files, and put you into a mode where you can freely type free form git message.
 
-Start with a title and then add a message
+Start with a title and then add a message. For the title use imperative language - not painting the fence, or painted the fence. Paint the fense.
+
+Completes the sentence `This commit will...`.
 
 ```
-refactor: added base onboarding view controller
+refactor: create generic onboarding view controller
 
-Realizing there was a lot of code duplication, I created a base
-onboarding view controller taking an image name and text as arguments.
-
-This made the other two view controllers redundant and were deleted.
+This commit adds a generic onboarding view controller that can be reused
+across multiple onboarding screens. 
 ```
 
 Once complete esc :wq.
 
 `> git log`
 
-Handy for when you want to add further detail.
+Handy for when you want to add explain yourself more or add further detail.
 
 
 ## Adding the buttons
@@ -379,6 +379,8 @@ We want:
 - `Close` on all x3 screens
 - `Next` and `Back` on the middle screen
 - `Done` on last screen
+
+![](images/4.png)
 
 Open up and lets programmatically add the buttons one at a time. Starting with `Next` and `Back`.
 
@@ -423,7 +425,7 @@ didSet {
 }
 ```
 
-Save our work `Added next button to onboarding`.
+Save our work `Add a next button to onboarding`.
 
 ### Back button challenge
 
@@ -492,7 +494,7 @@ Before we can go any further, we need a way of signally back to our `AppDelegate
 
 There are lots of ways we could solve this problem (`NotificationCenter`, `ResponderChain`, `Closures`). But the simplest, and most elegant and in my opinion `UIKit` consist way is to communicate back via the `protocol-delegate` pattern.
 
-Let's quickly review this pattern. See how it works. And then apply it to our login screen and onboarding process.
+Let's quickly review this pattern. See how it works. And then apply it to our login screen and onboarding process. See you in the next section!
 
 ## New section called Protocol-Delegate
 
