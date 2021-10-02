@@ -172,12 +172,13 @@ window?.rootViewController = OnboardingViewController()
  - Preserve Vector Data
  - Scales > Single Scale
  
-### Discusson off camera
+### Discusson iPad demo
 
 - Explain pdf vs retina display
   - pdf scale better
   - take less memory and space
   - don't alias like an image 
+  - represented as bezier curves (i.e. `y = (1 - t)^3`)
   - reason why is vectors and their pdf representation can compactly be represented as a series of equations and numbers
 
 - Why Apple has retina
@@ -195,11 +196,13 @@ window?.rootViewController = OnboardingViewController()
  - Control and buttons can be directly pinned
  - But image and label we will put in a stack
 
- **OnboardingViewController1**
+- Create a new class called `OnboardingViewController`.
+
+ **OnboardingViewController**
  
 ```swift
 //
-//  OnboardingViewController1.swift
+//  OnboardingViewController.swift
 //  Bankey
 //
 //  Created by jrasmusson on 2021-09-29.
@@ -207,7 +210,7 @@ window?.rootViewController = OnboardingViewController()
 
 import UIKit
 
-class OnboardingViewController1: UIViewController {
+class OnboardingViewController: UIViewController {
     
     let stackView = UIStackView()
     let imageView = UIImageView()
@@ -220,7 +223,7 @@ class OnboardingViewController1: UIViewController {
     }
 }
 
-extension OnboardingViewController1 {
+extension OnboardingViewController {
     func style() {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -263,37 +266,10 @@ extension OnboardingViewController1 {
 
 - Save your work - `First onboarding page`.
 
- ### Boss Challenge
+ ### Boss Challenge - Make it Reusable
  
-- Your turn. Create the next screen.
-- Create a new view controller called `OnboardingViewController2`.
-- Use the `world` pdf as art
-- Add the text `Move your money around the world quickly and securely.`
-- Update the `AppDelegate` to test it out.
-- Good luck!
-
-Solution 
-- Copy and paste view controller 1
-- Change image, and text.
-- Run
-
-![](images/1.png)
-
-- Save your work - `Added second onboarding page`.
-
-## Refactoring - the art of writing less code
-
-- Copy and paste is a perfectly fine way to get started, but we don't want to do it too much because then we have a lot of code to update when something changes
-- Let's see if we can refactor our view controllers to put all this onboarding code in one place, and reuse it three times
-
-### Create reusable view controller
-
-- Create a new swift class `OnboardingViewController`.
-- Copy view controller 1 entirely / rename
-- Explain how you want to parameterize this view controller
-- Meaning pass in the name of the image and text you want displayed, and then have this base view controller just use it
-
-### What is required init?
+- This is a good start, it would be nice if we could somehow reuse it for our other story boards
+- See if you can add an initizaler like this.
 
 ```swift
 init(heroImageName: String, titleText: String) {
@@ -304,7 +280,33 @@ init(heroImageName: String, titleText: String) {
 }
 ```
 
-Explain 
+And pass in the name of our hero image along with the title text.
+
+This is a tougher challenge. Give it a go. Take note of any questions you might have, and then come back and we will do it together. Good luck!
+
+### What is required init?
+
+OK so let's add our initializer.
+
+```swift
+init(heroImageName: String, titleText: String) {
+    self.heroImageName = heroImageName
+    self.titleText = titleText
+    
+    super.init(nibName: nil, bundle: nil)
+}
+```
+
+Let's add some variables for our image and title.
+
+```swift
+let heroImageName: String
+let titleText: String
+```
+
+And let's talk about how these initializers work.
+
+What is this?
 
 ```swift
 required init?(coder: NSCoder) {
@@ -312,7 +314,8 @@ required init?(coder: NSCoder) {
 }
 ```
 
-- This is here because `UIViewController` has an initializer defined in its base class to deserialize view controllers in story boars
+- This is here because of story boards
+- View controller has an initializer that can load a story boards via xml and because it is required, we need to implement it even though we don't want it.
 
 ```swift
 init(coder aDecoder: NSCoder) {
@@ -320,9 +323,6 @@ init(coder aDecoder: NSCoder) {
 }
 ```
 
-- Because it defines it, and it is required, we need to override it here - even though we aren't using it.
-- Annoying but something we have to do.
-- It has been there since the dawn of time. Something we just need to do.
 - Ask them if they know what NS means? [Interface Builder](https://arstechnica.com/gadgets/2012/12/the-legacy-of-next-lives-on-in-os-x/2/).
 
 ```swift
@@ -334,8 +334,8 @@ open class UIViewController : UIResponder, NSCoding, UIAppearanceContainer, UITr
 
 Use the parameters
 
-- `heroImageView.image = UIImage(named: heroImageName)`
-- `titleLabel.text = titleText`
+- `imageView.image = UIImage(named: heroImageName)`
+- `label.text = titleText`
 
 Use the new view controller
 
@@ -347,9 +347,10 @@ let page2 = OnboardingViewController(heroImageName: "world", titleText: "Move yo
 let page3 = OnboardingViewController(heroImageName: "thumbs", titleText: "Learn more at www.bankey.com.")
 ```
 
+Delete the view controllers at the bottom.
+
 - Update AppDelegate.
-- Run
-- Delete onboard 1 and 2 view controllers
+- Run/Demo still looking good in dark mode
 
 #### Saving your work with a longer commit message
 
