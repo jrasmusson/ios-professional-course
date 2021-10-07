@@ -41,7 +41,9 @@ extension AppDelegate: LoginViewControllerDelegate {
 }
 ```
 
-- Discuss `foo` in print statement.
+- Discuss
+ - Extensions common way to in Swift implement `protocol` 
+ -  `foo` in print statement.
 
 Need to keep our view controllers around so we can register ourselves as the delegate.
 
@@ -63,11 +65,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: LoginViewControllerDelegate {
     func didLogin() {
-        // Display home screen
+        // TODO: Display home screen or onboarding
         print("foo - Did login")
     }
 }
 ```
+
+- Discuss why `let` vs `var` on `loginViewController`
 
 - Test it out. 
 - Should now see print statement.
@@ -87,11 +91,69 @@ Run again. Now should see print statement.
 
 ## Protocol-Delegate Onboarding
  
- Boss challenge - not you add it to onboarding.
- 
- ## Bringing it all together in app delegate
- 
+Boss challenge - not you add it to onboarding.
+
+Open up `OnboardingContainerViewController`. 
+
+Go through same steps we did in login:
+
+- Define protocol named:
+
+```swift
+didFinishOnboarding()
+```
+
+- Assign as `weak var` variable
+- Call delegate when onboarding complete - `Done` button pressed or `Close` (where the `TODOs` are located).
+- Then switch to `AppDelegate` - assign yourself as delegate in there.
+- Implement the protocol
+- Set onboarding as the `rootViewController` temporarily for testing.
+- Print out statement when onboarding done.
+
+Good luck!
+
+**OnboardingContainerViewController**
+
+```swift
+protocol OnboardingContainerViewControllerDelegate: AnyObject {
+    func didFinishOnboarding()
+}
+
+var pages = [UIViewController]()
+weak var delegate: OnboardingContainerViewControllerDelegate?
+
+@objc func closeTapped(_ sender: UIButton) {
+    delegate?.didFinishOnboarding()
+}
+    
+@objc func doneTapped(_ sender: UIButton) {
+    delegate?.didFinishOnboarding()
+}
+```
+
+**AppDelegate**
+
+```swift
+let onboardingViewController = OnboardingContainerViewController()
+
+onboardingViewController.delegate = self
+window?.rootViewController = onboardingViewController
+
+extension AppDelegate: OnboardingContainerViewControllerDelegate {
+    func didFinishOnboarding() {
+        // TODO: Display home screen
+        print("foo - Did onboard")
+    }
+}
+```
+
+OK let's test it out. Click `Next` and `Close`. Yay 🎉!
+  
 ## Onboard only once
+
+Now that we have our protocol-delegate hooked up, let's us it to only onboard once.
+
+First let's define a variable, just to temporarily 
 
 ### Links that help
 
