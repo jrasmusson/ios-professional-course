@@ -23,25 +23,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         loginViewController.delegate = self
         onboardingViewController.delegate = self
         
-//        window?.rootViewController = loginViewController
-        window?.rootViewController = onboardingViewController
+        window?.rootViewController = loginViewController
+//        window?.rootViewController = onboardingViewController
 //        window?.rootViewController = AccountSummaryViewController()
 //        window?.rootViewController = OnboardingContainerViewController()
 
         return true
     }
+    
+    func setRootViewController(_ vc: UIViewController, animated: Bool = true) {
+        guard animated, let window = self.window else {
+            self.window?.rootViewController = vc
+            self.window?.makeKeyAndVisible()
+            return
+        }
+
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        UIView.transition(with: window,
+                          duration: 0.3,
+                          options: .transitionCrossDissolve,
+                          animations: nil,
+                          completion: nil)
+    }
 }
 
 extension AppDelegate: LoginViewControllerDelegate {
     func didLogin() {
-        // TODO: Display home screen or onboarding
-        print("foo - Did login")
+        setRootViewController(onboardingViewController)
     }
 }
 
 extension AppDelegate: OnboardingContainerViewControllerDelegate {
     func didFinishOnboarding() {
-        // TODO: Display home screen
-        print("foo - Did onboard")
+        setRootViewController(DummyViewController())
     }
 }
