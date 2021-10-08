@@ -135,10 +135,10 @@ weak var delegate: OnboardingContainerViewControllerDelegate?
 **AppDelegate**
 
 ```swift
-let onboardingViewController = OnboardingContainerViewController()
+let onboardingContainerViewController = OnboardingContainerViewController()
 
 onboardingViewController.delegate = self
-window?.rootViewController = onboardingViewController
+window?.rootViewController = onboardingContainerViewController
 
 extension AppDelegate: OnboardingContainerViewControllerDelegate {
     func didFinishOnboarding() {
@@ -165,7 +165,7 @@ Then let's display onboarding when login completes.
 ```swift
 extension AppDelegate: LoginViewControllerDelegate {
     func didLogin() {
-        window?.rootViewController = onboardingViewController
+        window?.rootViewController = onboardingContainerViewController
     }
 }
 ```
@@ -197,7 +197,7 @@ And replacing setting the rootViewController directly with this.
 ```swift
 extension AppDelegate: LoginViewControllerDelegate {
     func didLogin() {
-        setRootViewController(onboardingViewController)
+        setRootViewController(onboardingContainerViewController)
     }
 }
 ```
@@ -272,16 +272,13 @@ Good stuff!
 
 Save your work.
 
-## Overview of what we've learned
+## Next - how to we actually remember...
 
-- `UIPageViewController`
-- Onboarding
-- Protocol-Delegate (the most important pattern)
-- Controlling app flow from app delegate
-
-Next up we are going to talk navigation. Probably one of the most important, and confusing topics, for those not familiar with UIKit and all the different ways we can move around.
-
-Take a break. Stretch. Grab a coffee. Then comeback and we'll dive into the world of UIKit navigation.
+- Add logout button to Dummy
+- Define protocol - Logoutable() - didLogout() in LogoutViewController
+- Add delegate to dummary to logout when button pressed
+- Have app delegate register for logout
+- Then save results in NSUserDefault
 
 
 ### Links that help
