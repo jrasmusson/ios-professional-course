@@ -1,16 +1,21 @@
-# Protocol-Delegate
+# Onboarding Part II
 
 ![](images/0.png)
 
-- In this section you are going to learn not only learn what protocol-delegate is and how it works
- - you are also going to see how we can leverage its power ourselves when building UIKit applications
-- We will start by first reviewing what the protocol-delegate is and how it works, then we'll shift gears and use it in our app for handling signin and onboarding
+In part II you are going to learn:
 
-Explain what protocol-delegate is.
+- how to leverage the protocol-delegate pattern when building apps
+- how to coordinate view controller display in `AppDelegate`
+- how to save app state to disk via `UserDefaults`
 
-Explain how we are going to use it. 
+All important stuff you can be expected to be asked to applications you work on professionally.
 
-OK, so now that you've seen how protocol-delegate works, let's head over to the arcade, and see how we can use it to signal to our `AppDelegate` that login and onboarding are done, and then ultimately aid us in our navigation.
+Show video explaining:
+
+- what protocol-delegate pattern is
+- how it works
+- how we can use it when building applications
+
 
 ## Protocol-Delegate Login
 
@@ -25,6 +30,11 @@ protocol LoginViewControllerDelegate: AnyObject {
 }
 
 weak var delegate: LoginViewControllerDelegate?
+
+if username == "" && password == "" {
+    signInButton.configuration?.showsActivityIndicator = true
+    delegate?.didLogin()
+
 ```
 
 - Discuss alternative naming conventions.
@@ -36,7 +46,6 @@ Then let's use it in `AppDelgate` to signal login was complete and successful.
 ```swift
 extension AppDelegate: LoginViewControllerDelegate {
     func didLogin() {
-        // Display home screen
         print("foo - Did login")
     }
 }
@@ -66,29 +75,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: LoginViewControllerDelegate {
     func didLogin() {
-        // TODO: Display home screen or onboarding
         print("foo - Did login")
     }
 }
 ```
 
-- Discuss why `let` vs `var` on `loginViewController`
+- Discuss why `let` vs `var`
 
 - Test it out. 
 - Should now see print statement.
 - Discuss how to filter print statements.
-- Except it doesn't work. Because we forget to call it.
-
-**LoginViewController**
-
-```swift
-if username == "" && password == "" {
-    signInButton.configuration?.showsActivityIndicator = true
-    delegate?.didLogin()
-```
-
-Run again. Now should see print statement.
-
 
 ## Protocol-Delegate Onboarding
  
@@ -150,7 +146,7 @@ extension AppDelegate: OnboardingContainerViewControllerDelegate {
 
 OK let's test it out. Click `Next` and `Close`. Yay 🎉!
   
-## Transitioning smoothly like a pro
+## Transitioning like a pro
 
 Now that we have our protocol-delegate hooked up, let's us it to only onboard once.
 
@@ -212,10 +208,10 @@ In the next session we'll see how we can
 
 - setup a dummy view controller to temporaily nagivate to
 - give it the ability to logout
-- save our state (both in memory and on disk).
 
 
-## Creating a dummy for a home screen
+
+## Logging out
 
 Create new class `DummyViewController` in `Login` directory. Go ahead and type this code in.
 
@@ -268,14 +264,16 @@ Now let's display this dummy view controller when onboarding is done.
 **AppDelegate**
 
 ```swift
+let dummyViewController = DummyViewController()
+
 extension AppDelegate: OnboardingContainerViewControllerDelegate {
     func didFinishOnboarding() {
-        setRootViewController(DummyViewController())
+        setRootViewController(dummyViewController)
     }
 }
 ```
 
-## Logging them out
+## Logout Protocol-Delegate
 
 Going to do this with a protocol-delegate and adding it to our `DummyViewController`.
 
@@ -310,23 +308,20 @@ Discussion
  - Explain selector
  - Explain method signature of selector
 
-Register for it in our `AppDelegate`.
+Use it in our `AppDelegate`.
 
 ```swift
-let dummyViewController = DummyViewController()
-
 dummyViewController.logoutDelegate = self
 
 extension AppDelegate: LogoutDelegate {
     func didLogout() {
-        // TODO: Set state
         setRootViewController(loginViewController)
     }
 }
 
 extension AppDelegate: OnboardingContainerViewControllerDelegate {
     func didFinishOnboarding() {
-        setRootViewController(dummyViewController) // here
+        setRootViewController(dummyViewController)
     }
 }
 ```
@@ -337,18 +332,18 @@ So that that we have this setup, we are in a place where we can actually try to 
 
 Let's track this in memory.
 
-## Tracking state in memory
+## Onboarding once in memory
 
 Tracking in memory is he easiest thing we can do, and a good place to start. Let's create a variable representing whether someone has onboarded, and then set it when they have.
 
 **AppDelegate**
 
 ```swift
-var onboarded = false
+var hasOnboarded = false
     
 extension AppDelegate: OnboardingContainerViewControllerDelegate {
     func didFinishOnboarding() {
-        onboarded = true
+        hasOnboarded = true
         setRootViewController(dummyViewController)
     }
 }
@@ -359,7 +354,7 @@ And then update our `didLogin` to leverage this logic.
 ```swift
 extension AppDelegate: LoginViewControllerDelegate {
     func didLogin() {
-        if onboarded {
+        if hasOnboarded {
             setRootViewController(dummyViewController)
         } else {
             setRootViewController(onboardingViewController)
@@ -385,9 +380,40 @@ Now this is pretty good, but look what happens if we restart the app. It forgets
 
 Let's make our app permanently remember by storing this state on the phone. Using something called `UserDefaults`.
 
-## Tracking state on disk
+## ## Onboarding once on disk
 
-U R HERE
+- What are `UserDefaults`?
+- What are they good for?
+- How do they work?
+- Show students all the different types they can save (your page).
+
+Create a dir called `Utils`. Create a new class in there called `LocalState`.
+
+```swift
+public class LocalState {
+    
+    private enum Keys: String {
+        case hasOnboarded
+    }
+    
+    public static var hasOnboarded: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: Keys.hasOnboarded.rawValue)
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue, forKey: Keys.hasOnboarded.rawValue)
+            UserDefaults.standard.synchronize()
+        }
+    }
+}
+```
+
+Then instead of storing in a variable, will store on disk.
+
+- Delete variable `onboarded`.
+- Replace with `LocalState.hasOnboarded`
+- Run and test. It remembers 🎉.
+- Save your work.
 
 
 ### Links that help
