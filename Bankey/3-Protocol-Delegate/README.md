@@ -1,16 +1,17 @@
 # Protocol-Delegate
 
+![](images/0.png)
+
 - In this section you are going to learn not only learn what protocol-delegate is and how it works
  - you are also going to see how we can leverage its power ourselves when building UIKit applications
 - We will start by first reviewing what the protocol-delegate is and how it works, then we'll shift gears and use it in our app for handling signin and onboarding
 
-Youtube video.
- 
- 1. Login
- 2. Onboarding
+Explain what protocol-delegate is.
 
-OK, so now that you've seen how protocol-delegate works, let's head over to the arcade, and see how we can use itto signal to our `AppDelegate` that login and onboarding are done, and then ultimately aid us in our navigation.
- 
+Explain how we are going to use it. 
+
+OK, so now that you've seen how protocol-delegate works, let's head over to the arcade, and see how we can use it to signal to our `AppDelegate` that login and onboarding are done, and then ultimately aid us in our navigation.
+
 ## Protocol-Delegate Login
 
 First lets define the protocol and delegate.
@@ -201,7 +202,7 @@ extension AppDelegate: LoginViewControllerDelegate {
 }
 ```
 
-Explain what is going on here with animation etc.
+- Discuss: Explain what is going on here with animation etc.
 
 Great - so now we can finish logging in, present the onboarding view controller. Where do we go after onboarding?
 
