@@ -150,7 +150,7 @@ extension AppDelegate: OnboardingContainerViewControllerDelegate {
 
 OK let's test it out. Click `Next` and `Close`. Yay 🎉!
   
-## Onboard only once
+## Transitioning smoothly like a pro
 
 Now that we have our protocol-delegate hooked up, let's us it to only onboard once.
 
@@ -204,11 +204,18 @@ extension AppDelegate: LoginViewControllerDelegate {
 
 - Discuss: Explain what is going on here with animation etc.
 
-Great - so now we can finish logging in, present the onboarding view controller. Where do we go after onboarding?
+Great - so we can onboard and transition. But how can we ensure that users can only on board once.
 
-Well that is what we are going to tackle in the next section when we get into navigation. 
+To do that we need a home screen, or at least some place we can send people after they have logged in.
 
-But for now, let's just create a dummary view controller, and a stand in for our home screen, and do the real thing in the next section when we get there.
+In the next session we'll see how we can 
+
+- setup a dummy view controller to temporaily nagivate to
+- give it the ability to logout
+- save our state (both in memory and on disk).
+
+
+## Creating a dummy for a home screen
 
 Create new class `DummyViewController` in `Login` directory. Go ahead and type this code in.
 
@@ -268,17 +275,119 @@ extension AppDelegate: OnboardingContainerViewControllerDelegate {
 }
 ```
 
-Good stuff!
+## Logging them out
 
-Save your work.
+Going to do this with a protocol-delegate and adding it to our `DummyViewController`.
 
-## Next - how to we actually remember...
+Define the protocol in `LoginViewController`.
 
-- Add logout button to Dummy
-- Define protocol - Logoutable() - didLogout() in LogoutViewController
-- Add delegate to dummary to logout when button pressed
-- Have app delegate register for logout
-- Then save results in NSUserDefault
+```swift
+protocol LogoutDelegate: AnyObject {
+    func didLogout()
+}
+```
+
+Add a logout button and delegate to `DummyViewController`.
+
+```swift
+let logoutButton = UIButton(type: .system)
+
+logoutButton.translatesAutoresizingMaskIntoConstraints = false
+logoutButton.configuration = .filled()
+logoutButton.setTitle("Logout", for: [])
+logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .primaryActionTriggered)
+
+@objc func logoutButtonTapped(sender: UIButton) {
+    logoutDelegate?.didLogout()
+}
+
+stackView.addArrangedSubview(logoutButton)
+```
+
+Discussion
+
+ - Explain @objc
+ - Explain selector
+ - Explain method signature of selector
+
+Register for it in our `AppDelegate`.
+
+```swift
+let dummyViewController = DummyViewController()
+
+dummyViewController.logoutDelegate = self
+
+extension AppDelegate: LogoutDelegate {
+    func didLogout() {
+        // TODO: Set state
+        setRootViewController(loginViewController)
+    }
+}
+
+extension AppDelegate: OnboardingContainerViewControllerDelegate {
+    func didFinishOnboarding() {
+        setRootViewController(dummyViewController) // here
+    }
+}
+```
+
+Test it out. When we hit logout we end up back at the loging screen.
+
+So that that we have this setup, we are in a place where we can actually try to remember whether the user has already been through the onboarding process.
+
+Let's track this in memory.
+
+## Tracking state in memory
+
+Tracking in memory is he easiest thing we can do, and a good place to start. Let's create a variable representing whether someone has onboarded, and then set it when they have.
+
+**AppDelegate**
+
+```swift
+var onboarded = false
+    
+extension AppDelegate: OnboardingContainerViewControllerDelegate {
+    func didFinishOnboarding() {
+        onboarded = true
+        setRootViewController(dummyViewController)
+    }
+}
+```
+
+And then update our `didLogin` to leverage this logic.
+
+```swift
+extension AppDelegate: LoginViewControllerDelegate {
+    func didLogin() {
+        if onboarded {
+            setRootViewController(dummyViewController)
+        } else {
+            setRootViewController(onboardingViewController)
+        }
+    }
+}
+```
+
+If we run this now we'll see that is almost works. We just have a left over spinner that we need to reset. We can do that like this.
+
+**LoginViewController**
+
+```swift
+override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated)
+    signInButton.configuration?.showsActivityIndicator = false
+}
+```
+
+Test. Now everything works. Can onboard once, and never again for that session.
+
+Now this is pretty good, but look what happens if we restart the app. It forgets.
+
+Let's make our app permanently remember by storing this state on the phone. Using something called `UserDefaults`.
+
+## Tracking state on disk
+
+U R HERE
 
 
 ### Links that help
