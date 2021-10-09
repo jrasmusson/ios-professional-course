@@ -247,21 +247,20 @@ extension ViewController {
 
 - Discuss - create a snippet if you haven't already for this. We are going to reuse this going forward. Will save some typing.
 
-Now let's display this dummy view controller when onboarding is done.
-
-**AppDelegate**
+Add a login button.
 
 ```swift
-let dummyViewController = DummyViewController()
+let logoutButton = UIButton(type: .system)
 
-extension AppDelegate: OnboardingContainerViewControllerDelegate {
-    func didFinishOnboarding() {
-        setRootViewController(dummyViewController)
-    }
-}
+logoutButton.translatesAutoresizingMaskIntoConstraints = false
+logoutButton.configuration = .filled()
+logoutButton.setTitle("Logout", for: [])
+logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .primaryActionTriggered)
+
+stackView.addArrangedSubview(logoutButton)
 ```
 
-## Logout Protocol-Delegate
+And now lets apply protocol-delegate to it.
 
 Going to do this with a protocol-delegate and adding it to our `DummyViewController`.
 
@@ -295,6 +294,21 @@ Discussion
  - Explain @objc
  - Explain selector
  - Explain method signature of selector
+
+**AppDelegate**
+
+```swift
+let dummyViewController = DummyViewController()
+
+extension AppDelegate: OnboardingContainerViewControllerDelegate {
+    func didFinishOnboarding() {
+        setRootViewController(dummyViewController)
+    }
+}
+```
+
+## Logout Protocol-Delegate
+
 
 Use it in our `AppDelegate`.
 
