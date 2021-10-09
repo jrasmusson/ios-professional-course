@@ -43,18 +43,6 @@ Then let's use it in `AppDelgate` to signal login was complete and successful.
 
 **AppDelegate**
 
-```swift
-extension AppDelegate: LoginViewControllerDelegate {
-    func didLogin() {
-        print("foo - Did login")
-    }
-}
-```
-
-- Discuss
- - Extensions common way to in Swift implement `protocol` 
- -  `foo` in print statement.
-
 Need to keep our view controllers around so we can register ourselves as the delegate.
 
 ```swift
