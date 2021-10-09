@@ -323,7 +323,16 @@ extension AppDelegate: OnboardingContainerViewControllerDelegate {
 }
 ```
 
-Test it out. When we hit logout we end up back at the loging screen.
+Test it out. When we hit logout we end up back at the loging screen. But our spinner is still spinning. Fix like this.
+
+**LoginViewController**
+
+```swift
+override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated)
+    signInButton.configuration?.showsActivityIndicator = false
+}
+```
 
 So that that we have this setup, we are in a place where we can actually try to remember whether the user has already been through the onboarding process.
 
@@ -362,14 +371,7 @@ extension AppDelegate: LoginViewControllerDelegate {
 
 If we run this now we'll see that is almost works. We just have a left over spinner that we need to reset. We can do that like this.
 
-**LoginViewController**
 
-```swift
-override func viewDidDisappear(_ animated: Bool) {
-    super.viewDidDisappear(animated)
-    signInButton.configuration?.showsActivityIndicator = false
-}
-```
 
 Test. Now everything works. Can onboard once, and never again for that session.
 
@@ -377,7 +379,7 @@ Now this is pretty good, but look what happens if we restart the app. It forgets
 
 Let's make our app permanently remember by storing this state on the phone. Using something called `UserDefaults`.
 
-## ## Onboarding once on disk
+## Onboarding once on disk
 
 - What are `UserDefaults`?
 - What are they good for?
