@@ -298,24 +298,16 @@ weak var logoutDelegate: LogoutDelegate?
 
 At this point our `DummyViewController` is ready to go. Now we just need to sign up and use it in `AppDelegate`
 
+
+## Logout Protocol-Delegate
+
+
+OK so now we are ready to use in `AppDelegate`. React to logout.
 **AppDelegate**
 
 ```swift
 let dummyViewController = DummyViewController()
 
-extension AppDelegate: OnboardingContainerViewControllerDelegate {
-    func didFinishOnboarding() {
-        setRootViewController(dummyViewController)
-    }
-}
-```
-
-## Logout Protocol-Delegate
-
-
-Use it in our `AppDelegate`.
-
-```swift
 dummyViewController.logoutDelegate = self
 
 extension AppDelegate: LogoutDelegate {
