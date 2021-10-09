@@ -258,35 +258,10 @@ logoutButton.setTitle("Logout", for: [])
 logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .primaryActionTriggered)
 
 stackView.addArrangedSubview(logoutButton)
-```
-
-And now lets apply protocol-delegate to it.
-
-Going to do this with a protocol-delegate and adding it to our `DummyViewController`.
-
-Define the protocol in `LoginViewController`.
-
-```swift
-protocol LogoutDelegate: AnyObject {
-    func didLogout()
-}
-```
-
-Add a logout button and delegate to `DummyViewController`.
-
-```swift
-let logoutButton = UIButton(type: .system)
-
-logoutButton.translatesAutoresizingMaskIntoConstraints = false
-logoutButton.configuration = .filled()
-logoutButton.setTitle("Logout", for: [])
-logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .primaryActionTriggered)
 
 @objc func logoutButtonTapped(sender: UIButton) {
-    logoutDelegate?.didLogout()
+    
 }
-
-stackView.addArrangedSubview(logoutButton)
 ```
 
 Discussion
@@ -294,6 +269,34 @@ Discussion
  - Explain @objc
  - Explain selector
  - Explain method signature of selector
+
+Now lets apply protocol-delegate to it.
+
+Normally we would add protocol-delegate definition to`DummyViewController`, but in this case, because I know we are going to want to reuse this later in our real view controller, lets define it in `LoginViewController`.
+
+Define the protocol in `LoginViewController`.
+
+**LoginViewController**
+
+```swift
+protocol LogoutDelegate: AnyObject {
+    func didLogout()
+}
+```
+
+So we can define it there, and then use it in `DummyViewController` like this.
+
+**DummyViewController**
+
+```swift
+weak var logoutDelegate: LogoutDelegate?
+
+@objc func logoutButtonTapped(sender: UIButton) {
+    logoutDelegate?.didLogout()
+}
+```
+
+At this point our `DummyViewController` is ready to go. Now we just need to sign up and use it in `AppDelegate`
 
 **AppDelegate**
 
