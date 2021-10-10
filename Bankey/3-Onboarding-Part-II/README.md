@@ -121,7 +121,7 @@ weak var delegate: OnboardingContainerViewControllerDelegate?
 ```swift
 let onboardingContainerViewController = OnboardingContainerViewController()
 
-onboardingViewController.delegate = self
+onboardingContainerViewController.delegate = self
 window?.rootViewController = onboardingContainerViewController
 
 extension AppDelegate: OnboardingContainerViewControllerDelegate {
@@ -363,7 +363,7 @@ extension AppDelegate: LoginViewControllerDelegate {
         if hasOnboarded {
             setRootViewController(dummyViewController)
         } else {
-            setRootViewController(onboardingViewController)
+            setRootViewController(onboardingContainerViewController)
         }
     }
 }
