@@ -400,11 +400,24 @@ NSLayoutConstraint.activate([
 
 #### Creating a generic tile
 
+Let's create a generic tile that can display all our various bits of information.
+
+- first lets analyze what we need
+- then lets build it out full
+- then we will define a type (an `enum`) that will tell us what to display and what not to
+- then we'll fill it in with some realistic looking data
+
+
+
+
 - Save your work
 
 #### Making the tile dynamic
 
+### Selecting a tile
 
+- Next up account summary detail
+- 
 
 ### Links that help
 
