@@ -10,6 +10,15 @@ import UIKit
 
 class AccountSummaryTile: UIView {
     
+    let typeLabel = UILabel()
+    let underlineView = UIView()
+    let nameLabel = UILabel()
+    
+    let balanceLabel = UILabel()
+    let balanceAmountLabel = UILabel()
+    
+    let chevonImageView = UIImageView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -31,10 +40,34 @@ extension AccountSummaryTile {
     func style() {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .systemGreen
+        
+        typeLabel.translatesAutoresizingMaskIntoConstraints = false
+        typeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        typeLabel.adjustsFontForContentSizeCategory = true
+        typeLabel.text = "Account type"
+
+        underlineView.translatesAutoresizingMaskIntoConstraints = false
+        underlineView.backgroundColor = .systemPurple
+        
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        nameLabel.text = "Account name"
     }
     
     func layout() {
+        addSubview(typeLabel)
+        addSubview(underlineView)
+        addSubview(nameLabel)
         
+        NSLayoutConstraint.activate([
+            typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
+            typeLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+            underlineView.topAnchor.constraint(equalToSystemSpacingBelow: typeLabel.bottomAnchor, multiplier: 1),
+            underlineView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+            underlineView.widthAnchor.constraint(equalToConstant: 40),
+            underlineView.heightAnchor.constraint(equalToConstant: 4),
+            nameLabel.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 2),
+            nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+        ])
     }
 }
-

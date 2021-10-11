@@ -279,7 +279,7 @@ extension AccountSummaryHeaderView {
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
         ])
@@ -298,7 +298,7 @@ Couple ways we can fix:
 
  - modify intrinisc content size
  - give a fixed constraint / height for header view
- - will fix later when we add to scroll view
+ - or leave it if we think it looks good
 
 Save your work
 
@@ -407,17 +407,78 @@ Let's create a generic tile that can display all our various bits of information
 - then we will define a type (an `enum`) that will tell us what to display and what not to
 - then we'll fill it in with some realistic looking data
 
+Adding the `typeLabel`.
+
+**AccountSummaryTile**
+
+```swift
+let typeLabel = UILabel()
+
+typeLabel.translatesAutoresizingMaskIntoConstraints = false
+typeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+typeLabel.adjustsFontForContentSizeCategory = true
+typeLabel.text = "Account type"
+
+addSubview(typeLabel)
+    
+NSLayoutConstraint.activate([
+    typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
+    typeLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+])
+```
+
+![](images/4.png)
+
+Adding the `underlineView`.
+
+```swift
+let underlineView = UIView()
+
+underlineView.translatesAutoresizingMaskIntoConstraints = false
+underlineView.backgroundColor = .systemPurple
+
+underlineView.topAnchor.constraint(equalToSystemSpacingBelow: typeLabel.bottomAnchor, multiplier: 1),
+underlineView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+underlineView.widthAnchor.constraint(equalToConstant: 40),
+underlineView.heightAnchor.constraint(equalToConstant: 4)
+```
+
+![](images/5.png)
+
+Add `nameLabel` - challenge!
+
+- See if you can add the `nameLabel`.
+- Give it a font of `.headline`.
+- Placeholder text of `Account name`.
+- The put it a spacing of `2` multiplier beneath the underline view
+- And leading anchor of `1` from the edge.
+- Good luck!
+
+```swift
+let nameLabel = UILabel()
+
+nameLabel.translatesAutoresizingMaskIntoConstraints = false
+nameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+nameLabel.text = "Account name"
+
+addSubview(nameLabel)
+
+nameLabel.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 2),
+nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+```
+
+![](images/6.png)
 
 
 
 - Save your work
 
-#### Making the tile dynamic
+### Making the tile dynamic
 
 ### Selecting a tile
 
 - Next up account summary detail
-- 
+
 
 ### Links that help
 
