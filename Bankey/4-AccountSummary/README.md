@@ -469,9 +469,58 @@ nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, mul
 
 ![](images/6.png)
 
+Adding the balances. Let's try these out in a stack view.
 
+```swift
+let balanceStackView = UIStackView()
+let balanceLabel = UILabel()
+let balanceAmountLabel = UILabel()
+
+balanceStackView.translatesAutoresizingMaskIntoConstraints = false
+balanceStackView.axis = .vertical
+balanceStackView.spacing = 0
+    
+balanceLabel.translatesAutoresizingMaskIntoConstraints = false
+balanceLabel.font = UIFont.preferredFont(forTextStyle: .body)
+balanceLabel.text = "Some balance"
+
+balanceAmountLabel.translatesAutoresizingMaskIntoConstraints = false
+balanceAmountLabel.font = UIFont.preferredFont(forTextStyle: .body)
+balanceAmountLabel.text = "$100,000.00"
+
+balanceStackView.addArrangedSubview(balanceLabel)
+balanceStackView.addArrangedSubview(balanceAmountLabel)
+    
+addSubview(balanceStackView)
+
+balanceStackView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 0),
+trailingAnchor.constraint(equalToSystemSpacingAfter: balanceStackView.trailingAnchor, multiplier: 4)
+```
+
+Discussion:
+
+- when to stack view and when to not
 
 - Save your work
+
+![](images/7.png)
+
+Now we just need the chevron.
+
+```swift
+let chevonImageView = UIImageView()
+
+chevonImageView.translatesAutoresizingMaskIntoConstraints = false
+chevonImageView.image = UIImage(systemName: "chevron.right")
+
+addSubview(chevonImageView)
+
+chevonImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 1),
+trailingAnchor.constraint(equalToSystemSpacingAfter: chevonImageView.trailingAnchor, multiplier: 1)
+```
+
+![](images/8.png)
+
 
 ### Making the tile dynamic
 
