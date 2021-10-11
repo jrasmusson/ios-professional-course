@@ -156,9 +156,9 @@ extension AccountSummaryViewController {
         view.addSubview(headerView)
         
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 0),
-            headerView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0),
-            view.trailingAnchor.constraint(equalToSystemSpacingAfter: headerView.trailingAnchor, multiplier: 0)
+            headerView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1),
+            headerView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: headerView.trailingAnchor, multiplier: 1)
         ])
     }
 }
@@ -281,7 +281,7 @@ extension AccountSummaryHeaderView {
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
         ])
     }
 }
@@ -295,6 +295,7 @@ Discussion
 - That's how Stack Views work. They stretch to fill.
 
 Couple ways we can fix:
+
  - modify intrinisc content size
  - give a fixed constraint / height for header view
  - will fix later when we add to scroll view
@@ -305,19 +306,104 @@ Save your work
 
 - Scroll views are...
 - And the way they work is...
+- The trick with scroll views is understanding that there are x2 sets of constraints and then everything needs a height.
 
-What we are going to go is create a scroll view, containing a stack view, and that is how we are going to scroll this main page.
+Lets start by:
 
+- Creating a tile view
+- Adding our scroll and stack view
+- Adding our tiles to the stack.
+
+#### Creating the tile view
+
+**AccountSummaryTile**
+
+```swift
+import Foundation
+import UIKit
+
+class AccountSummaryTile: UIView {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        style()
+        layout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: 200, height: 100)
+    }
+}
+
+extension AccountSummaryTile {
+    
+    func style() {
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    func layout() {
+        
+    }
+}
+```
+
+#### Adding the tile to the view controller
+
+**AccountSummaryViewController**
+
+```swift
+let scrollView = UIScrollView()
+let stackView = UIStackView()
+
+let tiles = [
+    AccountSummaryTile(),
+    AccountSummaryTile(),
+    AccountSummaryTile(),
+    AccountSummaryTile(),
+    AccountSummaryTile()
+]
+
+scrollView.translatesAutoresizingMaskIntoConstraints = false
+
+stackView.translatesAutoresizingMaskIntoConstraints = false
+stackView.axis = .vertical
+stackView.spacing = 8
+
+for tile in tiles {
+    stackView.addArrangedSubview(tile)
+}
+
+// Scroll + StackView
+NSLayoutConstraint.activate([
+    scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 8),
+    scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+    scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+    scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+    
+    stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+    stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+    stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+    stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+    
+    stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+])
+```
+
+![](images/3.png)
 
 - Save your work
 
-### Setting up data structure
+#### Creating a generic tile
 
 - Save your work
 
-### Creatimg the customer header
+#### Making the tile dynamic
 
-- Save your work
 
 
 ### Links that help
