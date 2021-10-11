@@ -17,7 +17,7 @@ class MainViewController: UITabBarController {
     func setupViews() {
         view.backgroundColor = .systemPurple
 
-        let summaryVC = SummaryViewController()
+        let summaryVC = AccountSummaryViewController()
         summaryVC.setTabBarImage(imageName: "list.dash.header.rectangle", title: "Summary")
 
         let moveMoneyVC = MoveMoneyViewController()
@@ -29,12 +29,6 @@ class MainViewController: UITabBarController {
         let tabBarList = [summaryVC, moveMoneyVC, moreVC]
 
         viewControllers = tabBarList
-    }
-}
-
-class SummaryViewController: UIViewController {
-    override func viewDidLoad() {
-        view.backgroundColor = .systemGray6
     }
 }
 

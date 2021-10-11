@@ -24,7 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         loginViewController.delegate = self
         onboardingViewController.delegate = self
         
-        window?.rootViewController = loginViewController
+        window?.rootViewController = AccountSummaryViewController()
+//        window?.rootViewController = loginViewController
 //        window?.rootViewController = onboardingViewController
 //        window?.rootViewController = AccountSummaryViewController()
 //        window?.rootViewController = OnboardingContainerViewController()
