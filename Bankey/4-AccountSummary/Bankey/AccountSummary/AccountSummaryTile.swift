@@ -63,8 +63,7 @@ extension AccountSummaryTile {
         balanceLabel.text = "Some balance"
 
         balanceAmountLabel.translatesAutoresizingMaskIntoConstraints = false
-        balanceAmountLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        balanceAmountLabel.text = "$100,000.00"
+        balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "100,000", cents: "00")
         
         chevonImageView.translatesAutoresizingMaskIntoConstraints = false
         chevonImageView.image = UIImage(systemName: "chevron.right")
@@ -95,5 +94,23 @@ extension AccountSummaryTile {
             chevonImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 1),
             trailingAnchor.constraint(equalToSystemSpacingAfter: chevonImageView.trailingAnchor, multiplier: 1)
         ])
+    }
+}
+
+extension AccountSummaryTile {
+    
+    private func makeFormattedBalance(dollars: String, cents: String) -> NSMutableAttributedString {
+        let dollarSignAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
+        let dollarAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .title1)]
+        let centAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .baselineOffset: 8]
+        
+        let rootString = NSMutableAttributedString(string: "$", attributes: dollarSignAttributes)
+        let dollarString = NSAttributedString(string: dollars, attributes: dollarAttributes)
+        let centString = NSAttributedString(string: cents, attributes: centAttributes)
+        
+        rootString.append(dollarString)
+        rootString.append(centString)
+        
+        return rootString
     }
 }
