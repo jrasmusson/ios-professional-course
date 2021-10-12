@@ -9,7 +9,16 @@ import UIKit
 
 class AccountSummaryCell: UITableViewCell {
 
-    let courseName = UILabel()
+    let typeLabel = UILabel()
+    let underlineView = UIView()
+    let nameLabel = UILabel()
+        
+    let balanceStackView = UIStackView()
+    let balanceLabel = UILabel()
+    let balanceAmountLabel = UILabel()
+        
+    let chevonImageView = UIImageView()
+
     static let reuseID = "AccountSummaryCell"
     static let rowHeight: CGFloat = 150
     
@@ -27,17 +36,17 @@ class AccountSummaryCell: UITableViewCell {
 extension AccountSummaryCell {
     
     private func setup() {
-        courseName.translatesAutoresizingMaskIntoConstraints = false
-        courseName.font = UIFont.systemFont(ofSize: 20)
-        courseName.text = "Foo"
+        typeLabel.translatesAutoresizingMaskIntoConstraints = false
+        typeLabel.font = UIFont.systemFont(ofSize: 20)
+        typeLabel.text = "Foo"
     }
     
     private func layout() {
-        contentView.addSubview(courseName)
+        contentView.addSubview(typeLabel) // imporant!
         
         NSLayoutConstraint.activate([
-            courseName.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
-            courseName.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+            typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
+            typeLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
         ])
     }
 }

@@ -337,7 +337,7 @@ class AccountSummaryCell: UITableViewCell {
 extension AccountSummaryCell {
     
     private func setup() {
-        translatesAutoresizingMaskIntoConstraints = false
+
     }
     
     private func layout() {
