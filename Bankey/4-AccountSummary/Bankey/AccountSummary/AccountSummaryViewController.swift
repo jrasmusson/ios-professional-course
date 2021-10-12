@@ -72,10 +72,6 @@ extension AccountSummaryViewController: UITableViewDataSource {
         return games.count
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return AccountSummaryCell.rowHeight
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

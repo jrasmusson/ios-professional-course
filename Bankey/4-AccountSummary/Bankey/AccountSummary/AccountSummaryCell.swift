@@ -5,41 +5,34 @@
 //  Created by jrasmusson on 2021-10-12.
 //
 
-
-import Foundation
 import UIKit
 
 class AccountSummaryCell: UITableViewCell {
-    
-    let typeLabel = UILabel()
-    
-    static let reuseID = "AccountSummaryCell"
-    static let rowHeight: CGFloat = 80
 
+    let courseName = UILabel()
+    static let reuseID = "AccountSummaryCell"
+    static let rowHeight: CGFloat = 150
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension AccountSummaryCell {
-    private func setup() {
-        typeLabel.translatesAutoresizingMaskIntoConstraints = false
-        typeLabel.font = UIFont.systemFont(ofSize: 20)
-    }
-    
-    private func layout() {
-        contentView.addSubview(typeLabel)
+        // Set any attributes of your UI components here.
+        courseName.translatesAutoresizingMaskIntoConstraints = false
+        courseName.font = UIFont.systemFont(ofSize: 20)
+        courseName.text = "Foo"
+        
+        // Add the UI components
+        contentView.addSubview(courseName)
         
         NSLayoutConstraint.activate([
-            typeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            typeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            typeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            typeLabel.heightAnchor.constraint(equalToConstant: 50)
+            courseName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            courseName.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            courseName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            courseName.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
