@@ -350,6 +350,7 @@ Create image showing layout.
 
 Let's add all the elements then style them one-by-one. Starting with the account `typeLabel`.
 
+### typeLabel
 ```swift
 let typeLabel = UILabel()
 let underlineView = UIView()
@@ -369,7 +370,7 @@ typeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
 typeLabel.adjustsFontForContentSizeCategory = true
 typeLabel.text = "Account type"
 
-addSubview(typeLabel)
+contentView.addSubview(typeLabel) // imporant!
 
 typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
 typeLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
@@ -385,25 +386,127 @@ private func setupTableView() {
     tableView.dataSource = self
     
     tableView.register(AccountSummaryCell.self, forCellReuseIdentifier: AccountSummaryCell.reuseID)
+    tableView.rowHeight = AccountSummaryCell.rowHeight
+    tableView.tableFooterView = UIView()
     
     view = tableView
 }
 
 func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CustomCell
+    let cell = tableView.dequeueReusableCell(withIdentifier: AccountSummaryCell.reuseID, for: indexPath) as! AccountSummaryCell
     return cell
 }
+```
 
+![](images/6.png)
+
+Discussion on Cell height:
+
+ - if your cell height heights are all the same recommend way to set cell height is once for all cells like this:
+
+ `tableView.rowHeight = AccountSummaryCell.rowHeight`
+
+ - if your cell heights vary by cell you can introduce logic and set them specifically like this
+
+```swift
 func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     return AccountSummaryCell.rowHeight
 }
 ```
 
-#### How to make fancy titles
+#### Thinking challenge: How to add underline bar
+
+- How would you do this?
+- Spend 10 seconds thinking about it then come back and we'll implement together.
+- Discussion: Everything is a view
+- When you see blocks and rectangles like this, just think view. Most dividers and underlines are done this way.
+
+### underlineView
 
 ```swift
-extension AccountSummaryTile {
+underlineView.translatesAutoresizingMaskIntoConstraints = false
+underlineView.backgroundColor = .systemTeal
+
+contentView.addSubview(underlineView)
+
+underlineView.topAnchor.constraint(equalToSystemSpacingBelow: typeLabel.bottomAnchor, multiplier: 1),
+underlineView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+underlineView.widthAnchor.constraint(equalToConstant: 60),
+underlineView.heightAnchor.constraint(equalToConstant: 4),
+```
+
+![](images/7.png)
+
+### nameLabel - Challange
+
+See if you can lay this one out:
+
+- font: `.body`
+- text: `Account name`
+- topSpace: `16pts` (multiplier or x2)
+- leading:  `16pts` (multiplier or x2)
+
+```swift
+nameLabel.translatesAutoresizingMaskIntoConstraints = false
+nameLabel.font = UIFont.preferredFont(forTextStyle: .body)
+nameLabel.text = "Account name"
     
+contentView.addSubview(nameLabel)
+    
+nameLabel.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 2),
+nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+```
+
+![](images/8.png)
+
+### Balance labels
+
+Going to do something a bit different here. Instead of laying out each individually, going to embed into a stack view.
+
+```swift
+balanceStackView.translatesAutoresizingMaskIntoConstraints = false
+balanceStackView.axis = .vertical
+balanceStackView.spacing = 0
+
+balanceLabel.translatesAutoresizingMaskIntoConstraints = false
+balanceLabel.font = UIFont.preferredFont(forTextStyle: .body)
+balanceLabel.text = "Some balance"
+
+balanceAmountLabel.translatesAutoresizingMaskIntoConstraints = false
+balanceAmountLabel.text = "$929,466.63"
+
+balanceStackView.addArrangedSubview(balanceLabel)
+balanceStackView.addArrangedSubview(balanceAmountLabel)
+    
+contentView.addSubview(balanceStackView)
+
+balanceStackView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 0),
+trailingAnchor.constraint(equalToSystemSpacingAfter: balanceStackView.trailingAnchor, multiplier: 4),
+```
+
+![](images/9.png)
+
+### chevonImageView
+
+```swift
+chevonImageView.translatesAutoresizingMaskIntoConstraints = false
+chevonImageView.image = UIImage(systemName: "chevron.right")
+
+contentView.addSubview(chevonImageView)
+
+chevonImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 1),
+trailingAnchor.constraint(equalToSystemSpacingAfter: chevonImageView.trailingAnchor, multiplier: 1)
+```
+
+![](images/10.png)
+
+### NSAttributedStrings
+
+- Demo / explain what these things are and how they work.
+- Let's use these to make our balance fancy 🚀
+
+```swift
+extension AccountSummaryCell {
     private func makeFormattedBalance(dollars: String, cents: String) -> NSMutableAttributedString {
         let dollarSignAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
         let dollarAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .title1)]
@@ -423,7 +526,9 @@ extension AccountSummaryTile {
 balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "100,000", cents: "00")
 ```
 
-![](images/9.png)
+![](images/11.png)
+
+U R HERE
 
 ### Making the tile dynamic
 
