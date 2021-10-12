@@ -25,10 +25,8 @@ class AccountSummaryCell: UITableViewCell {
         contentView.addSubview(courseName)
         
         NSLayoutConstraint.activate([
-            courseName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            courseName.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            courseName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            courseName.heightAnchor.constraint(equalToConstant: 50)
+            courseName.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
+            courseName.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
         ])
     }
     
