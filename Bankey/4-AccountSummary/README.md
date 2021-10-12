@@ -2,6 +2,33 @@
 
 - image of app navigation
 
+
+## Discussion of which control to use
+
+### ScrollView
+
+- good for static fixed views
+- not good if your data needs to reload
+
+### CollectionView
+
+- good
+- little more complex
+- sometimes overkill
+
+### TableView
+
+- the work horse of UIKit
+- can do just about anything
+- will use later
+
+We are going to go with `UITableView`. 
+
+- Its the most commonly used control out there.
+- It can do everything you'll ever need.
+
+
+
 ## Setup
 
 - create branch `account-summary`.
@@ -29,8 +56,6 @@ class MainViewController: UITabBarController {
     }
 
     func setupViews() {
-        view.backgroundColor = .systemPurple
-
         let summaryVC = AccountSummaryViewController()
         summaryVC.setTabBarImage(imageName: "list.dash.header.rectangle", title: "Summary")
 
@@ -84,97 +109,196 @@ setRootViewController(mainViewController) // x2
 
 ## Creating Account Summary View Controller
 
-- Scroll View with tiles
+- UITableView with custom cell and header
 - Create directory `AccountSummary`
 - Extract into own class
 
-### Create the header
 
-- Custom view
-- Start with an empty view
-
-**AccountSummaryHeaderView**
-
-```swift
-class AccounSummaryHeaderView: UIView {
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        style()
-        layout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: 200, height: 200)
-    }
-}
-
-extension AccounSummaryHeaderView {
-    
-    func style() {
-        translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-    func layout() {
-        
-    }
-}
-```
-
-- Add it to the summary.
+Let's start with an empty table view controller with some basic data.
 
 **AccountSummaryViewController**
 
 ```swift
-import Foundation
 import UIKit
 
 class AccountSummaryViewController: UIViewController {
     
-    let headerView = AccountSummaryHeaderView()
+    let games = [
+        "Pacman",
+        "Space Invaders",
+        "Space Patrol",
+    ]
+    
+    var tableView = UITableView()
     
     override func viewDidLoad() {
-        view.backgroundColor = .systemBackground
-        
-        style()
-        layout()
+        super.viewDidLoad()
+        setup()
     }
 }
 
 extension AccountSummaryViewController {
-    private func style() {
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        headerView.backgroundColor = .systemRed
+    private func setup() {
+        setupTableView()
     }
     
-    private func layout() {
-        view.addSubview(headerView)
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
         
-        NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1),
-            headerView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
-            view.trailingAnchor.constraint(equalToSystemSpacingAfter: headerView.trailingAnchor, multiplier: 1)
-        ])
+        view = tableView
+    }
+}
+
+extension AccountSummaryViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.textLabel?.text = games[indexPath.row]
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return games.count
+    }
+}
+
+extension AccountSummaryViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
     }
 }
 ```
 
+Discussion:
+
+- simplest table we can start with
+- explain how table layout is done here
+- remind people how table view works
+
 ![](images/0.png)
+
+Next let's add the header.
+
+### Adding the table view header
+
+- There is lots of confusion around how to add a table view header ([link](https://stackoverflow.com/questions/16471846/is-it-possible-to-use-autolayout-with-uitableviews-tableheaderview))
+- The simplest, most reliable way is to create a complex, autolayout header is to:
+ - Create a nib 
+ - Add it as a `tableHeaderView` to the table.
+
+#### Create a class
+
+- Create a class `AccountSummaryHeaderView`
+
+**AccountSummaryHeaderView**
+
+```swift
+import UIKit
+
+class AccountSummaryHeaderView: UIView {
+
+}
+```
+
+#### Create a nib
+
+- Create a nib view named `AccountSummaryHeaderView`
+- Set to height `200`
+- Set `File's Owner` to `AccountSummaryHeaderView`
+- Give the nib a red background
+- Drag `view` from nib into file and call `contentView`.
+- Then load the nib and pin to the edges like this
+ 
+**AccountSummaryHeaderView**
+
+```swift
+import UIKit
+
+class AccountSummaryHeaderView: UIView {
+    
+    @IBOutlet var contentView: UIView!
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonInit()
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: UIView.noIntrinsicMetric, height: 144)
+    }
+    
+    private func commonInit() {
+        let bundle = Bundle(for: AccountSummaryHeaderView.self)
+        bundle.loadNibNamed("AccountSummaryHeaderView", owner: self, options: nil)
+        addSubview(contentView)
+        
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        contentView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        contentView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+    }
+}
+```
+
+- Add it to the table.
+
+
+```swift
+setupTableHeaderView()
+
+private func setupTableHeaderView() {
+    let header = AccountSummaryHeaderView(frame: .zero)
+    
+    var size = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+    size.width = UIScreen.main.bounds.width
+    header.frame.size = size
+    
+    tableView.tableHeaderView = header
+}        
+```
+
+![](images/1.png)
 
 ### Styling the header
 
-- Lets fill in some details and give it some style.
-- You add one label, let them add some others.
-- Also hard code header to appear in `AppDelegate` for faster iterations.
+- Now because we have a nib, we can do all our auto layout in there.
+- Set background back to `System Background Color`.
 
-`window?.rootViewController = AccountSummaryViewController()`
+Drag out the following labels vertically with the following font sizes:
 
-**AccountSummaryHeaderView**
+- `logoLabel` - title1, Bankey
+- `greetingLabel` - title3, Good morning, 
+- `nameLabel` - title3 bold, Jonathan
+- `dateLablel` - body
+
+Set `View` background to `systemPurple`.
+
+Embed in a stackview and layout as follows:
+
+![](images/4.png)
+
+Explain what CHCR means and how to fix.
+
+![](images/2.png)
+
+Bankey.
+
+![](images/3.png)
+
+Should now look like this.
+
+![](images/5.png)
+
+U R HERE
+
+
+
 
 - Enable bolding
 
@@ -549,6 +673,44 @@ balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "100,000", cen
 
 ### Making the tile dynamic
 
+Now this is nice, but what would be really nice is if we could re-use this account tile view for different types of accounts.
+
+Turns out we can. We just need to give it a way to determine what account type to display, and then give it the neccessary details.
+
+Enums are really good for this. Let's start by defining an account type, and then seeing what data we need to vary.
+
+Discussion
+
+- enums
+- ViewModel
+- passing in data via the viewModel
+
+**AccountSummaryTile**
+
+```swift
+enum AccountType: String {
+    case Banking
+    case CreditCards
+    case Investments
+}
+    
+struct ViewModel {
+    let accountType: AccountType
+    let accountName: String
+    let balanceTitle: String
+    let balanceAmount: Decimal
+}
+```
+
+Now we need to update creating the tiles. Let's pretend we got these over the network.
+
+**AccountSummaryViewController**
+
+```swift
+var tiles: [AccountSummaryTile]()
+```    
+
+
 ### Selecting a tile
 
 - Next up account summary detail
@@ -557,3 +719,4 @@ balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "100,000", cen
 ### Links that help
 
 - [Container Views](https://developer.apple.com/library/archive/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html)
+- [Table Headers & Footer](https://developer.apple.com/documentation/uikit/views_and_controls/table_views/adding_headers_and_footers_to_table_sections)

@@ -5,81 +5,39 @@
 //  Created by jrasmusson on 2021-10-11.
 //
 
-import Foundation
 import UIKit
 
 class AccountSummaryHeaderView: UIView {
     
-    let stackView = UIStackView()
-    
-    let logoLabel = UILabel()
-    let greetingLabel = UILabel()
-    let nameLabel = UILabel()
-    let dateLabel = UILabel()
+    @IBOutlet var contentView: UIView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        style()
-        layout()
+        commonInit()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonInit()
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: 200, height: 200)
-    }
-}
-
-extension AccountSummaryHeaderView {
-    
-    func style() {
-        translatesAutoresizingMaskIntoConstraints = false
-        
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.spacing = 20
-
-        logoLabel.translatesAutoresizingMaskIntoConstraints = false
-        logoLabel.font = UIFont.preferredFont(forTextStyle: .title1)
-        logoLabel.adjustsFontForContentSizeCategory = true
-        logoLabel.text = "Bankey"
-
-        greetingLabel.translatesAutoresizingMaskIntoConstraints = false
-        greetingLabel.font = UIFont.preferredFont(forTextStyle: .title3)
-        greetingLabel.adjustsFontForContentSizeCategory = true
-        greetingLabel.text = "Good morning,"
-
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.font = UIFont.preferredFont(forTextStyle: .title3).bold()
-        nameLabel.adjustsFontForContentSizeCategory = true
-        nameLabel.text = "Jonathan"
-
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        dateLabel.adjustsFontForContentSizeCategory = true
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM dd, yyyy"
-        dateLabel.text = formatter.string(from: Date())
+        return CGSize(width: UIView.noIntrinsicMetric, height: 144)
     }
     
-    func layout() {
-        stackView.addArrangedSubview(logoLabel)
-        stackView.addArrangedSubview(greetingLabel)
-        stackView.addArrangedSubview(nameLabel)
-        stackView.addArrangedSubview(dateLabel)
+    private func commonInit() {
+        let bundle = Bundle(for: AccountSummaryHeaderView.self)
+        bundle.loadNibNamed("AccountSummaryHeaderView", owner: self, options: nil)
         
-        addSubview(stackView)
+        addSubview(contentView)
+        
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            contentView.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 0),
+            contentView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 0),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: contentView.trailingAnchor, multiplier: 0),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: contentView.bottomAnchor, multiplier: 0)
         ])
     }
 }
-

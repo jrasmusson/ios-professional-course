@@ -10,6 +10,19 @@ import UIKit
 
 class AccountSummaryTile: UIView {
     
+    enum AccountType: String {
+        case Banking
+        case CreditCard
+        case Investment
+    }
+    
+    struct ViewModel {
+        let accountType: AccountType
+        let accountName: String
+        let balanceTitle: String
+        let balanceAmount: Decimal
+    }
+    
     let typeLabel = UILabel()
     let underlineView = UIView()
     let nameLabel = UILabel()
@@ -20,11 +33,11 @@ class AccountSummaryTile: UIView {
     
     let chevonImageView = UIImageView()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        style()
-        layout()
+    let viewModel: ViewModel
+    
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+        super.init(frame: .zero)
     }
     
     required init?(coder: NSCoder) {

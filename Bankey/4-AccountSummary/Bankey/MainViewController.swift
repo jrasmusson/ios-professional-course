@@ -15,8 +15,6 @@ class MainViewController: UITabBarController {
     }
 
     func setupViews() {
-        view.backgroundColor = .systemPurple
-
         let summaryVC = AccountSummaryViewController()
         summaryVC.setTabBarImage(imageName: "list.dash.header.rectangle", title: "Summary")
 
