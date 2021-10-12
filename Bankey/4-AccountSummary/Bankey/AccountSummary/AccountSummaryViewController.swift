@@ -33,7 +33,18 @@ extension AccountSummaryViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        tableView.register(AccountSummaryCell.self, forCellReuseIdentifier: AccountSummaryCell.reuseID)
+        // You must register the cell with a reuse identifier
+//                tableView.register(CourseCell.self, forCellReuseIdentifier: "courseCell")
+                // Change the row height if you want
+                tableView.rowHeight = 150
+                // This will remove any empty cells that are below your data filled cells
+                tableView.tableFooterView = UIView()
+        
         view = tableView
+        
+        ///
+        tableView.rowHeight = 144
     }
     
     private func setupTableHeaderView() {
@@ -49,13 +60,24 @@ extension AccountSummaryViewController {
 
 extension AccountSummaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = games[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: AccountSummaryCell.reuseID, for: indexPath) as! AccountSummaryCell
         return cell
+        
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "courseCell", for: indexPath) as! CourseCell
+//        cell.courseName.text = "Course name"
+//        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return games.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return AccountSummaryCell.rowHeight
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
 }
 
