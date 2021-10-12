@@ -15,15 +15,8 @@ class AccountSummaryCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         setup()
-        
-        contentView.addSubview(courseName)
-        
-        NSLayoutConstraint.activate([
-            courseName.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
-            courseName.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
-        ])
+        layout()
     }
     
     required init?(coder: NSCoder) {
@@ -39,5 +32,12 @@ extension AccountSummaryCell {
         courseName.text = "Foo"
     }
     
-    
+    private func layout() {
+        contentView.addSubview(courseName)
+        
+        NSLayoutConstraint.activate([
+            courseName.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
+            courseName.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+        ])
+    }
 }
