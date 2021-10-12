@@ -34,17 +34,10 @@ extension AccountSummaryViewController {
         tableView.dataSource = self
         
         tableView.register(AccountSummaryCell.self, forCellReuseIdentifier: AccountSummaryCell.reuseID)
-        // You must register the cell with a reuse identifier
-//                tableView.register(CourseCell.self, forCellReuseIdentifier: "courseCell")
-                // Change the row height if you want
-                tableView.rowHeight = 150
-                // This will remove any empty cells that are below your data filled cells
-                tableView.tableFooterView = UIView()
+        tableView.rowHeight = AccountSummaryCell.rowHeight
+        tableView.tableFooterView = UIView()
         
         view = tableView
-        
-        ///
-        tableView.rowHeight = 144
     }
     
     private func setupTableHeaderView() {
