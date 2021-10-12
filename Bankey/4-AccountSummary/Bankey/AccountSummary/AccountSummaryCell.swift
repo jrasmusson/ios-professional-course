@@ -16,12 +16,8 @@ class AccountSummaryCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        // Set any attributes of your UI components here.
-        courseName.translatesAutoresizingMaskIntoConstraints = false
-        courseName.font = UIFont.systemFont(ofSize: 20)
-        courseName.text = "Foo"
+        setup()
         
-        // Add the UI components
         contentView.addSubview(courseName)
         
         NSLayoutConstraint.activate([
@@ -33,4 +29,15 @@ class AccountSummaryCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension AccountSummaryCell {
+    
+    private func setup() {
+        courseName.translatesAutoresizingMaskIntoConstraints = false
+        courseName.font = UIFont.systemFont(ofSize: 20)
+        courseName.text = "Foo"
+    }
+    
+    
 }
