@@ -773,7 +773,6 @@ In Part I - Given these two new fields on our ViewModel.
 struct ViewModel {
     let accountType: AccountType
     let accountName: String
-    let balanceTitle: String // new
     let balanceAmount: Decimal // new
 }
 ```
@@ -791,8 +790,71 @@ In Part II update the view so that when a `balanceAmount` is passed in as part o
 
 Now be careful - you are going to have to figure out how to convert that `balanceAmount: Decimal` into `String` for dollars and cents. But I think you can do it. Give it a go, see what kind of challenges you run into, and then come back and we'll do it together. Good luck!
 
+### Solution
 
-Next up account summary detail.
+OK lets start with the easy part. Let's first update the balance label depending on the `accountType` passed in.
+
+```swift
+extension AccountSummaryCell {
+    func configure(with vm: ViewModel) {
+        
+        typeLabel.text = vm.accountType.rawValue
+        nameLabel.text = vm.accountName
+        
+        switch vm.accountType {
+        case .Banking:
+            underlineView.backgroundColor = .systemTeal
+            balanceLabel.text = "Current balance"
+        case .CreditCard:
+            underlineView.backgroundColor = .systemOrange
+            balanceLabel.text = "Current balance"
+        case .Investment:
+            underlineView.backgroundColor = .systemPurple
+            balanceLabel.text = "Value"
+        }
+    }
+}
+```
+
+If we run that now we'll see the balance label properly set.
+
+![](images/15.png)
+
+Next comes the tricky part. We need to update our view model so that when we pass in a balance.
+
+```swift
+struct ViewModel {
+    let accountType: AccountType
+    let accountName: String
+    let balanceAmount: Decimal // new
+}
+
+let banking1 = AccountSummaryCell.ViewModel(accountType: .Banking,
+                                            accountName: "Banking Account",
+                                            balanceAmount: 929466.23)
+let creditCard1 = AccountSummaryCell.ViewModel(accountType: .CreditCard,
+                                               accountName: "Visa Avion Card",
+                                               balanceAmount: 0.00)
+let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment,
+                                               accountName: "Tax-Free Saver",
+                                               balanceAmount: 2000)
+```
+
+We some how convert that `Decimal` into a two part String.
+
+This is actually harder than it looks. Could do it very simply by converting to string, parsing out dollars and cents and passing in.
+
+But I want to show you a more fully featured way that will
+
+- format the amount in the local the user is working in (adding the comma)
+- and then use that output to pass to our dollars and cent attributed string
+
+U R HERE
+
+- first we have to convert our `Decial` into a `Double` because that is what number formatter uses
+- then we need to separate out the dollars and cents
+- then can pass to attributed string func
+
 
 ### Links that help
 

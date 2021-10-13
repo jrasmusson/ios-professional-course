@@ -18,6 +18,18 @@ class AccountSummaryCell: UITableViewCell {
     struct ViewModel {
         let accountType: AccountType
         let accountName: String
+        let balanceAmount: Decimal
+        
+        var balanceFormatted: String {
+            // first convert our decimal into a double
+            let formatter = NumberFormatter()
+            formatter.locale = Locale.current
+            formatter.numberStyle = .currency
+            
+//            let number = NSNumber(value: amount)
+            let number = NSNumber(
+            return formatter.string(from: balanceAmount)!
+        }
     }
 
     let typeLabel = UILabel()
@@ -130,10 +142,13 @@ extension AccountSummaryCell {
         switch vm.accountType {
         case .Banking:
             underlineView.backgroundColor = .systemTeal
+            balanceLabel.text = "Current balance"
         case .CreditCard:
             underlineView.backgroundColor = .systemOrange
+            balanceLabel.text = "Current balance"
         case .Investment:
             underlineView.backgroundColor = .systemPurple
+            balanceLabel.text = "Value"
         }
     }
 }
