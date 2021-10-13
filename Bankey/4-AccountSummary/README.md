@@ -744,14 +744,55 @@ And now the world is our oyster. We can set and configure anything we want in th
 
 For example let's add the account name to our viewModel.
 
+```swift
+struct ViewModel {
+    let accountType: AccountType
+    let accountName: String
+}
+```
+
+Update our fetched data to pretend we also got that passed from the backed.
+
+```swift
+let banking1 = AccountSummaryCell.ViewModel(accountType: .Banking, accountName: "Banking Account")
+let creditCard1 = AccountSummaryCell.ViewModel(accountType: .CreditCard, accountName: "Visa Avion Card")
+let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment, accountName: "Tax-Free Saver")
+```
+
+And then leverage that in `configure`.
+
+`nameLabel.text = vm.accountName`
+
+### Challenge: Update balance and balance label
+
+This is a two part challenge.
+
+In Part I - Given these two new fields on our ViewModel.
+
+```swift
+struct ViewModel {
+    let accountType: AccountType
+    let accountName: String
+    let balanceTitle: String // new
+    let balanceAmount: Decimal // new
+}
+```
+
+See if you can update the `balanceLabel` so that if `accountType`:
+
+- is `Banking` or `CreditCard` the `balanceLabel` says `Current balance`.
+- is `Investment` the `balanceLabel` says `Value`.
+
+In Part II update the view so that when a `balanceAmount` is passed in as part of the view model, the `balanceAmountLabel` updates.
+
+- Give `Banking` a balance of `$929,466.63`
+- Give `CreditCard` a balance of `$0.00`
+- Give `Investment` a balance of `$2000.00`
+
+Now be careful - you are going to have to figure out how to convert that `balanceAmount: Decimal` into `String` for dollars and cents. But I think you can do it. Give it a go, see what kind of challenges you run into, and then come back and we'll do it together. Good luck!
 
 
-See if you can modify our 
-
-### Selecting a tile
-
-- Next up account summary detail
-
+Next up account summary detail.
 
 ### Links that help
 

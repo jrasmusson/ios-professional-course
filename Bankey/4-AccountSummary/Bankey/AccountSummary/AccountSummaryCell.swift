@@ -125,6 +125,7 @@ extension AccountSummaryCell {
     func configure(with vm: ViewModel) {
         
         typeLabel.text = vm.accountType.rawValue
+        nameLabel.text = vm.accountName
         
         switch vm.accountType {
         case .Banking:
