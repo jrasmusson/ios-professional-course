@@ -363,7 +363,7 @@ let balanceAmountLabel = UILabel()
 let chevonImageView = UIImageView()
 
 static let reuseID = "AccountSummaryCell"
-static let rowHeight: CGFloat = 80
+static let rowHeight: CGFloat = 100
 
 typeLabel.translatesAutoresizingMaskIntoConstraints = false
 typeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
@@ -530,13 +530,13 @@ balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "100,000", cen
 
 U R HERE
 
-### Making the tile dynamic
+## Making the tile dynamic
 
 Now this is nice, but what would be really nice is if we could re-use this account tile view for different types of accounts.
 
 Turns out we can. We just need to give it a way to determine what account type to display, and then give it the neccessary details.
 
-Enums are really good for this. Let's start by defining an account type, and then seeing what data we need to vary.
+Enums are really good for this. Let's start by defining an account type, and then seeing what data we need to vary by type.
 
 Discussion
 
@@ -544,7 +544,11 @@ Discussion
 - ViewModel
 - passing in data via the viewModel
 
+### Using enums for types
+
 **AccountSummaryTile**
+
+We can capture the variations in our cell like this.
 
 ```swift
 enum AccountType: String {
@@ -552,7 +556,13 @@ enum AccountType: String {
     case CreditCards
     case Investments
 }
-    
+```
+
+### Representing view data with ViewModels
+
+And we can represent the data for any given type like this.
+
+```swift    
 struct ViewModel {
     let accountType: AccountType
     let accountName: String
@@ -561,14 +571,182 @@ struct ViewModel {
 }
 ```
 
-Now we need to update creating the tiles. Let's pretend we got these over the network.
+Advantages:
+
+- clean separation between back and front end
+- lets you build what you need in the UI
+- while giving you a place to translation from the backend later
+- facilitates easy unit testing
+- decouples backed from front end 
+
+Let's start by simplying introducing an enum for `AccountType` and a ViewModel with `accountType` that can be figured after the cell has loaded.
+
+**AccountSummaryCell**
+
+```swift
+enum AccountType: String {
+    case Banking
+    case CreditCard
+    case Investment
+}
+```
+
+Sticking this in `AccountSummaryCell` to signal this type is only for this cell. Could put externally but then you start to run into name clashes. This avoids that.
+
+Next let's define a view model for this cell and give it an `accountType` and `accountName`.
+
+```swift    
+struct ViewModel {
+    let accountType: AccountType
+    let accountName: String
+}
+
+let viewModel: ViewModel? = nil
+```
+
+ViewModel is optional because we won't know what data this cell has when its initially dequeued in the table. But we'll set after imitating the flow as if it got set as the result of a network call.
+
+First we'll add the configuration method:
+
+```swift
+extension AccountSummaryCell {
+    func configure(with vm: ViewModel) {
+    }
+}
+```
+
+Then look and see how we can vary configuration based on type:
+
+```swift
+extension AccountSummaryCell {
+    func configure(with vm: ViewModel) {
+        switch vm.accountType {
+        case .Banking:
+            break
+        case .CreditCard:
+            break
+        case .Investment:
+            break
+        }
+    }
+}
+```
+
+Now we have a place to vary our cell configuration. All we need to do is set it when the cell gets created.
+
+First let's get rid of our old game data model (delete `games`). And instead replace it and empty data set containing exactly the data we want.
 
 **AccountSummaryViewController**
 
 ```swift
-var tiles: [AccountSummaryTile]()
-```    
+class AccountSummaryViewController: UIViewController {
+    var accounts: [AccountSummaryCell.ViewModel] = []
+    var tableView = UITableView()
+}
 
+func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return accounts.count
+}
+```
+
+Then let's pretend to fetch the data over the network like this:
+
+```swift
+extension AccountSummaryViewController {
+    private func setup() {
+        setupTableView()
+        setupTableHeaderView()
+        fetchData()
+    }
+}
+
+extension AccountSummaryViewController {
+    private func fetchData() {
+        let banking1 = AccountSummaryCell.ViewModel(accountType: .Banking)
+        let creditCard1 = AccountSummaryCell.ViewModel(accountType: .CreditCard)
+        let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment)
+        
+        accounts.append(banking1)
+        accounts.append(creditCard1)
+        accounts.append(investment1)
+    }
+}
+```
+
+And then pass it to our cell like this.
+
+```swift
+extension AccountSummaryViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard !accounts.isEmpty else { return UITableViewCell() }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: AccountSummaryCell.reuseID, for: indexPath) as! AccountSummaryCell
+        let account = accounts[indexPath.row]
+        cell.configure(with: account)
+        
+        return cell
+    }
+}
+```
+
+Now if we run the app, we won't notice anything different. Everything looks the same.
+
+But watch what happens when we leverage the account type. Because our account type enum is a string, we can use if for setting the `typeLabel`.
+
+```swift
+extension AccountSummaryCell {
+    func configure(with vm: ViewModel) {
+        
+        typeLabel.text = vm.accountType.rawValue
+        
+        switch vm.accountType {
+        case .Banking:
+            break
+        case .CreditCard:
+            break
+        case .Investment:
+            break
+        }
+    }
+}
+```
+
+![](images/12.png)
+
+But wait. It gets better. Because we can now vary by type, we can further configure our cell based on very specifiy things. Like setting the `underlineView` color.
+
+```swift
+extension AccountSummaryCell {
+    func configure(with vm: ViewModel) {
+        
+        typeLabel.text = vm.accountType.rawValue
+        
+        switch vm.accountType {
+        case .Banking:
+            underlineView.backgroundColor = .systemTeal
+        case .CreditCard:
+            underlineView.backgroundColor = .systemOrange
+        case .Investment:
+            underlineView.backgroundColor = .systemPurple
+        }
+    }
+}
+```
+
+![](images/13.png)
+
+And now the world is our oyster. We can set and configure anything we want in this cell simply by:
+
+- updating the `ViewModel`
+- leverage the `accountType` via the switch
+
+### Adding account name
+
+For example let's add the account name to our viewModel.
+
+
+
+See if you can modify our 
 
 ### Selecting a tile
 

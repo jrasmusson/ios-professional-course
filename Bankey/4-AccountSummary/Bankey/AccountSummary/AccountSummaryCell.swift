@@ -9,6 +9,17 @@ import UIKit
 
 class AccountSummaryCell: UITableViewCell {
 
+    enum AccountType: String {
+        case Banking
+        case CreditCard
+        case Investment
+    }
+
+    struct ViewModel {
+        let accountType: AccountType
+        let accountName: String
+    }
+
     let typeLabel = UILabel()
     let underlineView = UIView()
     let nameLabel = UILabel()
@@ -19,8 +30,10 @@ class AccountSummaryCell: UITableViewCell {
         
     let chevonImageView = UIImageView()
 
+    let viewModel: ViewModel? = nil
+    
     static let reuseID = "AccountSummaryCell"
-    static let rowHeight: CGFloat = 150
+    static let rowHeight: CGFloat = 100
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -95,7 +108,7 @@ extension AccountSummaryCell {
     private func makeFormattedBalance(dollars: String, cents: String) -> NSMutableAttributedString {
         let dollarSignAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
         let dollarAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .title1)]
-        let centAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .baselineOffset: 8]
+        let centAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
         
         let rootString = NSMutableAttributedString(string: "$", attributes: dollarSignAttributes)
         let dollarString = NSAttributedString(string: dollars, attributes: dollarAttributes)
@@ -105,5 +118,21 @@ extension AccountSummaryCell {
         rootString.append(centString)
         
         return rootString
+    }
+}
+
+extension AccountSummaryCell {
+    func configure(with vm: ViewModel) {
+        
+        typeLabel.text = vm.accountType.rawValue
+        
+        switch vm.accountType {
+        case .Banking:
+            underlineView.backgroundColor = .systemTeal
+        case .CreditCard:
+            underlineView.backgroundColor = .systemOrange
+        case .Investment:
+            underlineView.backgroundColor = .systemPurple
+        }
     }
 }
