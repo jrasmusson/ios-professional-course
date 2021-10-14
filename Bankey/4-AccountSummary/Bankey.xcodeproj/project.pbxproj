@@ -16,6 +16,7 @@
 		719D576C2715C52800DE5D4F /* AccountSummaryHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 719D576B2715C52800DE5D4F /* AccountSummaryHeaderView.xib */; };
 		719D5772271631BC00DE5D4F /* AccountSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719D5771271631BC00DE5D4F /* AccountSummaryCell.swift */; };
 		719D5774271639C900DE5D4F /* CourseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719D5773271639C900DE5D4F /* CourseCell.swift */; };
+		719D5776271846F600DE5D4F /* Decimal+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719D5775271846F600DE5D4F /* Decimal+Utils.swift */; };
 		71A0F7C426FD2B75008EAFD8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A0F7C326FD2B75008EAFD8 /* AppDelegate.swift */; };
 		71A0F7C826FD2B75008EAFD8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A0F7C726FD2B75008EAFD8 /* LoginViewController.swift */; };
 		71A0F7CD26FD2B76008EAFD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71A0F7CC26FD2B76008EAFD8 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 		719D576B2715C52800DE5D4F /* AccountSummaryHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountSummaryHeaderView.xib; sourceTree = "<group>"; };
 		719D5771271631BC00DE5D4F /* AccountSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryCell.swift; sourceTree = "<group>"; };
 		719D5773271639C900DE5D4F /* CourseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseCell.swift; sourceTree = "<group>"; };
+		719D5775271846F600DE5D4F /* Decimal+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decimal+Utils.swift"; sourceTree = "<group>"; };
 		71A0F7C026FD2B75008EAFD8 /* Bankey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bankey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71A0F7C326FD2B75008EAFD8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		71A0F7C726FD2B75008EAFD8 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 			children = (
 				71F770942710E99A0025AC04 /* LocalState.swift */,
 				719D576727149FF800DE5D4F /* UIFont+Traits.swift */,
+				719D5775271846F600DE5D4F /* Decimal+Utils.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				713D9FFF270F216F00193EE6 /* DummyViewController.swift in Sources */,
 				71A0F7C426FD2B75008EAFD8 /* AppDelegate.swift in Sources */,
 				71A0F7D826FD2BBA008EAFD8 /* LoginView.swift in Sources */,
+				719D5776271846F600DE5D4F /* Decimal+Utils.swift in Sources */,
 				71D109B22705DD3B000A0633 /* OnboardingViewController.swift in Sources */,
 				719D5774271639C900DE5D4F /* CourseCell.swift in Sources */,
 				719D576827149FF800DE5D4F /* UIFont+Traits.swift in Sources */,

@@ -21,14 +21,24 @@ class AccountSummaryCell: UITableViewCell {
         let balanceAmount: Decimal
         
         var balanceFormatted: String {
-            // first convert our decimal into a double
             let formatter = NumberFormatter()
-            formatter.locale = Locale.current
             formatter.numberStyle = .currency
+            formatter.usesGroupingSeparator = true
             
-//            let number = NSNumber(value: amount)
-            let number = NSNumber(
-            return formatter.string(from: balanceAmount)!
+            let doubleValue = balanceAmount.doubleValue
+            if let result = formatter.string(from: doubleValue as NSNumber) {
+                return result
+            }
+            
+            return ""
+        }
+        
+        var balanceDollarsAndCents: (String, String) {
+            let parts = modf(balanceAmount.doubleValue)
+            let dollars = String(format: "%.0f", parts.0)
+            let cents = String(format: "%.0f", parts.1 * 100)
+            
+            return (dollars, cents)
         }
     }
 
@@ -79,9 +89,11 @@ extension AccountSummaryCell {
 
         balanceLabel.translatesAutoresizingMaskIntoConstraints = false
         balanceLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        balanceLabel.textAlignment = .right
         balanceLabel.text = "Some balance"
 
         balanceAmountLabel.translatesAutoresizingMaskIntoConstraints = false
+        balanceAmountLabel.textAlignment = .right
         balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "929,466", cents: "63")
         
         chevonImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -138,6 +150,12 @@ extension AccountSummaryCell {
         
         typeLabel.text = vm.accountType.rawValue
         nameLabel.text = vm.accountName
+        
+        let dollarsAndCentsTuple = vm.balanceDollarsAndCents
+        balanceAmountLabel.attributedText = makeFormattedBalance(dollars: dollarsAndCentsTuple.0,
+                                                                 cents: dollarsAndCentsTuple.1)
+
+//        balanceAmountLabel.text = vm.balanceFormatted
         
         switch vm.accountType {
         case .Banking:

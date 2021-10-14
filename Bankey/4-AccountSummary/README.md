@@ -470,9 +470,11 @@ balanceStackView.spacing = 0
 
 balanceLabel.translatesAutoresizingMaskIntoConstraints = false
 balanceLabel.font = UIFont.preferredFont(forTextStyle: .body)
+balanceLabel.textAlignment = .right
 balanceLabel.text = "Some balance"
 
 balanceAmountLabel.translatesAutoresizingMaskIntoConstraints = false
+balanceAmountLabel.textAlignment = .right
 balanceAmountLabel.text = "$929,466.63"
 
 balanceStackView.addArrangedSubview(balanceLabel)
@@ -849,12 +851,89 @@ But I want to show you a more fully featured way that will
 - format the amount in the local the user is working in (adding the comma)
 - and then use that output to pass to our dollars and cent attributed string
 
-U R HERE
+Steps:
 
 - first we have to convert our `Decial` into a `Double` because that is what number formatter uses
+- then we need to convert that `Double` into dollars and cents formatted
 - then we need to separate out the dollars and cents
 - then can pass to attributed string func
 
+Create a file `Decimal+Utils` and into there copy.
+
+```
+extension Decimal {
+    var doubleValue: Double {
+        return NSDecimalNumber(decimal:self).doubleValue
+    }
+}
+```
+
+Discussion
+
+- why did we choose `Decimal` as our money type
+- why file named `Decimal+Utils`
+- why conversion required
+
+Then we can format like this:
+
+```swift
+struct ViewModel {
+    let accountType: AccountType
+    let accountName: String
+    let balanceAmount: Decimal // TODO: Rename me balance
+    
+    var balanceFormatted: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.usesGroupingSeparator = true
+        
+        let doubleValue = balanceAmount.doubleValue
+        if let result = formatter.string(from: doubleValue as NSNumber) {
+            return result
+        }
+        
+        return ""
+    }
+}
+```
+
+Then we need to separate out as dollars and cents.
+
+```swift
+var balanceDollarsAndCents: (String, String) {
+    return ("100", "00")
+}
+```
+
+which can then become.
+
+```swift
+    var balanceDollarsAndCents: (String, String) {
+        let parts = modf(balanceAmount.doubleValue)
+        let dollars = String(format: "%.0f", parts.0)
+        let cents = String(format: "%.0f", parts.1 * 100)
+        
+        return (dollars, cents)
+    }
+```
+
+Discussion
+
+- what is a tuple
+- why are we grabbing the `decimalSeparator`
+
+Now show them how to take this one step further with `NSAttributedString`.
+
+Explain NSAttributedString.
+
+Combine all together like this.
+
+```swift
+//        balanceAmountLabel.text = vm.balanceFormatted
+let dollarsAndCentsTuple = vm.balanceDollarsAndCents
+balanceAmountLabel.attributedText = makeFormattedBalance(dollars: dollarsAndCentsTuple.0,
+                                                         cents: dollarsAndCentsTuple.1)
+```
 
 ### Links that help
 
