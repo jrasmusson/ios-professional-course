@@ -35,11 +35,51 @@ class AccountSummaryCell: UITableViewCell {
         
         var balanceDollarsAndCents: (String, String) {
             let parts = modf(balanceAmount.doubleValue)
-            let dollars = String(format: "%.0f", parts.0)
+            
+            let dollarsWithDecimal = dollarsFormatted(parts.0) // $100,000.00
+            let formatter = NumberFormatter()
+            let decimalSeparator = formatter.decimalSeparator!
+            let dollarParts = dollarsWithDecimal.components(separatedBy: decimalSeparator)
+            var dollars = dollarParts.first!
+            dollars.removeFirst()
+            
             let cents = String(format: "%.0f", parts.1 * 100)
             
             return (dollars, cents)
         }
+        
+        var balanceAttributed: NSAttributedString {
+            let tuple = balanceDollarsAndCents
+            return makeAttributedBalance(dollars: tuple.0, cents: tuple.1)
+        }
+        
+        private func dollarsFormatted(_ dollars: Double) -> String {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .currency
+            formatter.usesGroupingSeparator = true
+            
+            if let result = formatter.string(from: dollars as NSNumber) {
+                return result
+            }
+            
+            return ""
+        }
+        
+        private func makeAttributedBalance(dollars: String, cents: String) -> NSMutableAttributedString {
+            let dollarSignAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
+            let dollarAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .title1)]
+            let centAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
+            
+            let rootString = NSMutableAttributedString(string: "$", attributes: dollarSignAttributes)
+            let dollarString = NSAttributedString(string: dollars, attributes: dollarAttributes)
+            let centString = NSAttributedString(string: cents, attributes: centAttributes)
+            
+            rootString.append(dollarString)
+            rootString.append(centString)
+            
+            return rootString
+        }
+
     }
 
     let typeLabel = UILabel()
@@ -94,7 +134,7 @@ extension AccountSummaryCell {
 
         balanceAmountLabel.translatesAutoresizingMaskIntoConstraints = false
         balanceAmountLabel.textAlignment = .right
-        balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "929,466", cents: "63")
+        balanceAmountLabel.text = "$XXX,XXX.XX"
         
         chevonImageView.translatesAutoresizingMaskIntoConstraints = false
         chevonImageView.image = UIImage(systemName: "chevron.right")
@@ -129,33 +169,11 @@ extension AccountSummaryCell {
 }
 
 extension AccountSummaryCell {
-    private func makeFormattedBalance(dollars: String, cents: String) -> NSMutableAttributedString {
-        let dollarSignAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
-        let dollarAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .title1)]
-        let centAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
-        
-        let rootString = NSMutableAttributedString(string: "$", attributes: dollarSignAttributes)
-        let dollarString = NSAttributedString(string: dollars, attributes: dollarAttributes)
-        let centString = NSAttributedString(string: cents, attributes: centAttributes)
-        
-        rootString.append(dollarString)
-        rootString.append(centString)
-        
-        return rootString
-    }
-}
-
-extension AccountSummaryCell {
     func configure(with vm: ViewModel) {
         
         typeLabel.text = vm.accountType.rawValue
         nameLabel.text = vm.accountName
-        
-        let dollarsAndCentsTuple = vm.balanceDollarsAndCents
-        balanceAmountLabel.attributedText = makeFormattedBalance(dollars: dollarsAndCentsTuple.0,
-                                                                 cents: dollarsAndCentsTuple.1)
-
-//        balanceAmountLabel.text = vm.balanceFormatted
+        balanceAmountLabel.attributedText = vm.balanceAttributed
         
         switch vm.accountType {
         case .Banking:

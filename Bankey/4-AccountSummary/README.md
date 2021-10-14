@@ -851,6 +851,12 @@ But I want to show you a more fully featured way that will
 - format the amount in the local the user is working in (adding the comma)
 - and then use that output to pass to our dollars and cent attributed string
 
+Do all this in a playground.
+
+- explain what playgrounds are and how to use
+- faster iterations
+- would normally also write unit tests.. but get into that later
+
 Steps:
 
 - first we have to convert our `Decial` into a `Double` because that is what number formatter uses
@@ -880,7 +886,7 @@ Then we can format like this:
 struct ViewModel {
     let accountType: AccountType
     let accountName: String
-    let balanceAmount: Decimal // TODO: Rename me balance
+    let balanceAmount: Decimal
     
     var balanceFormatted: String {
         let formatter = NumberFormatter()
