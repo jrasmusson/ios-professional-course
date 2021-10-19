@@ -19,6 +19,7 @@ class AccountSummaryViewController: UIViewController {
 
 extension AccountSummaryViewController {
     private func setup() {
+        setStatusBar()
         setupTableView()
         setupTableHeaderView()
         fetchData()
