@@ -24,11 +24,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         loginViewController.delegate = self
         onboardingViewController.delegate = self
         
-        let vc = AccountSummaryViewController()
-        let statusBarBackgroundView = UIView.makeStatusBarBackgroundView()
-        vc.view.addSubview(statusBarBackgroundView)
+        // Comment in for login
+        // let vc = LoginViewController()
         
-        window?.rootViewController = vc
+        // Comment in for development
+        let accountVC = AccountSummaryViewController()
+        accountVC.setStatusBar()
+        window?.rootViewController = accountVC
         
         return true
     }
@@ -75,33 +77,13 @@ extension AppDelegate: LogoutDelegate {
     }
 }
 
-extension UIView {
-//    func setStatusBar() {
-//        if #available(iOS 13.0, *) {
-//            let app = UIApplication.shared
-//            let statusBarHeight: CGFloat = app.statusBarFrame.size.height
-//
-//            let statusbarView = UIView()
-//            statusbarView.backgroundColor = UIColor.red
-//            view.addSubview(statusbarView)
-//
-//            statusbarView.translatesAutoresizingMaskIntoConstraints = false
-//            statusbarView.heightAnchor.constraint(equalToConstant: statusBarHeight).isActive = true
-//            statusbarView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1.0).isActive = true
-//            statusbarView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//            statusbarView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//        } else {
-//            let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
-//            statusBar?.backgroundColor = UIColor.red
-//        }
-//    }
-    
-    static func makeStatusBarBackgroundView() -> UIView {
-            let statusBarSize = UIApplication.shared.statusBarFrame.size // deprecated
-            let frame = CGRect(origin: .zero, size: statusBarSize)
-            let statusBackgroundView = UIView(frame: frame)
-            statusBackgroundView.backgroundColor = .systemTeal
-            statusBackgroundView.layer.zPosition = 100
-            return statusBackgroundView
-        }
+extension UIViewController {
+    func setStatusBar() {
+        let statusBarSize = UIApplication.shared.statusBarFrame.size // deprecated but OK
+        let frame = CGRect(origin: .zero, size: statusBarSize)
+        let statusbarView = UIView(frame: frame)
+
+        statusbarView.backgroundColor = .systemTeal
+        view.addSubview(statusbarView)
+    }
 }
