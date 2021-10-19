@@ -22,6 +22,7 @@
 		71A0F7CD26FD2B76008EAFD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71A0F7CC26FD2B76008EAFD8 /* Assets.xcassets */; };
 		71A0F7D026FD2B76008EAFD8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71A0F7CE26FD2B76008EAFD8 /* LaunchScreen.storyboard */; };
 		71A0F7D826FD2BBA008EAFD8 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A0F7D726FD2BBA008EAFD8 /* LoginView.swift */; };
+		71ADBF9C271EEE140097B9ED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71ADBF9B271EEE140097B9ED /* ViewController.swift */; };
 		71D109B22705DD3B000A0633 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D109B12705DD3B000A0633 /* OnboardingViewController.swift */; };
 		71F770952710E99A0025AC04 /* LocalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F770942710E99A0025AC04 /* LocalState.swift */; };
 		71FDBEC327147E7D006E710B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FDBEC227147E7D006E710B /* MainViewController.swift */; };
@@ -45,6 +46,7 @@
 		71A0F7CF26FD2B76008EAFD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		71A0F7D126FD2B76008EAFD8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71A0F7D726FD2BBA008EAFD8 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		71ADBF9B271EEE140097B9ED /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		71D109B12705DD3B000A0633 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		71F770942710E99A0025AC04 /* LocalState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalState.swift; sourceTree = "<group>"; };
 		71FDBEC227147E7D006E710B /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 				719D57692714A4C300DE5D4F /* AccountSummaryTile.swift */,
 				719D5771271631BC00DE5D4F /* AccountSummaryCell.swift */,
 				719D5773271639C900DE5D4F /* CourseCell.swift */,
+				71ADBF9B271EEE140097B9ED /* ViewController.swift */,
 			);
 			path = AccountSummary;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 				719D5774271639C900DE5D4F /* CourseCell.swift in Sources */,
 				719D576827149FF800DE5D4F /* UIFont+Traits.swift in Sources */,
 				717ADC0D2703B80300C89FDB /* OnboardingContainerViewController.swift in Sources */,
+				71ADBF9C271EEE140097B9ED /* ViewController.swift in Sources */,
 				71FDBEC327147E7D006E710B /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
