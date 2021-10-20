@@ -103,10 +103,10 @@ extension AccountSummaryViewController {
                                                     balanceAmount: 17562.44)
         let creditCard1 = AccountSummaryCell.ViewModel(accountType: .CreditCard,
                                                        accountName: "Visa Avion Card",
-                                                       balanceAmount: 0.00)
+                                                       balanceAmount: 412.83)
         let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment,
                                                        accountName: "Tax-Free Saver",
-                                                       balanceAmount: 2000)
+                                                       balanceAmount: 2000.00)
         accounts.append(savings)
         accounts.append(chequing)
         accounts.append(creditCard1)

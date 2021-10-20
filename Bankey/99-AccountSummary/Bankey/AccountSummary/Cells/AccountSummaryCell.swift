@@ -36,14 +36,21 @@ class AccountSummaryCell: UITableViewCell {
         var balanceDollarsAndCents: (String, String) {
             let parts = modf(balanceAmount.doubleValue)
             
-            let dollarsWithDecimal = dollarsFormatted(parts.0) // $100,000.00
+            let dollarPart = parts.0
+            let dollarsWithDecimal = dollarsFormatted(dollarPart) // $100,000.00
             let formatter = NumberFormatter()
             let decimalSeparator = formatter.decimalSeparator!
-            let dollarParts = dollarsWithDecimal.components(separatedBy: decimalSeparator)
-            var dollars = dollarParts.first!
+            let dollarComponents = dollarsWithDecimal.components(separatedBy: decimalSeparator)
+            var dollars = dollarComponents.first!
             dollars.removeFirst()
             
-            let cents = String(format: "%.0f", parts.1 * 100)
+            let centPart = parts.1
+            let cents: String
+            if centPart == 0 {
+                cents = "00"
+            } else {
+                cents = String(format: "%.0f", centPart * 100)
+            }
             
             return (dollars, cents)
         }
@@ -182,7 +189,7 @@ extension AccountSummaryCell {
             balanceLabel.text = "Current balance"
         case .CreditCard:
             underlineView.backgroundColor = .systemOrange
-            balanceLabel.text = "Current balance"
+            balanceLabel.text = "Balance"
         case .Investment:
             underlineView.backgroundColor = .systemPurple
             balanceLabel.text = "Value"
