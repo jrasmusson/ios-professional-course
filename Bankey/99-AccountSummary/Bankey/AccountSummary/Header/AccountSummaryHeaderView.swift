@@ -11,8 +11,18 @@ class AccountSummaryHeaderView: UIView {
     
     @IBOutlet var contentView: UIView!
     
+    @IBOutlet var welcomeLabel: UILabel!
+    @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var dateLabel: UILabel!
+    
     struct ViewModel {
+        let welcomeMessage: String
+        let name: String
+        let date: Date
         
+        var dateFormatted: String {
+            return date.monthDayYearString
+        }
     }
     
     override init(frame: CGRect) {
@@ -40,5 +50,11 @@ class AccountSummaryHeaderView: UIView {
         contentView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         contentView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+    }
+    
+    func configure(viewModel: ViewModel) {
+        welcomeLabel.text = viewModel.welcomeMessage
+        nameLabel.text = viewModel.name
+        dateLabel.text = viewModel.dateFormatted
     }
 }
