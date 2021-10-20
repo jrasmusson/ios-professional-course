@@ -24,13 +24,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         loginViewController.delegate = self
         onboardingViewController.delegate = self
         
-        // Comment in for login
-        // let vc = LoginViewController()
+        let vc = mainViewController
+        vc.setStatusBar()
+
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().backgroundColor = .systemTeal
         
-        // Comment in for development
-        let accountVC = AccountSummaryViewController()
-        accountVC.setStatusBar()
-        window?.rootViewController = accountVC
+        window?.rootViewController = vc
         
         return true
     }
@@ -74,16 +74,5 @@ extension AppDelegate: OnboardingContainerViewControllerDelegate {
 extension AppDelegate: LogoutDelegate {
     func didLogout() {
         setRootViewController(loginViewController)
-    }
-}
-
-extension UIViewController {
-    func setStatusBar() {
-        let statusBarSize = UIApplication.shared.statusBarFrame.size // deprecated but OK
-        let frame = CGRect(origin: .zero, size: statusBarSize)
-        let statusbarView = UIView(frame: frame)
-
-        statusbarView.backgroundColor = .systemTeal
-        view.addSubview(statusbarView)
     }
 }

@@ -11,6 +11,10 @@ class AccountSummaryHeaderView: UIView {
     
     @IBOutlet var contentView: UIView!
     
+    struct ViewModel {
+        
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()

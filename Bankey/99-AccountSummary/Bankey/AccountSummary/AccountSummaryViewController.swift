@@ -19,7 +19,6 @@ class AccountSummaryViewController: UIViewController {
 
 extension AccountSummaryViewController {
     private func setup() {
-//        setStatusBar()
         setupTableView()
         setupTableHeaderView()
         fetchData()
@@ -34,7 +33,6 @@ extension AccountSummaryViewController {
         tableView.tableFooterView = UIView()
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
