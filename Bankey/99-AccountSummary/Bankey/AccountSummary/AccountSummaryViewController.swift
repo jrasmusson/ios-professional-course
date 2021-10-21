@@ -101,16 +101,25 @@ extension AccountSummaryViewController {
         let chequing = AccountSummaryCell.ViewModel(accountType: .Banking,
                                                     accountName: "No-Fee All-In Chequing",
                                                     balanceAmount: 17562.44)
-        let creditCard1 = AccountSummaryCell.ViewModel(accountType: .CreditCard,
+        let visa = AccountSummaryCell.ViewModel(accountType: .CreditCard,
                                                        accountName: "Visa Avion Card",
                                                        balanceAmount: 412.83)
+        let masterCard = AccountSummaryCell.ViewModel(accountType: .CreditCard,
+                                                       accountName: "Student Mastercard",
+                                                       balanceAmount: 50.83)
         let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment,
                                                        accountName: "Tax-Free Saver",
                                                        balanceAmount: 2000.00)
+        let investment2 = AccountSummaryCell.ViewModel(accountType: .Investment,
+                                                       accountName: "Growth Fund",
+                                                       balanceAmount: 15000.00)
+
         accounts.append(savings)
         accounts.append(chequing)
-        accounts.append(creditCard1)
+        accounts.append(visa)
+        accounts.append(masterCard)
         accounts.append(investment1)
+        accounts.append(investment2)
     }
     
     private func fetchProfile() {

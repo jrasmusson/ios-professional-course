@@ -1,20 +1,22 @@
 # Container View Controllers
 
-- Intro: Demo where we are headed.
-- To get there however we first need to understand the role of Container View Controllers in iOS.
-- Let's start by reviewing:
- - What they are
- - How they work
- - And then see how we can build them ourselves.
+- Where we are headed.
+
+![](images/0.png)
+
+- To build this we need to first understand:
+ - Container View Controllers
+ - Scrollable View Controllers 
+
  
-## What are Container View Controllers
+## What are they?
 
 
 - Container view controllers are view controllers that combine content from child view controllers into a single working interface.
 
-- If you have every used the `General` `UINavigationViewController` works.
-- If you have ever ordered a coffee from Starbucks, watched a show on Netflix, or listened to some music on Spotify, you've see the `UITabBarViewController`.
-- And if you've every been onboard in a new app, you've seen the `UIPageViewController`.
+- `General` > `UINavigationViewController`.
+- Starbucks, Netflix, Spotify >`UITabBarViewController`.
+- Onboard > `UIPageViewController`.
 - These are all Container View Controllers.
 
   - UINavigationController
@@ -26,9 +28,35 @@
 
 For our app, we are going to use a `UITabBarController`. Which means we need to pass in all the VCs we want managed, and then let it figure out which one to display.
 
-Let's head over to the arcade and set this up now.
+But before we set that up, lets quickly review each container view controllers to see how they work.
 
-## Adding the TabBarController
+## UINavigationController
+
+Demo and explain.
+
+### Push / Pop
+
+```swift
+@objc func pushTapped(sender: UIButton) {
+    navigationController?.pushViewController(PushViewController(), animated: true)
+}
+
+@objc func popTapped(sender: UIButton) {
+    navigationController?.popViewController(animated: true)
+}
+```
+
+### Present / Dismiss
+
+```swift
+@objc func presentTapped(sender: UIButton) {
+    navigationController?.present(PresentViewController(), animated: true, completion: nil)
+}
+
+@objc func dismissTapped(sender: UIButton) {
+    dismiss(animated: true, completion: nil)
+}
+```
 
 ### Links that help
 
