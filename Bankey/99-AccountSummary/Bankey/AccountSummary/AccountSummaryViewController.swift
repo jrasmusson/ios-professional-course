@@ -96,10 +96,10 @@ extension AccountSummaryViewController {
     
     private func fetchAccounts() {
         let savings = AccountSummaryCell.ViewModel(accountType: .Banking,
-                                                    accountName: "Savings",
+                                                    accountName: "Basic Savings",
                                                     balanceAmount: 929466.23)
         let chequing = AccountSummaryCell.ViewModel(accountType: .Banking,
-                                                    accountName: "Chequing",
+                                                    accountName: "No-Fee All-In Chequing",
                                                     balanceAmount: 17562.44)
         let creditCard1 = AccountSummaryCell.ViewModel(accountType: .CreditCard,
                                                        accountName: "Visa Avion Card",
