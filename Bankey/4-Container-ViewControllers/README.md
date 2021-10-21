@@ -125,6 +125,8 @@ class FavoritesViewController: UIViewController {
 
 Demo and explain. Also point out how this is a `Custom Container`.
 
+![](images/3.png)
+
 ```swift
 import UIKit
 
