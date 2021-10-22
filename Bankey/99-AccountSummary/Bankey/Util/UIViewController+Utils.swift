@@ -13,7 +13,7 @@ extension UIViewController {
         let frame = CGRect(origin: .zero, size: statusBarSize)
         let statusbarView = UIView(frame: frame)
 
-        statusbarView.backgroundColor = .systemTeal
+        statusbarView.backgroundColor = appColor
         view.addSubview(statusbarView)
     }
     

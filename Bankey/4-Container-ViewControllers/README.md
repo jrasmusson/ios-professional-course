@@ -1,34 +1,26 @@
 # Container View Controllers
 
-- Where we are headed.
-
-![](images/0.png)
-
-- To build this we need to first understand:
- - Container View Controllers
- - Scrollable View Controllers 
-
- 
-## What are they?
-
-
 - Container view controllers are view controllers that combine content from child view controllers into a single working interface.
+
+  - UINavigationController
+  - UITabBarController
+  - UIPageViewController
+  - Custom
 
 - `General` > `UINavigationViewController`.
 - Starbucks, Netflix, Spotify >`UITabBarViewController`.
 - Onboard > `UIPageViewController`.
 - These are all Container View Controllers.
 
-  - UINavigationController
-  - UITabBarController
-  - UIPageViewController
-  - Custom container controllers we ourselves make
 
 - And then all do the same thing. They take in child view controllers, and then handle how they're displayed.
 
 For our app, we are going to use a `UITabBarController`. Which means we need to pass in all the VCs we want managed, and then let it figure out which one to display.
 
 But before we set that up, lets quickly review each container view controllers to see how they work.
+
+![](images/0.png)
+
 
 ## UINavigationController
 

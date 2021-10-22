@@ -124,7 +124,7 @@ extension AccountSummaryCell {
         typeLabel.text = "Account type"
         
         underlineView.translatesAutoresizingMaskIntoConstraints = false
-        underlineView.backgroundColor = .systemTeal
+        underlineView.backgroundColor = appColor
 
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.preferredFont(forTextStyle: .body)
@@ -144,7 +144,7 @@ extension AccountSummaryCell {
         balanceAmountLabel.text = "$XXX,XXX.XX"
         
         chevonImageView.translatesAutoresizingMaskIntoConstraints = false
-        let chevronImage = UIImage(systemName: "chevron.right")!.withTintColor(.systemTeal, renderingMode: .alwaysOriginal)
+        let chevronImage = UIImage(systemName: "chevron.right")!.withTintColor(appColor, renderingMode: .alwaysOriginal)
         chevonImageView.image = chevronImage
     }
     
@@ -186,7 +186,7 @@ extension AccountSummaryCell {
         
         switch vm.accountType {
         case .Banking:
-            underlineView.backgroundColor = .systemTeal
+            underlineView.backgroundColor = appColor
             balanceLabel.text = "Current balance"
         case .CreditCard:
             underlineView.backgroundColor = .systemOrange

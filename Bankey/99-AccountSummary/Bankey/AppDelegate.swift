@@ -7,6 +7,8 @@
 
 import UIKit
 
+let appColor: UIColor = .systemBlue
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -28,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         vc.setStatusBar()
 
         UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().backgroundColor = .systemTeal
+        UINavigationBar.appearance().backgroundColor = appColor
         
         window?.rootViewController = vc
         
