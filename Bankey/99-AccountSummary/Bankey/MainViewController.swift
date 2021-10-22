@@ -16,7 +16,7 @@ class MainViewController: UITabBarController {
     }
 
     private func setupViews() {
-        let summaryVC = AccountSummaryViewController()
+        let summaryVC = AccountSummaryTableViewController()
         let moneyVC = MoveMoneyViewController()
         let moreVC = MoreViewController()
 

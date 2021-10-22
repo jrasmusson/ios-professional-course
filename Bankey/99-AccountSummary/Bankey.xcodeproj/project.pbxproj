@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		713D9FFF270F216F00193EE6 /* DummyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713D9FFE270F216F00193EE6 /* DummyViewController.swift */; };
 		717ADC0D2703B80300C89FDB /* OnboardingContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ADC0C2703B80300C89FDB /* OnboardingContainerViewController.swift */; };
-		719D57642714962C00DE5D4F /* AccountSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719D57632714962C00DE5D4F /* AccountSummaryViewController.swift */; };
+		719D57642714962C00DE5D4F /* AccountSummaryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719D57632714962C00DE5D4F /* AccountSummaryTableViewController.swift */; };
 		719D57662714973600DE5D4F /* AccountSummaryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719D57652714973600DE5D4F /* AccountSummaryHeaderView.swift */; };
 		719D576827149FF800DE5D4F /* UIFont+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719D576727149FF800DE5D4F /* UIFont+Utils.swift */; };
 		719D576A2714A4C300DE5D4F /* AccountSummaryTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719D57692714A4C300DE5D4F /* AccountSummaryTile.swift */; };
@@ -42,7 +42,7 @@
 		713D9FFE270F216F00193EE6 /* DummyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyViewController.swift; sourceTree = "<group>"; };
 		717ADC0C2703B80300C89FDB /* OnboardingContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerViewController.swift; sourceTree = "<group>"; };
 		719D41482721837B007F5E22 /* BankeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BankeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		719D57632714962C00DE5D4F /* AccountSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryViewController.swift; sourceTree = "<group>"; };
+		719D57632714962C00DE5D4F /* AccountSummaryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryTableViewController.swift; sourceTree = "<group>"; };
 		719D57652714973600DE5D4F /* AccountSummaryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryHeaderView.swift; sourceTree = "<group>"; };
 		719D576727149FF800DE5D4F /* UIFont+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Utils.swift"; sourceTree = "<group>"; };
 		719D57692714A4C300DE5D4F /* AccountSummaryTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryTile.swift; sourceTree = "<group>"; };
@@ -90,12 +90,20 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		7182904027230D5A00C30510 /* TableViewController */ = {
+			isa = PBXGroup;
+			children = (
+				719D57632714962C00DE5D4F /* AccountSummaryTableViewController.swift */,
+				71EF3691272033A60089B202 /* Header */,
+				71EF3692272033C70089B202 /* Cells */,
+			);
+			path = TableViewController;
+			sourceTree = "<group>";
+		};
 		719D57622714961500DE5D4F /* AccountSummary */ = {
 			isa = PBXGroup;
 			children = (
-				719D57632714962C00DE5D4F /* AccountSummaryViewController.swift */,
-				71EF3691272033A60089B202 /* Header */,
-				71EF3692272033C70089B202 /* Cells */,
+				7182904027230D5A00C30510 /* TableViewController */,
 				719D57692714A4C300DE5D4F /* AccountSummaryTile.swift */,
 			);
 			path = AccountSummary;
@@ -292,7 +300,7 @@
 				719D576A2714A4C300DE5D4F /* AccountSummaryTile.swift in Sources */,
 				719D5772271631BC00DE5D4F /* AccountSummaryCell.swift in Sources */,
 				71EF369027202E9E0089B202 /* UIViewController+Utils.swift in Sources */,
-				719D57642714962C00DE5D4F /* AccountSummaryViewController.swift in Sources */,
+				719D57642714962C00DE5D4F /* AccountSummaryTableViewController.swift in Sources */,
 				719D57662714973600DE5D4F /* AccountSummaryHeaderView.swift in Sources */,
 				71A0F7C826FD2B75008EAFD8 /* LoginViewController.swift in Sources */,
 				71F770952710E99A0025AC04 /* LocalState.swift in Sources */,

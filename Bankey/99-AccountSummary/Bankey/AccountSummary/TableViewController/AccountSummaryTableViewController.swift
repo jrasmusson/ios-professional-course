@@ -7,12 +7,13 @@
 
 import UIKit
 
-struct Profile {
-    let firstName: String
-    let lastName: String
-}
+class AccountSummaryTableViewController: UIViewController {
+    
+    struct Profile {
+        let firstName: String
+        let lastName: String
+    }
 
-class AccountSummaryViewController: UIViewController {
     var profile: Profile?
     var accounts: [AccountSummaryCell.ViewModel] = []
 
@@ -26,7 +27,7 @@ class AccountSummaryViewController: UIViewController {
 }
 
 // MARK: - Setup
-extension AccountSummaryViewController {
+extension AccountSummaryTableViewController {
     private func setup() {
         setupTableView()
         setupTableHeaderView()
@@ -64,7 +65,7 @@ extension AccountSummaryViewController {
 }
 
 // MARK: - UITableViewDataSource
-extension AccountSummaryViewController: UITableViewDataSource {
+extension AccountSummaryTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !accounts.isEmpty else { return UITableViewCell() }
         
@@ -81,14 +82,14 @@ extension AccountSummaryViewController: UITableViewDataSource {
 }
 
 // MARK: - UITableViewDelegate
-extension AccountSummaryViewController: UITableViewDelegate {
+extension AccountSummaryTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
 }
 
 // MARK: - Networking
-extension AccountSummaryViewController {
+extension AccountSummaryTableViewController {
     private func fetchData() {
         fetchAccounts()
         fetchProfile()
