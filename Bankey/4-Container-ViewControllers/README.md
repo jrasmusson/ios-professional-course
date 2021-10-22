@@ -32,7 +32,7 @@ But before we set that up, lets quickly review each container view controllers t
 
 ## UINavigationController
 
-Demo and explain.
+Explain.
 
 ![](images/nav1.png)
 
@@ -206,7 +206,11 @@ class PresentViewController: UIViewController {
 
 ## UITabBarController
 
-Demo and explain.
+Explain.
+
+![](images/tabbar.png)
+
+### Demo
 
 ![](images/2.png)
 
@@ -267,7 +271,11 @@ class FavoritesViewController: UIViewController {
 
 ## UIPageViewController
 
-Demo and explain. Also point out how this is a `Custom Container`.
+Explain.
+
+![](images/pageview.png)
+
+### Demo
 
 ![](images/3.png)
 
@@ -312,6 +320,7 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .systemPurple
         
+        // how to add child view controllers
         addChild(pageViewController)
         view.addSubview(pageViewController.view)
         pageViewController.didMove(toParent: self)

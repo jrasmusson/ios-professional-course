@@ -45,6 +45,7 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .systemPurple
         
+        // how to add child view controllers
         addChild(pageViewController)
         view.addSubview(pageViewController.view)
         pageViewController.didMove(toParent: self)
