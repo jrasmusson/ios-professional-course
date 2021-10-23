@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AccountSummaryTableViewController: UIViewController {
+class AccountSummaryViewController: UIViewController {
     
     struct Profile {
         let firstName: String
@@ -27,7 +27,7 @@ class AccountSummaryTableViewController: UIViewController {
 }
 
 // MARK: - Setup
-extension AccountSummaryTableViewController {
+extension AccountSummaryViewController {
     private func setup() {
         setupTableView()
         setupTableHeaderView()
@@ -65,7 +65,7 @@ extension AccountSummaryTableViewController {
 }
 
 // MARK: - UITableViewDataSource
-extension AccountSummaryTableViewController: UITableViewDataSource {
+extension AccountSummaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !accounts.isEmpty else { return UITableViewCell() }
         
@@ -82,14 +82,14 @@ extension AccountSummaryTableViewController: UITableViewDataSource {
 }
 
 // MARK: - UITableViewDelegate
-extension AccountSummaryTableViewController: UITableViewDelegate {
+extension AccountSummaryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
 }
 
 // MARK: - Networking
-extension AccountSummaryTableViewController {
+extension AccountSummaryViewController {
     private func fetchData() {
         fetchAccounts()
         fetchProfile()

@@ -1,10 +1,26 @@
-//
-//  MainViewController.swift
-//  Bankey
-//
-//  Created by jrasmusson on 2021-10-11.
-//
+# Adding the UITabBarController
 
+![](images/0.png)
+
+- Demo
+- Discuss different ways we could do this.
+- Explain why you've chosen this way.
+
+## Creating the MainViewController
+
+- Define an app color in `AppDelegate`.
+
+`let appColor: UIColor = .systemTeal`
+
+- Create new view controller `MainViewController` beside `AppDelegate`.
+- Explain what is going on in here.
+- Discussion:
+ - extending `UITabBarController` 
+ - Show how to `hideNavigationBarLine`
+ - Show how to tint tab bar.
+ - We
+
+```swift
 import UIKit
 
 class MainViewController: UITabBarController {
@@ -49,6 +65,12 @@ class MainViewController: UITabBarController {
     }
 }
 
+class AccountSummaryViewController: UIViewController {
+    override func viewDidLoad() {
+        view.backgroundColor = .systemGreen
+    }
+}
+
 class MoveMoneyViewController: UIViewController {
     override func viewDidLoad() {
         view.backgroundColor = .systemOrange
@@ -60,3 +82,14 @@ class MoreViewController: UIViewController {
         view.backgroundColor = .systemPurple
     }
 }
+```
+
+
+## Adding to the AppDelegate
+
+
+
+### Links that help
+
+
+
