@@ -8,4 +8,3 @@ A course for those who would like to work professionally as iOS engineers.
 - [Onboarding Part I](Bankey/2-Onboarding-Part-I/README.md)
 - [Onboarding Part II](Bankey/3-Onboarding-Part-II/README.md)
 - [Container View Controllers](Bankey/4-Container-ViewControllers/README.md)
- - [Adding the UITabBarController](Bankey/5-AddingTabBar/README.md)
