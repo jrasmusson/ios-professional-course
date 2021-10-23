@@ -34,6 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window?.rootViewController = vc
         
+        mainViewController.selectedIndex = 2
+
         return true
     }
 }
