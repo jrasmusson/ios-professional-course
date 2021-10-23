@@ -8,6 +8,7 @@
 
 ## Creating the MainViewController
 
+- Move some folders around.
 - Define an app color in `AppDelegate`.
 
 `let appColor: UIColor = .systemTeal`
