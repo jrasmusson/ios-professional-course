@@ -19,7 +19,6 @@
  - extending `UITabBarController` 
  - Show how to `hideNavigationBarLine`
  - Show how to tint tab bar.
- - We
 
 ```swift
 import UIKit
