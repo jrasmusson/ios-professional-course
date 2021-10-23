@@ -2,7 +2,8 @@
 
 ![](images/0.png)
 
-- Demo
+- Open project - show where we are.
+- Grab the Agile story.
 - Discuss different ways we could do this.
 - Explain why you've chosen this way.
 
@@ -128,6 +129,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
  `mainViewController.selectedIndex = 2`
 
 Now ready to Add our first screen.
+
+Save your work - `feat: Add tab bar`
 
 ### Links that help
 
