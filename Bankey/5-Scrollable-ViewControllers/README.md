@@ -1,4 +1,4 @@
-# Scroll Views
+# Scrollable View Controllers
 
 - Scrolling is everything for the iPhone
 - Let's quickly review some options and see how each works.
