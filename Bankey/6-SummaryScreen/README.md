@@ -10,13 +10,13 @@
 - Demo the page
 - Explain how it is laid out
 
-## Create AccontSummaryViewController
+## Create ViewController
 
 - Create directory `AccountSummary`
 
 ![](images/0a.png)
 
-- Create file `AccountSummaryViewController`
+- Create file `AccountSummaryViewController` (via snippet)
 - Hook up in `AppDelegate`
 - Delete old one in `AppDelegate`
 - Instantiate and run.
@@ -53,7 +53,15 @@ extension AccountSummaryViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        view = tableView
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
 }
 
@@ -78,23 +86,23 @@ extension AccountSummaryViewController: UITableViewDelegate {
 
 Discussion:
 
-- simplest table we can start with
-- explain how table layout is done here
 - remind people how table view works
 
 ![](images/0.png)
 
 Next let's add the header.
 
-### Adding the table view header
+## Add Header View
 
-- There is lots of confusion around how to add a table view header ([link](https://stackoverflow.com/questions/16471846/is-it-possible-to-use-autolayout-with-uitableviews-tableheaderview))
-- The simplest, most reliable way is to create a complex, autolayout header is to:
- - Create a nib 
- - Add it as a `tableHeaderView` to the table.
+- The simplest way to add a header to a `UITableView` with Auto Layout is to:
+ - Create a class
+ - Add it as a nib
+
+- Discussion: What is a nib?
 
 #### Create a class
 
+- Create a folder `Header`
 - Create a class `AccountSummaryHeaderView`
 
 **AccountSummaryHeaderView**
@@ -110,11 +118,12 @@ class AccountSummaryHeaderView: UIView {
 #### Create a nib
 
 - Create a nib view named `AccountSummaryHeaderView`
-- Set to height `200`
+- Set to height `144`
 - Set `File's Owner` to `AccountSummaryHeaderView`
-- Give the nib a red background
-- Drag `view` from nib into file and call `contentView`.
-- Then load the nib and pin to the edges like this
+- Show how to bring up the assistant.
+- Control drag `view` from nib into file and call `contentView`.
+- Then load the nib and pin to the edges like this.
+- Give an `appColor`  or red background
  
 **AccountSummaryHeaderView**
 
@@ -143,6 +152,7 @@ class AccountSummaryHeaderView: UIView {
         let bundle = Bundle(for: AccountSummaryHeaderView.self)
         bundle.loadNibNamed("AccountSummaryHeaderView", owner: self, options: nil)
         addSubview(contentView)
+        contentView.backgroundColor = appColor
         
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
@@ -175,14 +185,37 @@ private func setupTableHeaderView() {
 ### Styling the header
 
 - Now because we have a nib, we can do all our auto layout in there.
-- Set background back to `System Background Color`.
+- Explain how we are going to layout using stack views.
 
-Drag out the following and embed in a stack view.
+![](images/2a.png)
+
+#### Horizontal Stack View #1
+
+Drag out the following and embed in a horizontal stack view.
 
 - `logoLabel` - title1, Bankey
 - `greetingLabel` - title3, Good morning, 
-- `nameLabel` - title3 bold, Jonathan
+- `nameLabel` - title3, Jonathan
 - `dateLablel` - body
+
+#### Vertical Stack View #2
+
+- Add a `UIImageView`
+- Assign it `SFSymbol` named `sun.max.fill`
+- Tint system yellow (not background)
+- Select it and horizontal stack and embed in vertical stack (if embed option not showing up after selecting try collapsing stack view let this)
+
+![](images/2b.png)
+
+![](images/2c.png)
+
+#### Layout
+
+- Pin parent stack view to edges `16 pt`.
+- Assign image view `height >= 100` and `width = 100`
+- Resolve any left over ambiguity
+
+![](images/2d.png)
 
 Explain what CHCR means and how to fix.
 
@@ -192,10 +225,8 @@ Bankey.
 
 ![](images/3.png)
 
-Drag out an imageView and set to `sun.max.fill`. 
-
-- Embed the label stackview and image in another stack view.
-- Set `View` background to `teal`.
+- Explain how Xcode will assign CHCR on your behalf when working with controls like labels and text fields.
+- Set `View` background to `appColor`.
 
 Layout as follows:
 
@@ -210,6 +241,12 @@ Header looking good. Next let's define a cell for our table view.
 Bonus video: Give a demo of Reveal and how to use when checking your layouts for ambiguity.
 
 Save your work.
+
+```
+> git add .
+> git commit -m "feat: Add header view"
+> git push
+```
 
 ## Creating the customer table view cell
 
