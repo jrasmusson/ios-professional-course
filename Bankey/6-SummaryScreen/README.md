@@ -4,7 +4,12 @@
 
 ## Setup
 
-- Create a branch `feat/story-3/account-summary`
+- Create a branch
+
+```
+> git checkout -b feat/story-3/account-summary
+```
+
 - Explain what a git branch is and why we use.
 - .
 - Demo the page
@@ -18,10 +23,10 @@
 
 - Create file `AccountSummaryViewController` (via snippet)
 - Hook up in `AppDelegate`
-- Delete old one in `AppDelegate`
+- Delete old one in `MainViewController`
 - Instantiate and run.
 
-Let's start with an empty table view controller with some basic data.
+Ask students to follow along in the show notes and to copy and paste in the following to start things off.
 
 **AccountSummaryViewController**
 
@@ -86,7 +91,8 @@ extension AccountSummaryViewController: UITableViewDelegate {
 
 Discussion:
 
-- remind people how table view works
+- Explain how this is pretty much the simplest table view controller we can get.
+- Go over how it works.
 
 ![](images/0.png)
 
@@ -98,11 +104,17 @@ Next let's add the header.
  - Create a class
  - Add it as a nib
 
-- Discussion: What is a nib?
+- Discussion: 
+- [Interface Builder with Steve Jobs](https://youtu.be/dl0CbKYUFTY?t=62)
+- [What is a nib?](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/NibFile.html)
+- What are some of the pros and cons of using them.
+- Less code
+- Bit of a learning curve (need to load differently)
+- But you will see these used in industry (work knowing)
 
 #### Create a class
 
-- Create a folder `Header`
+- Create a folder in AccountSummary called `Header`
 - Create a class `AccountSummaryHeaderView`
 
 **AccountSummaryHeaderView**
@@ -123,7 +135,6 @@ class AccountSummaryHeaderView: UIView {
 - Show how to bring up the assistant.
 - Control drag `view` from nib into file and call `contentView`.
 - Then load the nib and pin to the edges like this.
-- Give an `appColor`  or red background
  
 **AccountSummaryHeaderView**
 
@@ -887,5 +898,6 @@ balanceAmountLabel.attributedText = makeFormattedBalance(dollars: dollarsAndCent
 
 ### Links that help
 
+- [What are nibs?](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/NibFile.html)
 - [Container Views](https://developer.apple.com/library/archive/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html)
 - [Table Headers & Footer](https://developer.apple.com/documentation/uikit/views_and_controls/table_views/adding_headers_and_footers_to_table_sections)
