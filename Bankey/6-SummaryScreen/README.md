@@ -13,6 +13,9 @@
 ## Create AccontSummaryViewController
 
 - Create directory `AccountSummary`
+
+![](images/0a.png)
+
 - Create file `AccountSummaryViewController`
 - Hook up in `AppDelegate`
 - Delete old one in `AppDelegate`
