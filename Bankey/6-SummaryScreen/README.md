@@ -9,6 +9,26 @@
 - Create a branch
 
 ```
+> git checkout -b account-summary
+```
+
+- Switch branch
+
+```
+> git checkout main
+> git checkout account-summary
+> git checkout main
+```
+
+- Delete a branch
+
+```
+> git branch -D account-summary
+```
+
+- Template for branch names
+
+```
 > git checkout -b feat/BAN-3/account-summary
 ```
 
