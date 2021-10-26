@@ -104,7 +104,6 @@ Next let's add the header.
    - Create a class
    - Add it as a nib
 
-.
 
 - Discussion: 
    - [Interface Builder with Steve Jobs](https://youtu.be/dl0CbKYUFTY?t=62)
