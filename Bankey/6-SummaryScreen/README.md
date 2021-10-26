@@ -7,7 +7,7 @@
 - Create a branch
 
 ```
-> git checkout -b feat/story-3/account-summary
+> git checkout -b feat/BAN-3/account-summary
 ```
 
 - Explain what a git branch is and why we use.
@@ -101,16 +101,18 @@ Next let's add the header.
 ## Add Header View
 
 - The simplest way to add a header to a `UITableView` with Auto Layout is to:
- - Create a class
- - Add it as a nib
+   - Create a class
+   - Add it as a nib
+
+.
 
 - Discussion: 
-- [Interface Builder with Steve Jobs](https://youtu.be/dl0CbKYUFTY?t=62)
-- [What is a nib?](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/NibFile.html)
-- What are some of the pros and cons of using them.
-- Less code
-- Bit of a learning curve (need to load differently)
-- But you will see these used in industry (work knowing)
+   - [Interface Builder with Steve Jobs](https://youtu.be/dl0CbKYUFTY?t=62)
+   - [What is a nib?](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/NibFile.html)
+   - What are some of the pros and cons of using them.
+      - Less code
+      - Bit of a learning curve (need to load differently)
+      - But you will see these used in industry (work knowing)
 
 #### Create a class
 
@@ -134,7 +136,7 @@ class AccountSummaryHeaderView: UIView {
 - Set `File's Owner` to `AccountSummaryHeaderView`
 - Show how to bring up the assistant.
 - Control drag `view` from nib into file and call `contentView`.
-- Then load the nib and pin to the edges like this.
+- Then load the nib and pin to the edges by copying and pasing code like this.
  
 **AccountSummaryHeaderView**
 
@@ -174,8 +176,10 @@ class AccountSummaryHeaderView: UIView {
 }
 ```
 
-- Add it to the table.
-
+- Explain how nibs get loaded via the `Bundle`.
+- How we add `contentView` to subview.
+- Pin to edges uses Auto Layout.
+- Now add it to the table.
 
 ```swift
 setupTableHeaderView()
@@ -196,7 +200,7 @@ private func setupTableHeaderView() {
 ### Styling the header
 
 - Now because we have a nib, we can do all our auto layout in there.
-- Explain how we are going to layout using stack views.
+- Explain how we are going to layout using stack views (draw out).
 
 ![](images/2a.png)
 
@@ -204,10 +208,10 @@ private func setupTableHeaderView() {
 
 Drag out the following and embed in a horizontal stack view.
 
-- `logoLabel` - title1, Bankey
-- `greetingLabel` - title3, Good morning, 
-- `nameLabel` - title3, Jonathan
-- `dateLablel` - body
+- `logoLabel` - `title1`, Bankey
+- `greetingLabel` - `title3`, Good morning, 
+- `nameLabel` - `title3`, Jonathan
+- `dateLablel` - `body`, Date
 
 #### Vertical Stack View #2
 
@@ -258,6 +262,17 @@ Save your work.
 > git commit -m "feat: Add header view"
 > git push
 ```
+
+See the branch our work is on. Show how to switch branches.
+
+```
+> git log
+> git branch
+> git checkout main
+> git checkout feat/story-3/account-summary
+```
+
+This how developers work on multiple features, bugs, simultaneously. Don't want a tonne of branches. But a couple are OK. Try to work on one branch at a time.
 
 ## Creating the customer table view cell
 
