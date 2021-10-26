@@ -5,6 +5,7 @@
 ## Setup
 
 - Follow along with text if you like (will be copying and pasting code).
+- Review last where we left off (adding tab bar)
 - Create a branch
 
 ```
