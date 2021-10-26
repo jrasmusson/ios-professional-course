@@ -4,6 +4,7 @@
 
 ## Setup
 
+- Follow along with text if you like (will be copying and pasting code).
 - Create a branch
 
 ```
@@ -199,7 +200,10 @@ private func setupTableHeaderView() {
 ### Styling the header
 
 - Now because we have a nib, we can do all our auto layout in there.
+- Challenge - how should we do it? 
 - Explain how we are going to layout using stack views (draw out).
+
+![](images/2aa.png)
 
 ![](images/2a.png)
 
@@ -250,11 +254,16 @@ Should now look like this.
 
 ![](images/5.png)
 
-Header looking good. Next let's define a cell for our table view.
+Header looking good. 
 
-Bonus video: Give a demo of Reveal and how to use when checking your layouts for ambiguity.
+Discussion:
+
+- How to know your layout doesn't have any ambiguity
+- Check console
+- Demo Reveal
 
 Save your work.
+
 
 ```
 > git add .
@@ -268,10 +277,12 @@ See the branch our work is on. Show how to switch branches.
 > git log
 > git branch
 > git checkout main
-> git checkout feat/story-3/account-summary
+> git checkout feat/BAN-3/account-summary
 ```
 
 This how developers work on multiple features, bugs, simultaneously. Don't want a tonne of branches. But a couple are OK. Try to work on one branch at a time.
+
+Next let's define a cell for our table view.
 
 ## Creating the customer table view cell
 
