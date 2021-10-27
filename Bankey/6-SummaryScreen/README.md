@@ -2,42 +2,80 @@
 
 ![](images/demo.png)
 
-## Setup
+## Setting up a git branch
 
-- Follow along with text if you like (will be copying and pasting code).
+![](images/0b.png)
+
 - Review last where we left off (adding tab bar)
-- Create a branch
+
+```
+> git status (nothing to commit)
+> git log (tab bar last commit)
+```
+
+And right now this is the only branch we have which we can see by going:
+
+```
+> git branch
+```
+
+Which will list all the local branches created for this repos.
+
+To do our work on a separate branch we use the command:
+
+```
+> git checkout -b <branchname>
+```
+
+Let's create a new branch now by going:
 
 ```
 > git checkout -b account-summary
 ```
 
-- Switch branch
+If we look at this branch we will see it is the same as main.
 
 ```
+> git log
+```
+
+Anything we do here will only affect this branch.
+
+To get back to the main branch we can go:
+
+```
+> git checkout main
+```
+
+And if by accident we made a mistake. For example say we created a branch whose work we don't want to merge.
+
+```
+> git checkout -b opps
+```
+
+We can always delete it by going:
+
+```
+> git branch -D <branchname>
+> git branch -D opps
+```
+
+To swich branches:
+
+```
+> git checkout <branchname>
 > git checkout main
 > git checkout account-summary
-> git checkout main
 ```
 
-- Delete a branch
-
-```
-> git branch -D account-summary
-```
-
-- Template for branch names
-
-```
-> git checkout -b feat/BAN-3/account-summary
-```
-
-- Explain what a git branch is and why we use.
-- .
-- Demo the page
-- Explain how it is laid out
+- Double check you are on the `account-summary` branch.
+- This is where we are going to do our account work.
+- Later on we will see how to merge this back to main.
+- Let's get on with the show!
 
 ## Create ViewController
+
+- Follow along with text - we will be cutting and pasting some code.
 
 - Create directory `AccountSummary`
 
