@@ -154,6 +154,13 @@ Discussion:
 
 ![](images/0.png)
 
+- Let's save our changes.
+
+```
+> git add .
+> git commit -m "Add tableview"
+```
+
 Next let's add the header.
 
 ## Add Header View
@@ -324,8 +331,7 @@ Save your work.
 
 ```
 > git add .
-> git commit -m "feat: Add header view"
-> git push
+> git commit -m "Add header view"
 ```
 
 See the branch our work is on. Show how to switch branches.
@@ -334,12 +340,12 @@ See the branch our work is on. Show how to switch branches.
 > git log
 > git branch
 > git checkout main
-> git checkout feat/BAN-3/account-summary
+> git checkout account-summary
 ```
 
 This how developers work on multiple features, bugs, simultaneously. Don't want a tonne of branches. But a couple are OK. Try to work on one branch at a time.
 
-Next let's define a cell for our table view.
+Next let's design and layout the cell for our table view.
 
 ## Creating the customer table view cell
 
