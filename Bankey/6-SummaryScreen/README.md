@@ -6,20 +6,18 @@
 
 ![](images/0b.png)
 
-- Review last where we left off (adding tab bar)
+- Review where we left off
 
 ```
 > git status (nothing to commit)
 > git log (tab bar last commit)
 ```
 
-And right now this is the only branch we have which we can see by going:
+Currently we are on the `main` branch.
 
 ```
 > git branch
 ```
-
-Which will list all the local branches created for this repos.
 
 To do our work on a separate branch we use the command:
 
@@ -60,7 +58,7 @@ We can always delete it by going:
 > git branch -D opps
 ```
 
-To swich branches:
+To switch branches:
 
 ```
 > git checkout <branchname>

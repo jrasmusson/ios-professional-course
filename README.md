@@ -9,4 +9,4 @@ A course for those who would like to work professionally as iOS engineers.
 - [Onboarding Part II](Bankey/3-Onboarding-Part-II/README.md)
 - [Container View Controllers](Bankey/4-Container-ViewControllers/README.md)
 - [Scrollable View Controllers](Bankey/5-Scrollable-ViewControllers/README.md)
-- [Account Summary](Bankey/6-SummaryScreen)
+- [Account Summary](Bankey/6-SummaryScreen/README.md)
