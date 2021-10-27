@@ -201,6 +201,8 @@ class AccountSummaryHeaderView: UIView {
 - Show how to bring up the assistant.
 - Control drag `view` from nib into file and call `contentView`.
 - Then load the nib and pin to the edges by copying and pasing code like this.
+
+> If Xcode won't connect your IBOutlet - restart Xcode.
  
 **AccountSummaryHeaderView**
 
@@ -233,9 +235,9 @@ class AccountSummaryHeaderView: UIView {
         
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        contentView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
         contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        contentView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
     }
 }
 ```
@@ -287,9 +289,25 @@ Drag out the following and embed in a horizontal stack view.
 - Tint system yellow (not background)
 - Select it and horizontal stack and embed in vertical stack (if embed option not showing up after selecting try collapsing stack view let this)
 
-![](images/2b.png)
+Now try pinning the stack view fully to the edges of the view. It doesn't work!
 
-![](images/2c.png)
+- if we run the app we see we get ambiguity - not everything can be satisfied - too rigid.
+- one way to deal with this is to make some of our constraints on the stack view optional
+- we want to give it room to break (expand/contract)
+- a good way to think about this is to always pin it to where you want it, and then let it expand in the other direction
+- in this instance we can pin `top` and `leading` - leave those as required
+- but we can make `bottom` and `trailing` option - by lowering the priority by 1
+
+Run the app.
+
+Now when we run the app and check our output, the ambiguity is gone. And we get a nice layout with no violation of constraints.
+
+Another way we can check for broken constraints is with commercial products like Reveal.
+
+Demo Reveal.
+
+
+
 
 #### Layout
 
