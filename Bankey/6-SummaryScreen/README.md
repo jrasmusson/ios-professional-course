@@ -273,102 +273,47 @@ private func setupTableHeaderView() {
 ### Styling the header
 
 - Now because we have a nib, we can do all our auto layout in there.
-- Challenge - how should we do it? 
-- Explain how we are going to layout using stack views (draw out).
+- Challenge - how should we do it?
+
+Let's look at a couple of different ways we could do this layout, while learning some tricks for working with Auto Layout.
+
+1. Just accept the defaults.
+2. Layout everything manually by hand.
+ - Demo how to check for ambiguity.
+
+3. Using stack views.
+ - Why are stackviews great?
+ - Show how even though things look great, we can still have ambiguity.
+ - Demo Reveal.
+
+4. Using stack views like a pro.
+ - Embed the labels in a stack.
+ - Embed the image in a stack.
+ - Pin to the edges with `16pts`.
+ - Make the trailing and bottom optional.
+
+Here is the layout we've created.
 
 ![](images/2aa.png)
 
-![](images/2a.png)
+- Explain some of the magic going on here and why this layout works.
+- Explain some of the affordances Xcode does on our behalf and how it resolves ambiguity for us.
+- Take a detour and explain at a high-level what CHCR is and how the sun and the horizontal stack know how to space themselves.
 
-#### Horizontal Stack View #1
+Review the following takeaways:
 
-Drag out the following and embed in a horizontal stack view.
-
-- `logoLabel` - `title1`, Bankey
-- `greetingLabel` - `title3`, Good morning, 
-- `nameLabel` - `title3`, Jonathan
-- `dateLablel` - `body`, Date
-
-#### Vertical Stack View #2
-
-- Add a `UIImageView`
-- Assign it `SFSymbol` named `sun.max.fill`
-- Tint system yellow (not background)
-- Select it and horizontal stack and embed in vertical stack (if embed option not showing up after selecting try collapsing stack view let this)
-
-Now try pinning the stack view fully to the edges of the view. It doesn't work!
-
-- if we run the app we see we get ambiguity - not everything can be satisfied - too rigid.
-- one way to deal with this is to make some of our constraints on the stack view optional
-- we want to give it room to break (expand/contract)
-- a good way to think about this is to always pin it to where you want it, and then let it expand in the other direction
-- in this instance we can pin `top` and `leading` - leave those as required
-- but we can make `bottom` and `trailing` option - by lowering the priority by 1
-
-Run the app.
-
-Now when we run the app and check our output, the ambiguity is gone. And we get a nice layout with no violation of constraints.
-
-Another way we can check for broken constraints is with commercial products like Reveal.
-
-Demo Reveal.
-
-
-
-
-#### Layout
-
-- Pin parent stack view to edges `16 pt`.
-- Assign image view `height >= 100` and `width = 100`
-- Resolve any left over ambiguity
-
-![](images/2d.png)
-
-Explain what CHCR means and how to fix.
-
-![](images/2.png)
-
-Bankey.
-
-![](images/3.png)
-
-- Explain how Xcode will assign CHCR on your behalf when working with controls like labels and text fields.
-- Set `View` background to `appColor`.
-
-Layout as follows:
-
-![](images/4.png)
-
-Should now look like this.
-
-![](images/5.png)
-
-Header looking good. 
-
-Discussion:
-
-- How to know your layout doesn't have any ambiguity
-- Check console
-- Demo Reveal
+1. Start by just getting it to work.
+2. StackViews are handy for minimzing constraits.
+3. Beware that Xcode occasionally works magic for us.
+4. You can sometimes remove ambiguity by making certain constraints optional.
+5. There are always multiple ways to lay things out. So if one way doesn't work, try another.
 
 Save your work.
 
-
 ```
 > git add .
-> git commit -m "Add header view"
+> git commit -m "Style header view"
 ```
-
-See the branch our work is on. Show how to switch branches.
-
-```
-> git log
-> git branch
-> git checkout main
-> git checkout account-summary
-```
-
-This how developers work on multiple features, bugs, simultaneously. Don't want a tonne of branches. But a couple are OK. Try to work on one branch at a time.
 
 Next let's design and layout the cell for our table view.
 
