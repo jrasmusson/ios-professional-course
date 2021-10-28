@@ -263,6 +263,13 @@ private func setupTableHeaderView() {
 
 ![](images/1.png)
 
+- Let's save our changes.
+
+```
+> git add .
+> git commit -m "Add tableview header"
+```
+
 ### Styling the header
 
 - Now because we have a nib, we can do all our auto layout in there.
