@@ -1,6 +1,6 @@
 # Account Summary Header
 
-![](images/demo.png)
+![](images/demo2.png)
 
 ## Setting up a git branch
 
