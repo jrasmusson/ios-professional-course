@@ -7,7 +7,14 @@
 - Why iOS is able to scroll so quickly and be so efficient
 - Explain that we could do this with a nib, but lets do this one entirely programmatically so you can see how that would work.
 
-Create a new class in Account Summary called `AccountSummaryCell`.
+Setup:
+
+![](images/0.png)
+
+- Create a folder in `AccountSummary` called `Header`
+- Put header files in there
+- Create a another folder in `AccountSummary` called `Cells`
+- Create a new class in `Cells` called `AccountSummaryCell`.
 
 **AccountSummaryCell**
 
@@ -41,7 +48,9 @@ extension AccountSummaryCell {
 }
 ```
 
-Create image showing layout.
+How we are going to lay this out.
+
+![](images/1.png)
 
 Let's add all the elements then style them one-by-one. Starting with the account `typeLabel`.
 
@@ -71,6 +80,12 @@ contentView.addSubview(typeLabel) // imporant!
 typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
 typeLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
 ```
+
+Discussion:
+
+- Demo constraints using constant values (i.e. `8` and `16`)
+- Demo constraits using fluid constraint language.
+- Discuss pros and cons.
 
 Now let's go register and dequeue this cell in our view controller.
 

@@ -149,7 +149,7 @@ extension AccountSummaryCell {
     }
     
     private func layout() {
-        contentView.addSubview(typeLabel) // imporant!
+        contentView.addSubview(typeLabel) // important - add to contentView
         contentView.addSubview(underlineView)
         contentView.addSubview(nameLabel)
         
