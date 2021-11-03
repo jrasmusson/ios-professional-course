@@ -50,7 +50,7 @@ extension AccountSummaryCell {
 
 How we are going to lay this out.
 
-![](images/1.png)
+![](images/1a.png)
 
 Let's add all the elements then style them one-by-one. Starting with the account `typeLabel`.
 
@@ -58,14 +58,6 @@ Let's add all the elements then style them one-by-one. Starting with the account
 
 ```swift
 let typeLabel = UILabel()
-let underlineView = UIView()
-let nameLabel = UILabel()
-    
-let balanceStackView = UIStackView()
-let balanceLabel = UILabel()
-let balanceAmountLabel = UILabel()
-    
-let chevonImageView = UIImageView()
 
 static let reuseID = "AccountSummaryCell"
 static let rowHeight: CGFloat = 100
@@ -135,6 +127,8 @@ func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) ->
 ### underlineView
 
 ```swift
+let underlineView = UIView()
+
 underlineView.translatesAutoresizingMaskIntoConstraints = false
 underlineView.backgroundColor = .systemTeal
 
@@ -158,6 +152,8 @@ See if you can lay this one out:
 - leading:  `16pts` (multiplier or x2)
 
 ```swift
+let nameLabel = UILabel()
+    
 nameLabel.translatesAutoresizingMaskIntoConstraints = false
 nameLabel.font = UIFont.preferredFont(forTextStyle: .body)
 nameLabel.text = "Account name"
@@ -175,6 +171,10 @@ nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, mul
 Going to do something a bit different here. Instead of laying out each individually, going to embed into a stack view.
 
 ```swift
+let balanceStackView = UIStackView()
+let balanceLabel = UILabel()
+let balanceAmountLabel = UILabel()
+    
 balanceStackView.translatesAutoresizingMaskIntoConstraints = false
 balanceStackView.axis = .vertical
 balanceStackView.spacing = 0
@@ -202,6 +202,8 @@ trailingAnchor.constraint(equalToSystemSpacingAfter: balanceStackView.trailingAn
 ### chevonImageView
 
 ```swift
+let chevonImageView = UIImageView()
+
 chevonImageView.translatesAutoresizingMaskIntoConstraints = false
 chevonImageView.image = UIImage(systemName: "chevron.right")
 
