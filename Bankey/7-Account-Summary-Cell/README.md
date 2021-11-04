@@ -1,6 +1,12 @@
 # Account Summary Cell
 
-![](images/demo.png)
+Setup
+
+- Open browser to cell page
+- Review where we are in the project (show git log)
+- Demo where we are (run current app) and show where we are going (finished cell)
+
+![](images/end.png)
 
 - Explain what table view cells are
 - How they work
