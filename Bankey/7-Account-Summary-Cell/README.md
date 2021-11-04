@@ -54,7 +54,11 @@ extension AccountSummaryCell {
 }
 ```
 
+## Layout
+
 How we are going to lay this out.
+
+![](images/1b.png)
 
 ![](images/1c.png)
 
