@@ -236,8 +236,14 @@ trailingAnchor.constraint(equalToSystemSpacingAfter: chevonImageView.trailingAnc
 
 ### Save your work
 
-OK at this point we have successfully styled our cell. Let's save our work.
+OK at this point we have successfully styled our cell. Let's save our work. Note how all this work is still on our branch.
 
+```
+> git add .
+> git commit -m "feat: Style cell view"
+```
+
+DONE
 
 
 ### NSAttributedStrings
