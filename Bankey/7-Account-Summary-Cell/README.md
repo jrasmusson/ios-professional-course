@@ -50,7 +50,7 @@ extension AccountSummaryCell {
 
 How we are going to lay this out.
 
-![](images/1a.png)
+![](images/1c.png)
 
 Let's add all the elements then style them one-by-one. Starting with the account `typeLabel`.
 
@@ -67,17 +67,13 @@ typeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
 typeLabel.adjustsFontForContentSizeCategory = true
 typeLabel.text = "Account type"
 
-contentView.addSubview(typeLabel) // imporant!
+contentView.addSubview(typeLabel) // imporant! Add to contentView.
 
-typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
-typeLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+NSLayoutConstraint.activate([
+    typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
+    typeLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+])
 ```
-
-Discussion:
-
-- Demo constraints using constant values (i.e. `8` and `16`)
-- Demo constraits using fluid constraint language.
-- Discuss pros and cons.
 
 Now let's go register and dequeue this cell in our view controller.
 
@@ -91,8 +87,6 @@ private func setupTableView() {
     tableView.register(AccountSummaryCell.self, forCellReuseIdentifier: AccountSummaryCell.reuseID)
     tableView.rowHeight = AccountSummaryCell.rowHeight
     tableView.tableFooterView = UIView()
-    
-    view = tableView
 }
 
 func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -101,7 +95,26 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
 }
 ```
 
-![](images/6.png)
+![](images/6a.png)
+
+Run the app.
+
+Discussion on auto layout APIs:
+
+We could have done our auto layout in the cell explicitly like this:
+
+```swift
+typeLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+typeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+```
+
+- Demo constraits using fluid constraint language.
+   - How it reads.
+   - Advantage of standard spacing.
+   - Preferrred approach.
+- Demo constraints using constant values (i.e. `8` and `16`)
+   - Why spaces are not multiples of 8pts.
+   - Good for non-standard sizing.
 
 Discussion on Cell height:
 
@@ -125,6 +138,9 @@ func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) ->
 - When you see blocks and rectangles like this, just think view. Most dividers and underlines are done this way.
 
 ### underlineView
+
+**AccountSummaryCell **
+
 
 ```swift
 let underlineView = UIView()
@@ -150,6 +166,7 @@ See if you can lay this one out:
 - text: `Account name`
 - topSpace: `16pts` (multiplier or x2)
 - leading:  `16pts` (multiplier or x2)
+- trailing: ignore for now (this is enough to define)
 
 ```swift
 let nameLabel = UILabel()
@@ -164,7 +181,7 @@ nameLabel.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAn
 nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
 ```
 
-![](images/8.png)
+![](images/8a.png)
 
 ### Balance labels
 
@@ -194,10 +211,11 @@ balanceStackView.addArrangedSubview(balanceAmountLabel)
 contentView.addSubview(balanceStackView)
 
 balanceStackView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 0),
+balanceStackView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 4),
 trailingAnchor.constraint(equalToSystemSpacingAfter: balanceStackView.trailingAnchor, multiplier: 4),
 ```
 
-![](images/9.png)
+![](images/9a.png)
 
 ### chevonImageView
 
@@ -205,7 +223,8 @@ trailingAnchor.constraint(equalToSystemSpacingAfter: balanceStackView.trailingAn
 let chevonImageView = UIImageView()
 
 chevonImageView.translatesAutoresizingMaskIntoConstraints = false
-chevonImageView.image = UIImage(systemName: "chevron.right")
+let chevronImage = UIImage(systemName: "chevron.right")!.withTintColor(appColor, renderingMode: .alwaysOriginal)
+chevonImageView.image = chevronImage
 
 contentView.addSubview(chevonImageView)
 
@@ -213,7 +232,13 @@ chevonImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bo
 trailingAnchor.constraint(equalToSystemSpacingAfter: chevonImageView.trailingAnchor, multiplier: 1)
 ```
 
-![](images/10.png)
+![](images/10a.png)
+
+### Save your work
+
+OK at this point we have successfully styled our cell. Let's save our work.
+
+
 
 ### NSAttributedStrings
 
