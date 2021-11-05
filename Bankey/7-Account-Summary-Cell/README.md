@@ -60,7 +60,7 @@ How we are going to lay this out.
 
 ![](images/1b.png)
 
-![](images/1c.png)
+![](images/1d.png)
 
 Let's add all the elements then style them one-by-one. Starting with the account `typeLabel`.
 
