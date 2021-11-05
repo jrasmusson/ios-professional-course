@@ -156,7 +156,7 @@ func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) ->
 let underlineView = UIView()
 
 underlineView.translatesAutoresizingMaskIntoConstraints = false
-underlineView.backgroundColor = .systemTeal
+underlineView.backgroundColor = appColor
 
 contentView.addSubview(underlineView)
 
