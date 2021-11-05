@@ -230,16 +230,16 @@ trailingAnchor.constraint(equalToSystemSpacingAfter: balanceStackView.trailingAn
 ### chevonImageView
 
 ```swift
-let chevonImageView = UIImageView()
+let chevronImageView = UIImageView()
 
-chevonImageView.translatesAutoresizingMaskIntoConstraints = false
+chevronImageView.translatesAutoresizingMaskIntoConstraints = false
 let chevronImage = UIImage(systemName: "chevron.right")!.withTintColor(appColor, renderingMode: .alwaysOriginal)
-chevonImageView.image = chevronImage
+chevronImageView.image = chevronImage
 
-contentView.addSubview(chevonImageView)
+contentView.addSubview(chevronImageView)
 
-chevonImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 1),
-trailingAnchor.constraint(equalToSystemSpacingAfter: chevonImageView.trailingAnchor, multiplier: 1)
+chevronImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 1),
+trailingAnchor.constraint(equalToSystemSpacingAfter: chevronImageView.trailingAnchor, multiplier: 1)
 ```
 
 ![](images/10a.png)

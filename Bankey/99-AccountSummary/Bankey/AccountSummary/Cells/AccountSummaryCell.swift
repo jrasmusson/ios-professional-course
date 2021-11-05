@@ -97,7 +97,7 @@ class AccountSummaryCell: UITableViewCell {
     let balanceLabel = UILabel()
     let balanceAmountLabel = UILabel()
         
-    let chevonImageView = UIImageView()
+    let chevronImageView = UIImageView()
 
     let viewModel: ViewModel? = nil
     
@@ -143,9 +143,9 @@ extension AccountSummaryCell {
         balanceAmountLabel.textAlignment = .right
         balanceAmountLabel.text = "$XXX,XXX.XX"
         
-        chevonImageView.translatesAutoresizingMaskIntoConstraints = false
+        chevronImageView.translatesAutoresizingMaskIntoConstraints = false
         let chevronImage = UIImage(systemName: "chevron.right")!.withTintColor(appColor, renderingMode: .alwaysOriginal)
-        chevonImageView.image = chevronImage
+        chevronImageView.image = chevronImage
     }
     
     private func layout() {
@@ -157,7 +157,7 @@ extension AccountSummaryCell {
         balanceStackView.addArrangedSubview(balanceAmountLabel)
         
         contentView.addSubview(balanceStackView)
-        contentView.addSubview(chevonImageView)
+        contentView.addSubview(chevronImageView)
 
         NSLayoutConstraint.activate([
             typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
@@ -171,8 +171,8 @@ extension AccountSummaryCell {
             balanceStackView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 0),
             balanceStackView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 4),
             trailingAnchor.constraint(equalToSystemSpacingAfter: balanceStackView.trailingAnchor, multiplier: 4),
-            chevonImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 1),
-            trailingAnchor.constraint(equalToSystemSpacingAfter: chevonImageView.trailingAnchor, multiplier: 1)
+            chevronImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 1),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: chevronImageView.trailingAnchor, multiplier: 1)
         ])
     }
 }
