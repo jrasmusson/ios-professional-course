@@ -26,6 +26,11 @@ extension AccountSummaryCell {
             return makeBalanceAttributed(dollars: tuple.0, cents: tuple.1)
         }
         
+        // MoneyStringConverter
+        //  convertDecimalToDollarsAndCentsStrings(_ money: Decimal) -> (String, String)
+        // Why don't you put this as an extension on Decimal...
+        // .toDollarsAndCents -> (String, String)
+        
         var balanceAsDollarsAndCents: (String, String) { // 929466.23
             let parts = modf(balance.doubleValue) // 929466 0.23
             
