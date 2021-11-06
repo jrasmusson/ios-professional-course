@@ -10,7 +10,7 @@ import Foundation
 extension Double {
     
     // Convert 929466 > "$929,466.00
-    var dollarsFormatted: String {
+    var asFormattedCurrency: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.usesGroupingSeparator = true
@@ -24,7 +24,7 @@ extension Double {
     
     // Convert 929466 > "929,466
     var convertToDollar: String {
-        let dollarsWithDecimal = self.dollarsFormatted
+        let dollarsWithDecimal = self.asFormattedCurrency
         let formatter = NumberFormatter()
         let decimalSeparator = formatter.decimalSeparator! // "."
         let dollarComponents = dollarsWithDecimal.components(separatedBy: decimalSeparator)

@@ -18,8 +18,8 @@ class DoubleTests: XCTestCase {
     }
     
     func testShouldFormatAsCurrency() throws {
-        let dollarsFormatted = amount.dollarsFormatted
-        XCTAssertEqual(dollarsFormatted, "$929,466.23")
+        let asFormattedCurrency = amount.asFormattedCurrency
+        XCTAssertEqual(asFormattedCurrency, "$929,466.23")
     }
     
     
