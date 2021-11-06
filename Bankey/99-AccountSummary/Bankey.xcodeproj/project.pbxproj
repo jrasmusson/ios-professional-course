@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7128EA3B2736BCEF00FFDBD0 /* AccountSummaryCell+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7128EA3A2736BCEF00FFDBD0 /* AccountSummaryCell+ViewModel.swift */; };
 		713D9FFF270F216F00193EE6 /* DummyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713D9FFE270F216F00193EE6 /* DummyViewController.swift */; };
 		717ADC0D2703B80300C89FDB /* OnboardingContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ADC0C2703B80300C89FDB /* OnboardingContainerViewController.swift */; };
 		719D57642714962C00DE5D4F /* AccountSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719D57632714962C00DE5D4F /* AccountSummaryViewController.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7128EA3A2736BCEF00FFDBD0 /* AccountSummaryCell+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountSummaryCell+ViewModel.swift"; sourceTree = "<group>"; };
 		713D9FFE270F216F00193EE6 /* DummyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyViewController.swift; sourceTree = "<group>"; };
 		717ADC0C2703B80300C89FDB /* OnboardingContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerViewController.swift; sourceTree = "<group>"; };
 		719D41482721837B007F5E22 /* BankeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BankeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -162,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				719D5771271631BC00DE5D4F /* AccountSummaryCell.swift */,
+				7128EA3A2736BCEF00FFDBD0 /* AccountSummaryCell+ViewModel.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 				71EF3694272035A10089B202 /* DateUtils.swift in Sources */,
 				71A0F7D826FD2BBA008EAFD8 /* LoginView.swift in Sources */,
 				719D5776271846F600DE5D4F /* Decimal+Utils.swift in Sources */,
+				7128EA3B2736BCEF00FFDBD0 /* AccountSummaryCell+ViewModel.swift in Sources */,
 				71D109B22705DD3B000A0633 /* OnboardingViewController.swift in Sources */,
 				719D576827149FF800DE5D4F /* UIFont+Utils.swift in Sources */,
 				717ADC0D2703B80300C89FDB /* OnboardingContainerViewController.swift in Sources */,

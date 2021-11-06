@@ -25,26 +25,34 @@ class AccountSummaryCell: UITableViewCell {
             return makeBalanceAttributed(dollars: tuple.0, cents: tuple.1)
         }
         
-        var balanceAsDollarsAndCents: (String, String) {
-            let parts = modf(balance.doubleValue)
+        var balanceAsDollarsAndCents: (String, String) { // 929466.23
+            let parts = modf(balance.doubleValue) // 929466 0.23
             
-            let dollarPart = parts.0
-            let dollarsWithDecimal = dollarsFormatted(dollarPart) // $100,000.00
+            let dollars = convertToDollarString(parts.0) // "929,466"
+            let cents = convertToCents(parts.1) // "23"
+            
+            return (dollars, cents) // "929,466" "23"
+        }
+        
+        func convertToDollarString(_ dollarPart: Double) -> String { // 929466
+            let dollarsWithDecimal = dollarsFormatted(dollarPart) // "$929,466.00"
             let formatter = NumberFormatter()
-            let decimalSeparator = formatter.decimalSeparator!
-            let dollarComponents = dollarsWithDecimal.components(separatedBy: decimalSeparator)
-            var dollars = dollarComponents.first!
-            dollars.removeFirst()
-            
-            let centPart = parts.1
+            let decimalSeparator = formatter.decimalSeparator! // "."
+            let dollarComponents = dollarsWithDecimal.components(separatedBy: decimalSeparator) // "$929,466" "00"
+            var dollars = dollarComponents.first! // "$929,466"
+            dollars.removeFirst() // "929,466"
+
+            return dollars
+        }
+        
+        func convertToCents(_ centPart: Double) -> String { // 0.23
             let cents: String
             if centPart == 0 {
                 cents = "00"
             } else {
-                cents = String(format: "%.0f", centPart * 100)
+                cents = String(format: "%.0f", centPart * 100) // "23"
             }
-            
-            return (dollars, cents)
+            return cents
         }
         
         private func dollarsFormatted(_ dollars: Double) -> String {
