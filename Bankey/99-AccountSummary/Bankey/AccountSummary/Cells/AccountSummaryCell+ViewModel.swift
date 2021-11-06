@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UIKit 
+import UIKit
 
 extension AccountSummaryCell {
     
@@ -15,7 +15,7 @@ extension AccountSummaryCell {
         case CreditCard
         case Investment
     }
-
+ 
     struct ViewModel {
         let accountType: AccountType
         let accountName: String
