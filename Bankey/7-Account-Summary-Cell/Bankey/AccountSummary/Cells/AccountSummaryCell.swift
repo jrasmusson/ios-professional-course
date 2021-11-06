@@ -2,7 +2,7 @@
 //  AccountSummaryCell.swift
 //  Bankey
 //
-//  Created by jrasmusson on 2021-11-03.
+//  Created by jrasmusson on 2021-11-04.
 //
 
 import Foundation
@@ -18,7 +18,7 @@ class AccountSummaryCell: UITableViewCell {
     let balanceLabel = UILabel()
     let balanceAmountLabel = UILabel()
     
-    let chevonImageView = UIImageView()
+    let chevronImageView = UIImageView()
     
     static let reuseID = "AccountSummaryCell"
     static let rowHeight: CGFloat = 100
@@ -42,7 +42,7 @@ extension AccountSummaryCell {
         typeLabel.text = "Account type"
         
         underlineView.translatesAutoresizingMaskIntoConstraints = false
-        underlineView.backgroundColor = .systemTeal
+        underlineView.backgroundColor = appColor
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.preferredFont(forTextStyle: .body)
@@ -51,7 +51,7 @@ extension AccountSummaryCell {
         balanceStackView.translatesAutoresizingMaskIntoConstraints = false
         balanceStackView.axis = .vertical
         balanceStackView.spacing = 0
-        
+
         balanceLabel.translatesAutoresizingMaskIntoConstraints = false
         balanceLabel.font = UIFont.preferredFont(forTextStyle: .body)
         balanceLabel.textAlignment = .right
@@ -61,11 +61,10 @@ extension AccountSummaryCell {
         balanceAmountLabel.textAlignment = .right
         balanceAmountLabel.text = "$929,466.63"
         
-        chevonImageView.translatesAutoresizingMaskIntoConstraints = false
-        chevonImageView.image = UIImage(systemName: "chevron.right")
-    }
-    
-    private func layout() {
+        chevronImageView.translatesAutoresizingMaskIntoConstraints = false
+        let chevronImage = UIImage(systemName: "chevron.right")!.withTintColor(appColor, renderingMode: .alwaysOriginal)
+        chevronImageView.image = chevronImage
+        
         contentView.addSubview(typeLabel) // imporant! Add to contentView.
         contentView.addSubview(underlineView)
         contentView.addSubview(nameLabel)
@@ -74,10 +73,12 @@ extension AccountSummaryCell {
         balanceStackView.addArrangedSubview(balanceAmountLabel)
             
         contentView.addSubview(balanceStackView)
-        contentView.addSubview(chevonImageView)
-        
+        contentView.addSubview(chevronImageView)
+    }
+    
+    private func layout() {
         NSLayoutConstraint.activate([
-            typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
+            typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
             typeLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
             underlineView.topAnchor.constraint(equalToSystemSpacingBelow: typeLabel.bottomAnchor, multiplier: 1),
             underlineView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
@@ -88,8 +89,8 @@ extension AccountSummaryCell {
             balanceStackView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 0),
             balanceStackView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 4),
             trailingAnchor.constraint(equalToSystemSpacingAfter: balanceStackView.trailingAnchor, multiplier: 4),
-            chevonImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 1),
-            trailingAnchor.constraint(equalToSystemSpacingAfter: chevonImageView.trailingAnchor, multiplier: 1)
+            chevronImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 1),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: chevronImageView.trailingAnchor, multiplier: 1)
         ])
     }
 }

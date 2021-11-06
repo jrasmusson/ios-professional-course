@@ -18,23 +18,15 @@ class AccountSummaryCell: UITableViewCell {
     struct ViewModel {
         let accountType: AccountType
         let accountName: String
-        let balanceAmount: Decimal
-        
-        var balanceFormatted: String {
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .currency
-            formatter.usesGroupingSeparator = true
-            
-            let doubleValue = balanceAmount.doubleValue
-            if let result = formatter.string(from: doubleValue as NSNumber) {
-                return result
-            }
-            
-            return ""
+        let balance: Decimal
+
+        var balanceAsAttributedString: NSAttributedString {
+            let tuple = balanceAsDollarsAndCents
+            return makeBalanceAttributed(dollars: tuple.0, cents: tuple.1)
         }
         
-        var balanceDollarsAndCents: (String, String) {
-            let parts = modf(balanceAmount.doubleValue)
+        var balanceAsDollarsAndCents: (String, String) {
+            let parts = modf(balance.doubleValue)
             
             let dollarPart = parts.0
             let dollarsWithDecimal = dollarsFormatted(dollarPart) // $100,000.00
@@ -55,11 +47,6 @@ class AccountSummaryCell: UITableViewCell {
             return (dollars, cents)
         }
         
-        var balanceAttributed: NSAttributedString {
-            let tuple = balanceDollarsAndCents
-            return makeAttributedBalance(dollars: tuple.0, cents: tuple.1)
-        }
-        
         private func dollarsFormatted(_ dollars: Double) -> String {
             let formatter = NumberFormatter()
             formatter.numberStyle = .currency
@@ -72,7 +59,7 @@ class AccountSummaryCell: UITableViewCell {
             return ""
         }
         
-        private func makeAttributedBalance(dollars: String, cents: String) -> NSMutableAttributedString {
+        private func makeBalanceAttributed(dollars: String, cents: String) -> NSMutableAttributedString {
             let dollarSignAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
             let dollarAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .title1)]
             let centAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
@@ -86,7 +73,6 @@ class AccountSummaryCell: UITableViewCell {
             
             return rootString
         }
-
     }
 
     let typeLabel = UILabel()
@@ -182,7 +168,7 @@ extension AccountSummaryCell {
         
         typeLabel.text = vm.accountType.rawValue
         nameLabel.text = vm.accountName
-        balanceAmountLabel.attributedText = vm.balanceAttributed
+        balanceAmountLabel.attributedText = vm.balanceAsAttributedString
         
         switch vm.accountType {
         case .Banking:
