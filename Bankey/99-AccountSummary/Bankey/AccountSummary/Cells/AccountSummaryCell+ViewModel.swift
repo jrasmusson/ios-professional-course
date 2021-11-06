@@ -41,7 +41,7 @@ extension AccountSummaryCell {
         }
         
         func convertToDollarString(_ dollarPart: Double) -> String { // 929466
-            let dollarsWithDecimal = dollarsFormatted(dollarPart) // "$929,466.00"
+            let dollarsWithDecimal = dollarPart.dollarsFormatted // "$929,466.00"
             let formatter = NumberFormatter()
             let decimalSeparator = formatter.decimalSeparator! // "."
             let dollarComponents = dollarsWithDecimal.components(separatedBy: decimalSeparator) // "$929,466" "00"
@@ -61,17 +61,17 @@ extension AccountSummaryCell {
             return cents
         }
         
-        private func dollarsFormatted(_ dollars: Double) -> String {
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .currency
-            formatter.usesGroupingSeparator = true
-            
-            if let result = formatter.string(from: dollars as NSNumber) {
-                return result
-            }
-            
-            return ""
-        }
+//        private func dollarsFormatted(_ dollars: Double) -> String { // 929466
+//            let formatter = NumberFormatter()
+//            formatter.numberStyle = .currency
+//            formatter.usesGroupingSeparator = true
+//            
+//            if let result = formatter.string(from: dollars as NSNumber) {
+//                return result // "$929,466.00"
+//            }
+//            
+//            return ""
+//        }
         
         private func makeBalanceAttributed(dollars: String, cents: String) -> NSMutableAttributedString {
             let dollarSignAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]

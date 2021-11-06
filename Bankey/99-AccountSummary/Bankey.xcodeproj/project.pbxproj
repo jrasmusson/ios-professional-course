@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7128EA3B2736BCEF00FFDBD0 /* AccountSummaryCell+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7128EA3A2736BCEF00FFDBD0 /* AccountSummaryCell+ViewModel.swift */; };
+		7128EA3D2736C89700FFDBD0 /* Double+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7128EA3C2736C89700FFDBD0 /* Double+Utils.swift */; };
 		713D9FFF270F216F00193EE6 /* DummyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713D9FFE270F216F00193EE6 /* DummyViewController.swift */; };
 		717ADC0D2703B80300C89FDB /* OnboardingContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717ADC0C2703B80300C89FDB /* OnboardingContainerViewController.swift */; };
 		719D57642714962C00DE5D4F /* AccountSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719D57632714962C00DE5D4F /* AccountSummaryViewController.swift */; };
@@ -40,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		7128EA3A2736BCEF00FFDBD0 /* AccountSummaryCell+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountSummaryCell+ViewModel.swift"; sourceTree = "<group>"; };
+		7128EA3C2736C89700FFDBD0 /* Double+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Utils.swift"; sourceTree = "<group>"; };
 		713D9FFE270F216F00193EE6 /* DummyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyViewController.swift; sourceTree = "<group>"; };
 		717ADC0C2703B80300C89FDB /* OnboardingContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerViewController.swift; sourceTree = "<group>"; };
 		719D41482721837B007F5E22 /* BankeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BankeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,11 +174,12 @@
 		71F770932710E98E0025AC04 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				71EF368F27202E9E0089B202 /* UIViewController+Utils.swift */,
 				71F770942710E99A0025AC04 /* LocalState.swift */,
+				71EF3693272035A10089B202 /* DateUtils.swift */,
 				719D576727149FF800DE5D4F /* UIFont+Utils.swift */,
 				719D5775271846F600DE5D4F /* Decimal+Utils.swift */,
-				71EF368F27202E9E0089B202 /* UIViewController+Utils.swift */,
-				71EF3693272035A10089B202 /* DateUtils.swift */,
+				7128EA3C2736C89700FFDBD0 /* Double+Utils.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 				719D57662714973600DE5D4F /* AccountSummaryHeaderView.swift in Sources */,
 				71A0F7C826FD2B75008EAFD8 /* LoginViewController.swift in Sources */,
 				71F770952710E99A0025AC04 /* LocalState.swift in Sources */,
+				7128EA3D2736C89700FFDBD0 /* Double+Utils.swift in Sources */,
 				713D9FFF270F216F00193EE6 /* DummyViewController.swift in Sources */,
 				71A0F7C426FD2B75008EAFD8 /* AppDelegate.swift in Sources */,
 				71EF3694272035A10089B202 /* DateUtils.swift in Sources */,
