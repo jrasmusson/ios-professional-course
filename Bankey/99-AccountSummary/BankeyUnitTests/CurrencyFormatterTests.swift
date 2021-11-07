@@ -31,13 +31,13 @@ class Test: XCTestCase {
     }
     
     // Challenge: You write
-    func tesetDollarsFormatted() throws {
+    func testDollarsFormatted() throws {
         let result = formatter.dollarsFormatted(929466.23)
-        XCTAssertEqual(result, "$929466.23")
+        XCTAssertEqual(result, "$929,466.23")
     }
 
     // Challenge: You write
-    func tesetZeroDollarsFormatted() throws {
+    func testZeroDollarsFormatted() throws {
         let result = formatter.dollarsFormatted(0.00)
         XCTAssertEqual(result, "$0.00")
     }

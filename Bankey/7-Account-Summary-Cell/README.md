@@ -253,8 +253,6 @@ OK at this point we have successfully styled our cell. Let's save our work. Note
 > git commit -m "feat: Style cell view"
 ```
 
-DONE
-
 
 ### NSAttributedStrings
 
@@ -279,10 +277,11 @@ extension AccountSummaryCell {
     }
 }
 
-balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "100,000", cents: "00")
+balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "929,466", cents: "23")
+static let rowHeight: CGFloat = 112
 ```
 
-![](images/11.png)
+![](images/11a.png)
 
 U R HERE
 
