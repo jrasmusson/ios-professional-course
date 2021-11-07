@@ -526,7 +526,7 @@ If we run that now we'll see the balance label properly set.
 
 ```
 > git add .
-> git commit -m "Add view model"
+> git commit -m "feat: Add view model"
 ```
 
 ## Dealing with Decimals
