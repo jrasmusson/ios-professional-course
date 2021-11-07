@@ -520,7 +520,16 @@ extension AccountSummaryCell {
 
 If we run that now we'll see the balance label properly set.
 
-![](images/15.png)
+![](images/15a.png)
+
+### Save your work
+
+```
+> git add .
+> git commit -m "Add view model"
+```
+
+## Dealing with Decimals
 
 Next comes the tricky part. We need to update our view model so that when we pass in a balance.
 
@@ -566,7 +575,7 @@ Steps:
 
 Create a file `Decimal+Utils` and into there copy.
 
-```
+```swift
 extension Decimal {
     var doubleValue: Double {
         return NSDecimalNumber(decimal:self).doubleValue
