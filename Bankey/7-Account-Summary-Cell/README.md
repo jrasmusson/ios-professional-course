@@ -279,7 +279,6 @@ extension AccountSummaryCell {
 
 balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "929,466", cents: "23")
 static let rowHeight: CGFloat = 112
-// This is the new height
 ```
 
 ![](images/11a.png)
@@ -297,7 +296,7 @@ To get rid of changes, or start over at last commit:
 > git reset --hard
 ```
 
-## Making the tile dynamic
+## View Models
 
 Now this is nice, but what would be really nice is if we could re-use this account tile view for different types of accounts.
 
@@ -311,40 +310,7 @@ Discussion
 - ViewModel
 - passing in data via the viewModel
 
-### Using enums for types
 
-**AccountSummaryTile**
-
-We can capture the variations in our cell like this.
-
-```swift
-enum AccountType: String {
-    case Banking
-    case CreditCards
-    case Investments
-}
-```
-
-### Representing view data with ViewModels
-
-And we can represent the data for any given type like this.
-
-```swift    
-struct ViewModel {
-    let accountType: AccountType
-    let accountName: String
-    let balanceTitle: String
-    let balanceAmount: Decimal
-}
-```
-
-Advantages:
-
-- clean separation between back and front end
-- lets you build what you need in the UI
-- while giving you a place to translation from the backend later
-- facilitates easy unit testing
-- decouples backed from front end 
 
 Let's start by simplying introducing an enum for `AccountType` and a ViewModel with `accountType` that can be figured after the cell has loaded.
 
@@ -711,3 +677,4 @@ balanceAmountLabel.attributedText = makeFormattedBalance(dollars: dollarsAndCent
 - [What are nibs?](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/NibFile.html)
 - [Container Views](https://developer.apple.com/library/archive/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html)
 - [Table Headers & Footer](https://developer.apple.com/documentation/uikit/views_and_controls/table_views/adding_headers_and_footers_to_table_sections)
+- [NSAttributedStrings](https://github.com/jrasmusson/swift-arcade/blob/master/Foundation/NSAttributedStrings/README.md)
