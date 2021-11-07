@@ -459,7 +459,7 @@ extension AccountSummaryCell {
         
         switch vm.accountType {
         case .Banking:
-            underlineView.backgroundColor = .systemTeal
+            underlineView.backgroundColor = appColor
         case .CreditCard:
             underlineView.backgroundColor = .systemOrange
         case .Investment:
@@ -476,59 +476,25 @@ And now the world is our oyster. We can set and configure anything we want in th
 - updating the `ViewModel`
 - leverage the `accountType` via the switch
 
-### Adding account name
+### Challenge: Account Name
 
-For example let's add the account name to our viewModel.
-
-```swift
-struct ViewModel {
-    let accountType: AccountType
-    let accountName: String
-}
-```
-
-Update our fetched data to pretend we also got that passed from the backed.
-
-```swift
-let banking1 = AccountSummaryCell.ViewModel(accountType: .Banking, accountName: "Banking Account")
-let creditCard1 = AccountSummaryCell.ViewModel(accountType: .CreditCard, accountName: "Visa Avion Card")
-let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment, accountName: "Tax-Free Saver")
-```
-
-And then leverage that in `configure`.
+See if you can update the `nameLabel` by setting it equal to the `accountName` from our viewModel.
 
 `nameLabel.text = vm.accountName`
 
-### Challenge: Update balance and balance label
-
-This is a two part challenge.
-
-In Part I - Given these two new fields on our ViewModel.
+#### Solution
 
 ```swift
-struct ViewModel {
-    let accountType: AccountType
-    let accountName: String
-    let balanceAmount: Decimal // new
+extension AccountSummaryCell {
+    func configure(with vm: ViewModel) {
+        
+        typeLabel.text = vm.accountType.rawValue
+        nameLabel.text = vm.accountName
+    }
 }
 ```
 
-See if you can update the `balanceLabel` so that if `accountType`:
-
-- is `Banking` or `CreditCard` the `balanceLabel` says `Current balance`.
-- is `Investment` the `balanceLabel` says `Value`.
-
-In Part II update the view so that when a `balanceAmount` is passed in as part of the view model, the `balanceAmountLabel` updates.
-
-- Give `Banking` a balance of `$929,466.63`
-- Give `CreditCard` a balance of `$0.00`
-- Give `Investment` a balance of `$2000.00`
-
-Now be careful - you are going to have to figure out how to convert that `balanceAmount: Decimal` into `String` for dollars and cents. But I think you can do it. Give it a go, see what kind of challenges you run into, and then come back and we'll do it together. Good luck!
-
-### Solution
-
-OK lets start with the easy part. Let's first update the balance label depending on the `accountType` passed in.
+### Updading the balanceLabel
 
 ```swift
 extension AccountSummaryCell {
