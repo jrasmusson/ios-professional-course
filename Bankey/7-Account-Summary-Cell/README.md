@@ -279,11 +279,23 @@ extension AccountSummaryCell {
 
 balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "929,466", cents: "23")
 static let rowHeight: CGFloat = 112
+// This is the new height
 ```
 
 ![](images/11a.png)
 
-U R HERE
+Let's save our work. But this time incrementally.
+
+```
+> git add -p
+> git commit -m "feat: Format bank balance"
+```
+
+To get rid of changes, or start over at last commit:
+
+```
+> git reset --hard
+```
 
 ## Making the tile dynamic
 
