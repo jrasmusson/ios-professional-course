@@ -395,13 +395,16 @@ extension AccountSummaryViewController {
 
 extension AccountSummaryViewController {
     private func fetchData() {
-        let banking1 = AccountSummaryCell.ViewModel(accountType: .Banking)
-        let creditCard1 = AccountSummaryCell.ViewModel(accountType: .CreditCard)
-        let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment)
-        
-        accounts.append(banking1)
-        accounts.append(creditCard1)
-        accounts.append(investment1)
+        let savings = AccountSummaryCell.ViewModel(accountType: .Banking,
+                                                    accountName: "Basic Savings")
+        let visa = AccountSummaryCell.ViewModel(accountType: .CreditCard,
+                                                       accountName: "Visa Avion Card")
+        let investment = AccountSummaryCell.ViewModel(accountType: .Investment,
+                                                       accountName: "Tax-Free Saver")
+
+        accounts.append(savings)
+        accounts.append(visa)
+        accounts.append(investment)
     }
 }
 ```
