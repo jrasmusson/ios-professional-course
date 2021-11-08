@@ -688,9 +688,34 @@ Discussion
 - Walk the solution explaining `modf` and `tuple`
 - Set break points and walk code
 
+### Save your work
+
+```
+> git add -p
+> git commit -m "feat: Add CurrencyFormatter"
+```
+
+## Setting the Navigation Bar background color
+
+- Open `AppDelegate`.
+- Remove reference to `DummyViewController.
+- Make `MainViewController` root vc
+- Add
+
+```swift
+let vc = mainViewController
+vc.setStatusBar()
+
+UINavigationBar.appearance().isTranslucent = false
+UINavigationBar.appearance().backgroundColor = appColor
+    
+window?.rootViewController = vc
+```
+
 ### Links that help
 
 - [What are nibs?](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/NibFile.html)
 - [Container Views](https://developer.apple.com/library/archive/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html)
 - [Table Headers & Footer](https://developer.apple.com/documentation/uikit/views_and_controls/table_views/adding_headers_and_footers_to_table_sections)
 - [NSAttributedStrings](https://github.com/jrasmusson/swift-arcade/blob/master/Foundation/NSAttributedStrings/README.md)
+- [modf](https://www.tutorialspoint.com/c_standard_library/c_function_modf.htm)
