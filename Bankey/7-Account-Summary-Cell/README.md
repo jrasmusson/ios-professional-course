@@ -537,7 +537,7 @@ Next comes the tricky part. We need to update our view model so that when we pas
 struct ViewModel {
     let accountType: AccountType
     let accountName: String
-    let balanceAmount: Decimal // new
+    let balance: Decimal // new
 }
 
 let banking1 = AccountSummaryCell.ViewModel(accountType: .Banking,
@@ -553,18 +553,6 @@ let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment,
 
 We some how convert that `Decimal` into a two part String.
 
-This is actually harder than it looks. Could do it very simply by converting to string, parsing out dollars and cents and passing in.
-
-But I want to show you a more fully featured way that will
-
-- format the amount in the local the user is working in (adding the comma)
-- and then use that output to pass to our dollars and cent attributed string
-
-Do all this in a playground.
-
-- explain what playgrounds are and how to use
-- faster iterations
-- would normally also write unit tests.. but get into that later
 
 Steps:
 
@@ -573,7 +561,9 @@ Steps:
 - then we need to separate out the dollars and cents
 - then can pass to attributed string func
 
-Create a file `Decimal+Utils` and into there copy.
+![](images/16.png)
+
+Create a file `Decimal+Utils` in Util and into there copy.
 
 ```swift
 extension Decimal {
@@ -583,72 +573,100 @@ extension Decimal {
 }
 ```
 
-Discussion
-
-- why did we choose `Decimal` as our money type
-- why file named `Decimal+Utils`
-- why conversion required
-
-Then we can format like this:
+Create a file `CurrencyFormatter` in Util and copy the following.
 
 ```swift
-struct ViewModel {
-    let accountType: AccountType
-    let accountName: String
-    let balanceAmount: Decimal
+import UIKit
+
+struct CurrencyFormatter {
     
-    var balanceFormatted: String {
+    func makeAttributedCurrency(_ amount: Decimal) -> NSMutableAttributedString {
+        let tuple = breakIntoDollarsAndCents(amount)
+        return makeBalanceAttributed(dollars: tuple.0, cents: tuple.1)
+    }
+    
+    // Converts 929466.23 > "929,466" "23"
+    func breakIntoDollarsAndCents(_ amount: Decimal) -> (String, String) {
+        let tuple = modf(amount.doubleValue)
+        
+        let dollars = convertDollar(tuple.0)
+        let cents = convertCents(tuple.1)
+        
+        return (dollars, cents)
+    }
+    
+    // Converts 929466 > 929,466
+    private func convertDollar(_ dollarPart: Double) -> String {
+        let dollarsWithDecimal = dollarsFormatted(dollarPart) // "$929,466.00"
+        let formatter = NumberFormatter()
+        let decimalSeparator = formatter.decimalSeparator! // "."
+        let dollarComponents = dollarsWithDecimal.components(separatedBy: decimalSeparator) // "$929,466" "00"
+        var dollars = dollarComponents.first! // "$929,466"
+        dollars.removeFirst() // "929,466"
+
+        return dollars
+    }
+    
+    // Convert 0.23 > 23
+    private func convertCents(_ centPart: Double) -> String {
+        let cents: String
+        if centPart == 0 {
+            cents = "00"
+        } else {
+            cents = String(format: "%.0f", centPart * 100)
+        }
+        return cents
+    }
+    
+    // Converts 929466 > $929,466.00
+    func dollarsFormatted(_ dollars: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.usesGroupingSeparator = true
         
-        let doubleValue = balanceAmount.doubleValue
-        if let result = formatter.string(from: doubleValue as NSNumber) {
+        if let result = formatter.string(from: dollars as NSNumber) {
             return result
         }
         
         return ""
     }
-}
-```
-
-Then we need to separate out as dollars and cents.
-
-```swift
-var balanceDollarsAndCents: (String, String) {
-    return ("100", "00")
-}
-```
-
-which can then become.
-
-```swift
-    var balanceDollarsAndCents: (String, String) {
-        let parts = modf(balanceAmount.doubleValue)
-        let dollars = String(format: "%.0f", parts.0)
-        let cents = String(format: "%.0f", parts.1 * 100)
+    
+    private func makeBalanceAttributed(dollars: String, cents: String) -> NSMutableAttributedString {
+        let dollarSignAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
+        let dollarAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .title1)]
+        let centAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
         
-        return (dollars, cents)
+        let rootString = NSMutableAttributedString(string: "$", attributes: dollarSignAttributes)
+        let dollarString = NSAttributedString(string: dollars, attributes: dollarAttributes)
+        let centString = NSAttributedString(string: cents, attributes: centAttributes)
+        
+        rootString.append(dollarString)
+        rootString.append(centString)
+        
+        return rootString
     }
+}
+```
+
+The use in `ViewModel` like this.
+
+```swift
+struct ViewModel {
+    let accountType: AccountType
+    let accountName: String
+    let balance: Decimal
+    
+    var balanceAsAttributedString: NSAttributedString {
+        return CurrencyFormatter().makeAttributedCurrency(balance)
+    }
+}
 ```
 
 Discussion
 
-- what is a tuple
-- why are we grabbing the `decimalSeparator`
-
-Now show them how to take this one step further with `NSAttributedString`.
-
-Explain NSAttributedString.
-
-Combine all together like this.
-
-```swift
-//        balanceAmountLabel.text = vm.balanceFormatted
-let dollarsAndCentsTuple = vm.balanceDollarsAndCents
-balanceAmountLabel.attributedText = makeFormattedBalance(dollars: dollarsAndCentsTuple.0,
-                                                         cents: dollarsAndCentsTuple.1)
-```
+- why did we choose `Decimal` as our money type
+- Walk the solution explaining `modf` and `tuple`
+- Set break points and walk code
 
 ### Links that help
 
