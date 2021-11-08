@@ -703,6 +703,9 @@ Discussion
 - Add
 
 ```swift
+loginViewController.delegate = self
+onboardingViewController.delegate = self
+    
 let vc = mainViewController
 vc.setStatusBar()
 
@@ -710,6 +713,8 @@ UINavigationBar.appearance().isTranslucent = false
 UINavigationBar.appearance().backgroundColor = appColor
     
 window?.rootViewController = vc
+    
+return true
 ```
 
 ### Links that help
