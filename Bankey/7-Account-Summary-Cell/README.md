@@ -531,9 +531,11 @@ If we run that now we'll see the balance label properly set.
 
 ## Dealing with Decimals
 
-Next comes the tricky part. We need to update our view model so that when we pass in a balance.
 
 ![](images/16.png)
+
+Next comes the tricky part. We need to update our view model so that when we pass in a balance.
+
 
 ```swift
 struct ViewModel {
