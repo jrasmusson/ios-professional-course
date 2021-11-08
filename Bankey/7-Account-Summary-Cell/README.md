@@ -533,6 +533,8 @@ If we run that now we'll see the balance label properly set.
 
 Next comes the tricky part. We need to update our view model so that when we pass in a balance.
 
+![](images/16.png)
+
 ```swift
 struct ViewModel {
     let accountType: AccountType
@@ -577,7 +579,7 @@ Steps:
 - then we need to separate out the dollars and cents
 - then can pass to attributed string func
 
-![](images/16.png)
+
 
 Create a file `Decimal+Utils` in Util and into there copy.
 
