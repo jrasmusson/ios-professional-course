@@ -2,7 +2,7 @@
 //  CurrencyFormatter.swift
 //  Bankey
 //
-//  Created by jrasmusson on 2021-11-07.
+//  Created by jrasmusson on 2021-11-08.
 //
 
 import UIKit
@@ -25,7 +25,7 @@ struct CurrencyFormatter {
     }
     
     // Converts 929466 > 929,466
-    func convertDollar(_ dollarPart: Double) -> String {
+    private func convertDollar(_ dollarPart: Double) -> String {
         let dollarsWithDecimal = dollarsFormatted(dollarPart) // "$929,466.00"
         let formatter = NumberFormatter()
         let decimalSeparator = formatter.decimalSeparator! // "."
@@ -37,7 +37,7 @@ struct CurrencyFormatter {
     }
     
     // Convert 0.23 > 23
-    func convertCents(_ centPart: Double) -> String {
+    private func convertCents(_ centPart: Double) -> String {
         let cents: String
         if centPart == 0 {
             cents = "00"
@@ -75,3 +75,4 @@ struct CurrencyFormatter {
         return rootString
     }
 }
+

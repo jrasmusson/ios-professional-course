@@ -10,7 +10,7 @@ import XCTest
 
 @testable import Bankey
 
-class Test: XCTestCase {
+class CurrencyFormatterTest: XCTestCase {
     var formatter: CurrencyFormatter!
     
     override func setUp() {
@@ -23,7 +23,7 @@ class Test: XCTestCase {
         XCTAssertEqual(result.0, "929,466")
         XCTAssertEqual(result.1, "23")
     }
-    
+
     func testBreakZeroDollarsIntoCents() throws {
         let result = formatter.breakIntoDollarsAndCents(0.00)
         XCTAssertEqual(result.0, "0")

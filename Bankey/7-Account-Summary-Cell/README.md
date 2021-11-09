@@ -717,6 +717,43 @@ window?.rootViewController = vc
 return true
 ```
 
+The update our delegates in `AppDelegate` to use `mainViewController`.
+
+```swift
+extension AppDelegate: LoginViewControllerDelegate {
+    func didLogin() {
+        if LocalState.hasOnboarded {
+            setRootViewController(mainViewController) // here
+        } else {
+            setRootViewController(onboardingViewController)
+        }
+    }
+}
+
+extension AppDelegate: OnboardingContainerViewControllerDelegate {
+    func didFinishOnboarding() {
+        LocalState.hasOnboarded = true
+        setRootViewController(mainViewController) // here
+    }
+}
+```
+
+Then set the background color of the `AccountSummaryVC` like this.
+
+**AccountSummaryViewController**
+
+```swift
+private func setupTableView() {
+    tableView.backgroundColor = appColor
+``
+
+### Save work
+
+```
+> git add .
+> git commit -m "ux: Fix status and nav bar background colors"
+```
+
 ### Links that help
 
 - [What are nibs?](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/NibFile.html)
