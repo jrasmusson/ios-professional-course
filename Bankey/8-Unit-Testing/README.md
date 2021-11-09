@@ -106,6 +106,13 @@ class DateUtilsTests: XCTestCase {
 
 Could extract this function to `Date+Utils` if we thought useful. Will leave here for now.
 
+### Save our work
+
+```
+> git add .
+> git commit -m "test: Add unit tests for currency and date"
+```
+
 Discussion
 
 - Hopefully you've now got a test of what unit tests are and how they work
