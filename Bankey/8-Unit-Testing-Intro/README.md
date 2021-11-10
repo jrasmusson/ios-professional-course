@@ -7,7 +7,7 @@
 ## CurrencyFormatter
 
 ```swift
-class CurrencyFormatterTest: XCTestCase {
+class CurrencyFormatterTests: XCTestCase {
     var formatter: CurrencyFormatter!
     
     override func setUp() {
@@ -56,58 +56,6 @@ Another challenge. Write two more test cases:
 
 Some overlap of tests is OK.
 
-## DateUtil
-
-What's another class we could write some tests for. What about `DateUtil`?
-
-Challenge: See if you can:
-
-- Add a new test file called `DateUtilsTests`.
-- Write a test for `monthDayYearString`.
-- And verify it returns the result we'd like.
-
-Good luck!
-
-Talk about some of the challenges here. 
-
-- Dates are tricky.
-- Don't want to instantiate `Date()` because that will change every day.
-- So we need to create a concrete date like this.
-
-```swift
-import Foundation
-import XCTest
-
-@testable import Bankey
-
-class DateUtilsTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    func testMonthDayYear() throws {
-        let date = makeDate(day: 7, month: 11, year: 2000)
-        XCTAssertEqual(date.monthDayYearString, "Nov 7, 2000")
-    }
-    
-    private func makeDate(day: Int, month: Int, year: Int) -> Date {
-        let userCalendar = Calendar.current
-        var components = DateComponents()
-         
-        components.day = day
-        components.month = month
-        components.year = year
-         
-        return userCalendar.date(from: components)!
-    }
-}
-```
-
-Could extract this function to `Date+Utils` if we thought useful. Will leave here for now.
-
-### Save our work
-
 ```
 > git add .
 > git commit -m "test: Add unit tests for currency and date"
@@ -133,3 +81,5 @@ OK - good for now. Let's get on with the show and see what we are going to tackl
 
 ### Links that help
 
+- [What is an Xcode Target?](https://developer.apple.com/library/archive/featuredarticles/XcodeConcepts/Concept-Targets.html#:~:text=A%20target%20specifies%20a%20product,in%20a%20project%20or%20workspace.&text=The%20instructions%20for%20building%20a,in%20the%20Xcode%20project%20editor.)
+- [Working with Targets](https://developer.apple.com/library/archive/documentation/ToolsLanguages/Conceptual/Xcode_Overview/WorkingwithTargets.html)
