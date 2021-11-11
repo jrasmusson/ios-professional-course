@@ -445,22 +445,19 @@ Let's quickly review this pattern. See how it works. And then apply it to our lo
 
 ## New section called Protocol-Delegate
 
-### Explain how protocol delegate works
+- Explain how protocol delegate works
 
-### Show how we want to use it in our app
+- Show how we want to use it in our app
 
-### Add protocol delegate to login
+- Add protocol delegate to login
 
-### User it in app delegate to display onboarding
+- Use it in app delegate to display onboarding
 
-### Challenge - get students to add to onboarding for close button
+- Challenge - get students to add to onboarding for close button
 
-### Use it to display a temporary DummyView
+- Use it to display a temporary DummyView
 
-## Onboard only once
+- Onboard only once
 
-## Turn off onboarding via debug screen
-
-### Level Up
 
 
