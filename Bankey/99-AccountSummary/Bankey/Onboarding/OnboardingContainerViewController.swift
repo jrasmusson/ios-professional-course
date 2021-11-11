@@ -52,7 +52,7 @@ class OnboardingContainerViewController: UIViewController {
     }
         
     private func setup() {
-        view.backgroundColor = .systemOrange
+        view.backgroundColor = .systemPurple
         
         addChild(pageViewController)
         view.addSubview(pageViewController.view)
@@ -105,6 +105,7 @@ extension OnboardingContainerViewController: UIPageViewControllerDataSource {
     private func getPreviousViewController(from viewController: UIViewController) -> UIViewController? {
         guard let index = pages.firstIndex(of: viewController), index - 1 >= 0 else { return nil }
         resetAnimationConstraintsOnScreen()
+        
         self.currentVC = pages[index - 1]
         return pages[index - 1]
     }
@@ -112,6 +113,7 @@ extension OnboardingContainerViewController: UIPageViewControllerDataSource {
     private func getNextViewController(from viewController: UIViewController) -> UIViewController? {
         guard let index = pages.firstIndex(of: viewController), index + 1 < pages.count else { return nil }
         resetAnimationConstraintsOnScreen()
+        
         self.currentVC = pages[index + 1]
         return pages[index + 1]
     }
@@ -143,7 +145,7 @@ extension OnboardingContainerViewController {
     private func resetAnimationConstraintsOnScreen() {
         closeTopAnchor?.constant = 16
         
-        UIView.animate(withDuration: 2.0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
     }

@@ -15,7 +15,7 @@
 - Explain how `UIPageViewController` works
  - Illustrator or iPad 
 
- ![](images/uipageviewcontroller.png)
+ ![](images/5.png)
  
 - Create a new group in project `Onboarding`
 - Move Files to bottom

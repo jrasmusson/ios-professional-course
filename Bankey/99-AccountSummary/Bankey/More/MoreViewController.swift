@@ -23,6 +23,7 @@ class MoreViewController: UIViewController {
 
 extension MoreViewController {
     func style() {
+        title = "More"
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = 20
