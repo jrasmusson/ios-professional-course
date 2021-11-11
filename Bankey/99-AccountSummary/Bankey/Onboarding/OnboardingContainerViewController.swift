@@ -129,7 +129,12 @@ extension OnboardingContainerViewController: UIPageViewControllerDataSource {
 extension OnboardingContainerViewController {
     @objc func closeTapped(_ sender: UIButton) {
         setAnimationConstraintsOffScreen()
-        delegate?.didFinishOnboarding()
+
+        UIView.animate(withDuration: 2.0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.view.layoutIfNeeded()
+        }) { completion in
+            self.delegate?.didFinishOnboarding()
+        }
     }
 }
 
@@ -145,9 +150,5 @@ extension OnboardingContainerViewController {
     
     private func setAnimationConstraintsOffScreen() {
         closeTopAnchor?.constant = -80
-        
-        UIView.animate(withDuration: 2.0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.layoutIfNeeded()
-        }, completion: nil)
     }
 }
