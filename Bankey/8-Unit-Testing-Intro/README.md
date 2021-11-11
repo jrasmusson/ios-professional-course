@@ -58,7 +58,7 @@ Some overlap of tests is OK.
 
 ```
 > git add .
-> git commit -m "test: Add unit tests for currency and date"
+> git commit -m "test: Add unit tests for CurrencyFormatter"
 ```
 
 Discussion

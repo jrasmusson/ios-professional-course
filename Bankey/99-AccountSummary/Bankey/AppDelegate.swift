@@ -26,11 +26,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         loginViewController.delegate = self
         onboardingViewController.delegate = self
         
-        let vc = mainViewController
-        vc.setStatusBar()
-
-        UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().backgroundColor = appColor
+//        let vc = loginViewController
+//        let vc = mainViewController
+        let vc = onboardingViewController
+        
+//        vc.setStatusBar()
+//
+//        UINavigationBar.appearance().isTranslucent = false
+//        UINavigationBar.appearance().backgroundColor = appColor
         
         window?.rootViewController = vc
         
