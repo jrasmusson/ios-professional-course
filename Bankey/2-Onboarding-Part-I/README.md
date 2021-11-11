@@ -386,19 +386,11 @@ Once complete esc :wq.
 Handy for when you want to add explain yourself more or add further detail.
 
 
-## Adding the buttons
+## Adding the close button
 
-### Next button
+We want to add a close button in the upper-left-hand corner on all three screens in case someone wants to exit onboarding earlier.
 
-We want:
-
-- `Close` on all x3 screens
-- `Next` and `Back` on the middle screen
-- `Done` on last screen
-
-![](images/4.png)
-
-Open up and lets programmatically add the buttons one at a time. Starting with `Next` and `Back`.
+![](images/4a.png)
 
 First lets do a little refactoring and break these methods up a bit in `viewDidLoad`:
 
@@ -407,83 +399,6 @@ First lets do a little refactoring and break these methods up a bit in `viewDidL
 - layout()
 
 **OnboardingContainerViewController**
-
-```swift
-let nextButton = UIButton(type: .system)
-
-nextButton.translatesAutoresizingMaskIntoConstraints = false
-nextButton.setTitle("Next", for: [])
-nextButton.addTarget(self, action: #selector(nextTapped), for: .primaryActionTriggered)
-
-view.addSubview(nextButton)
-
-// Next
-NSLayoutConstraint.activate([
-    view.trailingAnchor.constraint(equalToSystemSpacingAfter: nextButton.trailingAnchor, multiplier: 2),
-    view.bottomAnchor.constraint(equalToSystemSpacingBelow: nextButton.bottomAnchor, multiplier: 4)
-])
-
-// MARK: Actions
-extension OnboardingContainerViewController {
-    @objc func nextTapped(_ sender: UIButton) {
-        guard let nextVC = getNextViewController(from: currentVC) else { return }
-        pageViewController.setViewControllers([nextVC], direction: .forward, animated: true, completion: nil)
-    }
-}
-```
-
-Then let's hide `next` on the last page. Can do this in `didSet`.
-
-Explain [property observer](https://github.com/jrasmusson/level-up-swift/tree/master/7-properties).
-
-```swift
-var currentVC: UIViewController { // stored property
-    didSet { // property observer
-        guard let index = pages.firstIndex(of: currentVC) else { return }
-            nextButton.isHidden = index == pages.count - 1 // Hide if last page
-    }
-}
-```
-
-Save our work `Add a next button to onboarding`.
-
-### Back button challenge
-
-Let's get you in the game. See if you can add the back button.
-
-- Position like next only on left hand side
-- When tapped make it go to the previous page
-- Hide if on the first page
-
-Good luck!
-
-```swift
-let backButton = UIButton(type: .system)
-
-// Back
-backButton.translatesAutoresizingMaskIntoConstraints = false
-backButton.setTitle("Back", for: [])
-backButton.addTarget(self, action: #selector(backTapped), for: .primaryActionTriggered)
-
-view.addSubview(backButton)
-
-// Back
-NSLayoutConstraint.activate([
-    backButton.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
-    view.bottomAnchor.constraint(equalToSystemSpacingBelow: backButton.bottomAnchor, multiplier: 4)
-])
-
-@objc func backTapped(_ sender: UIButton) {
-    guard let previousVC = getPreviousViewController(from: currentVC) else { return }
-    pageViewController.setViewControllers([previousVC], direction: .reverse, animated: true, completion: nil)
-}
-
-backButton.isHidden = index == 0 // Hide if on first page
-```
-
-![](images/2.png)
-
-#### Close and Done buttons
 
 Close and Done are just like the others. Close appears always. Done only when we are on the last page.
 
@@ -509,34 +424,16 @@ NSLayoutConstraint.activate([
     // TODO
 }
 ```
-
-Then let's add Done.
-
-```swift
-let doneButton = UIButton(type: .system)
-
-doneButton.translatesAutoresizingMaskIntoConstraints = false
-doneButton.setTitle("Done", for: [])
-doneButton.addTarget(self, action: #selector(doneTapped), for: .primaryActionTriggered)
-
-view.addSubview(doneButton)
-
-// Done
-NSLayoutConstraint.activate([
-    view.trailingAnchor.constraint(equalToSystemSpacingAfter: doneButton.trailingAnchor, multiplier: 2),
-    view.bottomAnchor.constraint(equalToSystemSpacingBelow: doneButton.bottomAnchor, multiplier: 4)
-])
-
-@objc func doneTapped(_ sender: UIButton) {
-    // TODO
-}
-
-doneButton.isHidden = !(index == pages.count - 1) // Show if on last page
-```
-
 Don't worry about Close and Done not doing anything. We will handle that in the next section.
 
 Go ahead and commit and add and save your work `Add onboarding buttons`.
+
+Let's save our work:
+
+```
+> git add .
+> git commit -m "Add close button"
+```
 
 ## Protocol Delegate
 
