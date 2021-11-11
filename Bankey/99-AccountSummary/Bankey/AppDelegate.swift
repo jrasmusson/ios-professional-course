@@ -32,10 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func displayScreen() {
         if LocalState.hasOnboarded {
-            mainViewController.setStatusBar()
-            UINavigationBar.appearance().isTranslucent = false
-            UINavigationBar.appearance().backgroundColor = appColor
-
+            prepMainView()
             setRootViewController(mainViewController)
         } else {
             setRootViewController(onboardingViewController)
@@ -59,6 +56,12 @@ extension AppDelegate {
                           animations: nil,
                           completion: nil)
     }
+    
+    private func prepMainView() {
+        mainViewController.setStatusBar()
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().backgroundColor = appColor
+    }
 }
 
 extension AppDelegate: LoginViewControllerDelegate {
@@ -70,6 +73,7 @@ extension AppDelegate: LoginViewControllerDelegate {
 extension AppDelegate: OnboardingContainerViewControllerDelegate {
     func didFinishOnboarding() {
         LocalState.hasOnboarded = true
+        prepMainView()
         setRootViewController(mainViewController)
     }
 }
