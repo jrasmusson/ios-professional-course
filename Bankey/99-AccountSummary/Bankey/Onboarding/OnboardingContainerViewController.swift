@@ -16,7 +16,10 @@ class OnboardingContainerViewController: UIViewController {
     let pageViewController: UIPageViewController
     var pages = [UIViewController]()
     weak var delegate: OnboardingContainerViewControllerDelegate?
-    
+
+    // animation anchors
+    var closeTopAnchor: NSLayoutConstraint?
+
     var currentVC: UIViewController {
         didSet {
             guard let index = pages.firstIndex(of: currentVC) else { return }
@@ -58,7 +61,7 @@ class OnboardingContainerViewController: UIViewController {
         style()
         layout()
     }
-    
+        
     private func setup() {
         addChild(pageViewController)
         view.addSubview(pageViewController.view)
@@ -117,10 +120,12 @@ class OnboardingContainerViewController: UIViewController {
         // Close
         NSLayoutConstraint.activate([
             closeButton.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
-            closeButton.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2)
         ])
         
-        // Close
+        closeTopAnchor = closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16)
+        closeTopAnchor?.isActive = true
+
+        // Done
         NSLayoutConstraint.activate([
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: doneButton.trailingAnchor, multiplier: 2),
             view.bottomAnchor.constraint(equalToSystemSpacingBelow: doneButton.bottomAnchor, multiplier: 4)
@@ -141,12 +146,14 @@ extension OnboardingContainerViewController: UIPageViewControllerDataSource {
 
     private func getPreviousViewController(from viewController: UIViewController) -> UIViewController? {
         guard let index = pages.firstIndex(of: viewController), index - 1 >= 0 else { return nil }
+        resetAnimationConstraintsOnScreen()
         self.currentVC = pages[index - 1]
         return pages[index - 1]
     }
 
     private func getNextViewController(from viewController: UIViewController) -> UIViewController? {
         guard let index = pages.firstIndex(of: viewController), index + 1 < pages.count else { return nil }
+        resetAnimationConstraintsOnScreen()
         self.currentVC = pages[index + 1]
         return pages[index + 1]
     }
@@ -178,5 +185,25 @@ extension OnboardingContainerViewController {
     
     @objc func doneTapped(_ sender: UIButton) {
         delegate?.didFinishOnboarding()
+        setAnimationConstraintsOffScreen()
+    }
+}
+
+// MARK: Animations
+extension OnboardingContainerViewController {
+    private func resetAnimationConstraintsOnScreen() {
+        closeTopAnchor?.constant = 16
+        
+        UIView.animate(withDuration: 2.0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
+    private func setAnimationConstraintsOffScreen() {
+        closeTopAnchor?.constant = -80
+        
+        UIView.animate(withDuration: 2.0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
 }
