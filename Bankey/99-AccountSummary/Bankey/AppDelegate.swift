@@ -28,14 +28,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 //        let vc = loginViewController
 //        let vc = mainViewController
-        let vc = onboardingViewController
+//        let vc = onboardingViewController
+        
+        didLogin()
         
 //        vc.setStatusBar()
 //
 //        UINavigationBar.appearance().isTranslucent = false
 //        UINavigationBar.appearance().backgroundColor = appColor
         
-        window?.rootViewController = vc
+//        window?.rootViewController = vc
         
         return true
     }
