@@ -54,9 +54,3 @@ class MoveMoneyViewController: UIViewController {
         view.backgroundColor = .systemOrange
     }
 }
-
-class MoreViewController: UIViewController {
-    override func viewDidLoad() {
-        view.backgroundColor = .systemPurple
-    }
-}
