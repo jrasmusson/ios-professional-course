@@ -78,9 +78,7 @@ Discussion
 
 ## House Keeping
 
-Let's do a little house cleaning before heading to the next section.
-
-First we need to apply some status bar navbar styleing for when the `mainView` is presented.
+Let's do a little house cleaning and get our login onboarding flow back.
 
 **AppDelegate**
 
@@ -102,11 +100,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         loginViewController.delegate = self
         onboardingViewController.delegate = self
 
-        displayScreen()
+        displayLogin()
         return true
     }
-    
-    private func displayScreen() {
+
+    private func displayLogin() {
+        setRootViewController(loginViewController)
+    }
+
+    private func displayNextScreen() {
         if LocalState.hasOnboarded {
             prepMainView()
             setRootViewController(mainViewController)
@@ -121,11 +123,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().backgroundColor = appColor
     }
 }
-```
 
-We call it when user finished onboarding.
+extension AppDelegate {
+    func setRootViewController(_ vc: UIViewController, animated: Bool = true) {
+        guard animated, let window = self.window else {
+            self.window?.rootViewController = vc
+            self.window?.makeKeyAndVisible()
+            return
+        }
 
-```swift
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        UIView.transition(with: window,
+                          duration: 0.3,
+                          options: .transitionCrossDissolve,
+                          animations: nil,
+                          completion: nil)
+    }
+}
+
+extension AppDelegate: LoginViewControllerDelegate {
+    func didLogin() {
+        displayNextScreen()
+    }
+}
+
 extension AppDelegate: OnboardingContainerViewControllerDelegate {
     func didFinishOnboarding() {
         LocalState.hasOnboarded = true
@@ -133,14 +155,10 @@ extension AppDelegate: OnboardingContainerViewControllerDelegate {
         setRootViewController(mainViewController)
     }
 }
-```
 
-Then when the user finished logging in, we'll call the same logic to determine whether to present onboarding or just take them to the main screen.
-
-```swift
-extension AppDelegate: LoginViewControllerDelegate {
-    func didLogin() {
-        displayScreen()
+extension AppDelegate: LogoutDelegate {
+    func didLogout() {
+        setRootViewController(loginViewController)
     }
 }
 ```

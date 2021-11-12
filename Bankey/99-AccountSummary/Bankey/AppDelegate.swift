@@ -26,11 +26,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         loginViewController.delegate = self
         onboardingViewController.delegate = self
 
-        displayScreen()
+        displayLogin()
         return true
     }
-    
-    private func displayScreen() {
+
+    private func displayLogin() {
+        setRootViewController(loginViewController)
+    }
+
+    private func displayNextScreen() {
         if LocalState.hasOnboarded {
             prepMainView()
             setRootViewController(mainViewController)
@@ -66,7 +70,7 @@ extension AppDelegate {
 
 extension AppDelegate: LoginViewControllerDelegate {
     func didLogin() {
-        displayScreen()
+        displayNextScreen()
     }
 }
 
