@@ -76,7 +76,84 @@ Discussion
 - And you can run these everytime you make a change or want to verify everything still works
 - Often run as part of a continuous integration process which is run everytime someone checks code in
 
-OK - good for now. Let's get on with the show and see what we are going to tackle next.
+## House Keeping
+
+Let's do a little house cleaning before heading to the next section.
+
+First we need to apply some status bar navbar styleing for when the `mainView` is presented.
+
+**AppDelegate**
+
+```swift
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    var window: UIWindow?
+    let loginViewController = LoginViewController()
+    let onboardingViewController = OnboardingContainerViewController()
+    let mainViewController = MainViewController()
+        
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        window?.backgroundColor = .systemBackground
+                
+        loginViewController.delegate = self
+        onboardingViewController.delegate = self
+
+        displayScreen()
+        return true
+    }
+    
+    private func displayScreen() {
+        if LocalState.hasOnboarded {
+            prepMainView()
+            setRootViewController(mainViewController)
+        } else {
+            setRootViewController(onboardingViewController)
+        }
+    }
+    
+    private func prepMainView() {
+        mainViewController.setStatusBar()
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().backgroundColor = appColor
+    }
+}
+```
+
+We call it when user finished onboarding.
+
+```swift
+extension AppDelegate: OnboardingContainerViewControllerDelegate {
+    func didFinishOnboarding() {
+        LocalState.hasOnboarded = true
+        prepMainView()
+        setRootViewController(mainViewController)
+    }
+}
+```
+
+Then when the user finished logging in, we'll call the same logic to determine whether to present onboarding or just take them to the main screen.
+
+```swift
+extension AppDelegate: LoginViewControllerDelegate {
+    func didLogin() {
+        displayScreen()
+    }
+}
+```
+
+### Adding a launch screen
+
+Add a launch screen image.
+
+- Open `LaunchScreen.storyboard`.
+- Add a `UIImageView` with image `banknote.fill`.
+- Give width `240 pt`
+- Give height `142 pt`
+- Center
 
 
 ### Links that help
