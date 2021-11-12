@@ -1,4 +1,4 @@
-# Notification Center
+# NotificationCenter
 
 Sometimes you need to send messages far and wide in your app. And `NoficiationCenter` is a way to do that. In this section we are going to use `NotificationCenter` to help us with logout.
 
@@ -72,4 +72,6 @@ Add a launch screen image.
 - Center
 
 ### Links that help
+
+- [Apple NotificationCenter Documentation](https://developer.apple.com/documentation/foundation/notificationcenter)
 
