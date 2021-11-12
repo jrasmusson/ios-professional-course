@@ -1,5 +1,7 @@
 # NotificationCenter
 
+![](images/2.png)
+
 Sometimes you need to send messages far and wide in your app. And `NoficiationCenter` is a way to do that. In this section we are going to use `NotificationCenter` to help us with logout.
 
 Let's start by adding a logout button to our `AccountSummaryViewController` screen, and see why sending that message back to our `AppDelegate` is harder than it looks.
@@ -55,7 +57,6 @@ AppDelegate > MainViewController > AccountSummaryViewController
 
 Better option here would be another communication pattern - `NotificationCenter`.
 
-![](images/2.png)
 
 ## Hooking up Notification Center
 
