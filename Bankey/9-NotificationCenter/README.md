@@ -2,25 +2,11 @@
 
 Sometimes you need to send messages far and wide in your app. And `NoficiationCenter` is a way to do that. In this section we are going to use `NotificationCenter` to help us with logout.
 
-Let's add a logout button to our `AccountSummaryViewController` screen, and see why sending that message out is harder than it looks.
-
-## The limitations of protocol-delegate
-
-Talk about the trade-offs between these and other communication patterns.
-
-- Protocol-delegate
-- NotificationCenter
-- ResponderChain
-
-There are others
-
-- KVO
-- Combine
-- Closures
+Let's start by adding a logout button to our `AccountSummaryViewController` screen, and see why sending that message back to our `AppDelegate` is harder than it looks.
 
 ## Adding a logout button
 
-First let's add the logout button as a `UIBarButtonItem`.
+First let's add the logout button to our `AccountSummaryViewController`.
 
 **AccountSummaryViewController**
 
@@ -59,27 +45,21 @@ Discussion:
 
 If we click on the button, it won't do anything. That's because we haven't yet hooked it up to our protocol-delegate.
 
-**AccountSummaryViewController**
+Now this leads to an interesting question. How do we send logout as a message back to the `AppDelegate`?
 
-```swift
-var tableView = UITableView()
-    
-weak var delegate: LogoutDelegate?
+If we look at our view hierarchy we can see we've got a pretty long way to go if we wanted to use `protocol-delegate`.
 
-// MARK: LogoutDelegate
-extension AccountSummaryViewController: LogoutDelegate {
-    func didLogout() {
-        delegate?.didLogout()
-    }
-}
-```
-
-Now this leads to an interesting question. Who handles logout?
-
-If we look at our view hierarchy we can see 
+![](images/1.png)
 
 AppDelegate > MainViewController > AccountSummaryViewController
 
+Better option here would be another communication pattern - `NotificationCenter`.
+
+![](images/2.png)
+
+## Hooking up Notification Center
+
+U R HERE
 
 ### Adding a launch screen
 
