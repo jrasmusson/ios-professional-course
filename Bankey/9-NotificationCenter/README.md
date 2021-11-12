@@ -118,6 +118,28 @@ Add a launch screen image.
 
 ### Fix the label spacing
 
+Notice how our label is getting truncated. Let's have a conversation with our UX folks and fix.
+
+![](images/3.png)
+
+**AccountSummaryCell**
+
+```swift
+nameLabel.translatesAutoresizingMaskIntoConstraints = false
+nameLabel.font = UIFont.preferredFont(forTextStyle: .body)
+nameLabel.adjustsFontSizeToFitWidth = true
+nameLabel.text = "Account name"
+
+balanceLabel.translatesAutoresizingMaskIntoConstraints = false
+balanceLabel.font = UIFont.preferredFont(forTextStyle: .body)
+balanceLabel.textAlignment = .right
+balanceLabel.adjustsFontSizeToFitWidth = true
+balanceLabel.text = "Some balance"
+```
+
+![](images/4.png)
+
+
 ### Links that help
 
 - [Apple NotificationCenter Documentation](https://developer.apple.com/documentation/foundation/notificationcenter)
