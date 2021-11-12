@@ -155,6 +155,12 @@ Add a launch screen image.
 - Give height `142 pt`
 - Center
 
+### Save your work
+
+```
+> git add .
+> git commit -m "feat: Add launch screen and general cleanup"
+```
 
 ### Links that help
 
