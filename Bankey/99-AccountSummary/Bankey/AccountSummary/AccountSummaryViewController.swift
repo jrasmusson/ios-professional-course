@@ -19,6 +19,12 @@ class AccountSummaryViewController: UIViewController {
 
     var headerView = AccountSummaryHeaderView(frame: .zero)
     var tableView = UITableView()
+    
+    lazy var logoutBarButtonItem: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutTapped))
+        barButtonItem.tintColor = .label
+        return barButtonItem
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,9 +35,14 @@ class AccountSummaryViewController: UIViewController {
 // MARK: - Setup
 extension AccountSummaryViewController {
     private func setup() {
+        setupNavigationBar()
         setupTableView()
         setupTableHeaderView()
         fetchData()
+    }
+    
+    func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = logoutBarButtonItem
     }
     
     private func setupTableView() {
@@ -131,5 +142,12 @@ extension AccountSummaryViewController {
     private func configureTableHeaderView(with profile: Profile) {
         let vm = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Good morning,", name: profile.firstName, date: Date())
         headerView.configure(viewModel: vm)
+    }
+}
+
+// MARK: Actions
+extension AccountSummaryViewController {
+    @objc func logoutTapped(sender: UIButton) {
+        
     }
 }

@@ -163,21 +163,12 @@ extension AppDelegate: LogoutDelegate {
 }
 ```
 
-### Adding a launch screen
-
-Add a launch screen image.
-
-- Open `LaunchScreen.storyboard`.
-- Add a `UIImageView` with image `banknote.fill`.
-- Give width `240 pt`
-- Give height `142 pt`
-- Center
 
 ### Save your work
 
 ```
 > git add .
-> git commit -m "feat: Add launch screen and general cleanup"
+> git commit -m "refactor: General AppDelegate cleanup"
 ```
 
 ### Links that help
