@@ -55,6 +55,14 @@ If we look at our view hierarchy we can see we've got a pretty long way to go if
 
 AppDelegate > MainViewController > AccountSummaryViewController
 
+
+Now there are lots of ways we could solve this:
+
+- Protocol-Delegate (short distances)
+- Closures (retain cycles)
+- Notification Center (recommended)
+- Responder Chain (powerful but not common)
+
 Better option here would be another communication pattern - `NotificationCenter`.
 
 
@@ -101,9 +109,10 @@ extension AccountSummaryViewController {
 
 OK lets's test. 🎉
 
-<iframe src="https://giphy.com/embed/MCZ39lz83o5lC" width="480" height="257" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/MCZ39lz83o5lC"></a></p>
-
 Discuss Pros / Cons of NotificationCenter.
+
+- With great power comes great responsibility.
+
 
 ### Adding a launch screen
 
