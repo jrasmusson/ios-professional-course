@@ -1,7 +1,4 @@
-# Animations
-
-
-## Animating with constraints
+# Animating with constraints
 
 - image 
 - explain how it works
