@@ -26,6 +26,12 @@ class LoginViewController: UIViewController {
     
     weak var delegate: LoginViewControllerDelegate?
     
+    // animation
+    var leadingEdgeOnScreen: CGFloat = 16
+    var leadingEdgeOffScreen: CGFloat = -1000
+    
+    var titleLeadingAnchor: NSLayoutConstraint?
+    
     var username: String? {
         return loginView.usernameTextField.text
     }
@@ -43,6 +49,13 @@ class LoginViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         signInButton.configuration?.showsActivityIndicator = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        setAnimationsOnScreen()
+        animate()
     }
 }
 
@@ -89,8 +102,11 @@ extension LoginViewController {
         // Title
         NSLayoutConstraint.activate([
             subtitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: titleLabel.bottomAnchor, multiplier: 3),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            titleLabel.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
         ])
+        
+        titleLeadingAnchor = titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingEdgeOffScreen)
+        titleLeadingAnchor?.isActive = true
         
         // Subtitle
         NSLayoutConstraint.activate([
@@ -155,3 +171,20 @@ extension LoginViewController {
     }
 }
 
+// MARK: - Animations
+extension LoginViewController {
+    private func setAnimationsOnScreen() {
+        titleLeadingAnchor?.constant = leadingEdgeOnScreen
+    }
+    
+    private func resetAnimationsOfScreen() {
+        titleLeadingAnchor?.constant = leadingEdgeOffScreen
+    }
+    
+    private func animate() {
+        let titleAnimation = UIViewPropertyAnimator(duration: 0.75, curve: .easeInOut) {
+            self.view.layoutIfNeeded()
+        }
+        titleAnimation.startAnimation()
+    }
+}
