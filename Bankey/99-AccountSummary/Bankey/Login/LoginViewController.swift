@@ -26,12 +26,6 @@ class LoginViewController: UIViewController {
     
     weak var delegate: LoginViewControllerDelegate?
     
-    // animation
-    var leadingEdgeOnScreen: CGFloat = 16
-    var leadingEdgeOffScreen: CGFloat = -1000
-    
-    var titleLeadingAnchor: NSLayoutConstraint?
-    
     var username: String? {
         return loginView.usernameTextField.text
     }
@@ -40,6 +34,13 @@ class LoginViewController: UIViewController {
         return loginView.passwordTextField.text
     }
 
+    // animation
+    var leadingEdgeOnScreen: CGFloat = 16
+    var leadingEdgeOffScreen: CGFloat = -1000
+    
+    var titleLeadingAnchor: NSLayoutConstraint?
+    var subtitleLeadingAnchor: NSLayoutConstraint?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         style()
@@ -53,8 +54,6 @@ class LoginViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        setAnimationsOnScreen()
         animate()
     }
 }
@@ -111,10 +110,12 @@ extension LoginViewController {
         // Subtitle
         NSLayoutConstraint.activate([
             loginView.topAnchor.constraint(equalToSystemSpacingBelow: subtitleLabel.bottomAnchor, multiplier: 3),
-            subtitleLabel.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
             subtitleLabel.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
         ])
         
+        subtitleLeadingAnchor = subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingEdgeOffScreen)
+        subtitleLeadingAnchor?.isActive = true
+
         // LoginView
         NSLayoutConstraint.activate([
             loginView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
@@ -173,18 +174,17 @@ extension LoginViewController {
 
 // MARK: - Animations
 extension LoginViewController {
-    private func setAnimationsOnScreen() {
-        titleLeadingAnchor?.constant = leadingEdgeOnScreen
-    }
-    
-    private func resetAnimationsOfScreen() {
-        titleLeadingAnchor?.constant = leadingEdgeOffScreen
-    }
-    
     private func animate() {
-        let titleAnimation = UIViewPropertyAnimator(duration: 0.75, curve: .easeInOut) {
+        let animator1 = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
+            self.titleLeadingAnchor?.constant = self.leadingEdgeOnScreen
             self.view.layoutIfNeeded()
         }
-        titleAnimation.startAnimation()
+        animator1.startAnimation()
+        
+        let animator2 = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
+            self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
+            self.view.layoutIfNeeded()
+        }
+        animator2.startAnimation(afterDelay: 0.25)
     }
 }
