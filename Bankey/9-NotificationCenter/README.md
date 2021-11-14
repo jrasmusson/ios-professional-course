@@ -1,5 +1,7 @@
 # NotificationCenter
 
+![](images/1.png)
+
 ![](images/2.png)
 
 Sometimes you need to send messages far and wide in your app. And `NoficiationCenter` is a way to do that. In this section we are going to use `NotificationCenter` to help us with logout.
@@ -55,14 +57,6 @@ If we look at our view hierarchy we can see we've got a pretty long way to go if
 
 AppDelegate > MainViewController > AccountSummaryViewController
 
-
-Now there are lots of ways we could solve this:
-
-- Protocol-Delegate (short distances)
-- Closures (retain cycles)
-- Notification Center (recommended)
-- Responder Chain (powerful but not common)
-
 Better option here would be another communication pattern - `NotificationCenter`.
 
 
@@ -74,7 +68,7 @@ First let's add a new class in `Utils` to strongly type our notification names.
 
 ```swift
 extension Notification.Name {
-     static let Logout = Notification.Name("Logout")
+     static let logout = Notification.Name("Logout")
 }
 ```
 
@@ -148,6 +142,12 @@ balanceLabel.text = "Some balance"
 
 ![](images/4.png)
 
+### Save your work incrementally
+
+```
+> git add .
+> git commit -m "feat: Add logout button"
+```
 
 ### Links that help
 
