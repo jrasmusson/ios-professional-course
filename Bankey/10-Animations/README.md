@@ -16,6 +16,8 @@ var password: String? {
 // animation
 var leadingEdgeOnScreen: CGFloat = 16
 var leadingEdgeOffScreen: CGFloat = -1000
+
+var titleLeadingAnchor: NSLayoutConstraint?
 ```
 
 Then modify the `titleLabel` constraints so we start with our titile off screen.
@@ -133,9 +135,74 @@ If you ever want to see your animations in slow motion, select your simulator an
 
 One common technique for making controls appear and fade is to play with this visibility and alpha.
 
-For example we would blur these labels in by going initially setting their `alpha` to `0` and then setting it to `1` as part of the animation in:
+For example we could set our titles `alpha` to `0`
 
 ```swift
+titleLabel.alpha = 0
+```
 
+Run and demo. Now the label is effectively hidden.
+
+But we can bring it back by resetting `alpha` back to a default of `1` in our animation.
+
+```swift
+// MARK: - Animations
+extension LoginViewController {
+    private func animate() {
+        let duration = 0.8
+        
+        let animator1 = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+            self.titleLeadingAnchor?.constant = self.leadingEdgeOnScreen
+            self.view.layoutIfNeeded()
+        }
+        animator1.startAnimation()
+        
+        let animator2 = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+            self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
+            self.view.layoutIfNeeded()
+        }
+        animator2.startAnimation(afterDelay: 0.2)
+        
+        let animator3 = UIViewPropertyAnimator(duration: duration*2, curve: .easeInOut) {
+            self.titleLabel.alpha = 1
+            self.view.layoutIfNeeded()
+        }
+        animator3.startAnimation(afterDelay: 0.2)
+    }
+}
+```
+
+If we run this now we should see a nice animation fade in.
+
+
+### Challenge: Fade in subtitle label
+
+See if you can fade in our `subtitleLabel`. Follow the steps we did for `titleLabel`.
+
+- Set the alpha to `0`.
+- Add it to the correct animation block.
+- And see if you can make it fade in just like the `title`.
+
+Solution
+
+```swift
+subtitleLabel.alpha = 0
+self.subtitleLabel.alpha = 1
+```
+
+Save your work.
 
 ```
+> git add -p
+> git commit -m "feat: Add fade in animation to login titles"
+```
+
+### Recap what we have done here
+
+- Used constraints as a means of animating
+- Step 1 was setting up the constratints into a position we wanted to animate from
+- Step 2 was creating animation blocks using `UIViewPropertyAnimator` to animate to by adjusting constraints and setting values on our controls.
+
+Next we are going to drop down a layer and take a look at `Core Animation` libary and see how we can do even more power animations that aren't easily replicated in UIKit.
+
+
