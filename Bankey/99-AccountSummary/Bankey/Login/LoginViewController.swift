@@ -175,22 +175,57 @@ extension LoginViewController {
 }
 
 // MARK: - Animations
+//extension LoginViewController {
+//    private func animate() {
+//        let duration = 0.8
+//
+//        let animator1 = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+//            self.titleLeadingAnchor?.constant = self.leadingEdgeOnScreen
+//            self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
+//            self.view.layoutIfNeeded()
+//        }
+//        animator1.startAnimation()
+//    }
+//}
+
+
+// MARK: - Animations
+//extension LoginViewController {
+//    private func animate() {
+//        let duration = 2.0
+//
+//        let animator1 = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+//            self.titleLeadingAnchor?.constant = self.leadingEdgeOnScreen
+//            self.view.layoutIfNeeded()
+//        }
+//        animator1.startAnimation()
+//
+//        let animator2 = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+//            self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
+//            self.view.layoutIfNeeded()
+//        }
+//        animator2.startAnimation(afterDelay: 0.5)
+//    }
+//}
+
+
+// MARK: - Animations
 extension LoginViewController {
     private func animate() {
         let duration = 0.8
-        
+
         let animator1 = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
             self.titleLeadingAnchor?.constant = self.leadingEdgeOnScreen
             self.view.layoutIfNeeded()
         }
         animator1.startAnimation()
-        
+
         let animator2 = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
             self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
             self.view.layoutIfNeeded()
         }
         animator2.startAnimation(afterDelay: 0.2)
-        
+
         let animator3 = UIViewPropertyAnimator(duration: duration*2, curve: .easeInOut) {
             self.titleLabel.alpha = 1
             self.subtitleLabel.alpha = 1

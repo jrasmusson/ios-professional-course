@@ -5,6 +5,8 @@
 
 First define some variables to represent the edges of our constraints.
 
+**LoginViewController**
+
 ```swift
 var password: String? {
     return loginView.passwordTextField.text
@@ -17,7 +19,7 @@ var leadingEdgeOffScreen: CGFloat = -1000
 var titleLeadingAnchor: NSLayoutConstraint?
 ```
 
-Then modify the `titleLabel` constraints so we start with our titile off screen.
+Then modify the `titleLabel` constraints so we start with our title **off screen**.
 
 ```swift
 // Title
@@ -47,7 +49,9 @@ extension LoginViewController {
 
 Run the app now. And you should see the title appear offscreen.
 
-Now comes the fun part. Animating the title in. To do this we need to hook into the `viewDidAppear` lifecycle of the view controller. We want the auto layout to have fully completed. Now we want to change the constraint and trigger the animation in.
+Now comes the fun part. Animating the title in. To do this we need to hook into the `viewDidAppear` lifecycle of the view controller. We want the auto layout to have fully completed (that's why we don't do this in `willAppear`). 
+
+Now we want to change the constraint and trigger the animation in.
 
 ```swift
 override func viewDidAppear(_ animated: Bool) {
@@ -95,21 +99,17 @@ NSLayoutConstraint.activate([
 subtitleLeadingAnchor = subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingEdgeOffScreen)
 subtitleLeadingAnchor?.isActive = true
 
-let animation = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
-    self.titleLeadingAnchor?.constant = self.leadingEdgeOnScreen
-    self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
-    self.view.layoutIfNeeded()
-}
-
+self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
 ```
 
 Demo. Cool! That works nicely. But watch what we can do with animations. We can chain them together.
 
-Let's create a second animator and do our subitle animation in there with a `0.5s` delay.
+Let's create a second animator and do our subitle animation in there.
 
 ```swift
 let animator2 = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
     self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
+    self.view.layoutIfNeeded()
 }
 animator2.startAnimation(afterDelay: 0.25)
 ```
@@ -184,6 +184,9 @@ Solution
 
 ```swift
 subtitleLabel.alpha = 0
+```
+
+```swift
 self.subtitleLabel.alpha = 1
 ```
 
@@ -192,6 +195,7 @@ Save your work.
 ```
 > git add -p
 > git commit -m "feat: Add fade in animation to login titles"
+> git push
 ```
 
 ### Recap what we have done here
