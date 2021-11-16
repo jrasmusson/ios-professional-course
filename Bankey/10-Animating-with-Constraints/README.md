@@ -1,7 +1,10 @@
 # Animating with constraints
 
-- image 
-- explain how it works
+When animating via Auto Layout constraints, we first setup the layout we want to animate `from`, then we modify the constraint in an animation block for where we want to animate `to`.
+
+![](images/0.png)
+
+In this case we are going to add an animation to the login page. We'll start by placing the title and subtitle off screen, and then animate then in after the page as appeared.
 
 First define some variables to represent the edges of our constraints.
 
