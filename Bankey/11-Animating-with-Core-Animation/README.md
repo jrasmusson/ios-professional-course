@@ -1,6 +1,17 @@
 # Animating with Core Animation
 
-Update our code to login.
+Core Animation Intro.
+
+Key concepts.
+
+Examples...
+
+
+## Shaking the login button
+
+Let's make it so that when the user enters an incorrect password, the login button shakes.
+
+Set our username and password.
 
 **LoginViewController**
 
@@ -19,10 +30,7 @@ if username == "Flynn" && password == "Welcome" {
 }
 ```
 
-
-## Shaking the login button
-
-Let's make it so that when the user enters an incorrect password, the login button shakes.
+Shake the login button is username/password is wrong.
 
 **LoginViewController**
 
