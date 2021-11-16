@@ -51,6 +51,7 @@ extension LoginView {
         passwordTextField.placeholder = "Password"
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
+        passwordTextField.enablePasswordToggle()
                 
         layer.cornerRadius = 5
         clipsToBounds = true

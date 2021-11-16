@@ -118,6 +118,45 @@ Add a launch screen image.
 - Give height `142 pt`
 - Center
 
+### Showing the password
+
+Add an eye to show password. Create a new extension.
+
+**UITextField+SecureToggle**
+
+```swift
+import Foundation
+import UIKit
+
+let passwordToggleButton = UIButton(type: .custom)
+
+extension UITextField {
+    
+    func enablePasswordToggle(){
+        passwordToggleButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+        passwordToggleButton.setImage(UIImage(systemName: "eye.slash.fill"), for: .selected)
+        passwordToggleButton.addTarget(self, action: #selector(togglePasswordView), for: .touchUpInside)
+        rightView = passwordToggleButton
+        rightViewMode = .always
+    }
+    
+    @objc func togglePasswordView(_ sender: Any) {
+        isSecureTextEntry.toggle()
+        passwordToggleButton.isSelected.toggle()
+    }
+}
+```
+
+Call in `LoginView`.
+
+**LoginView**
+
+```swift
+passwordTextField.delegate = self
+passwordTextField.enablePasswordToggle()
+```
+
+![](images/5.png)
 
 ### Fix the label spacing
 

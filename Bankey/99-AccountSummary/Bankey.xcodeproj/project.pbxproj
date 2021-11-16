@@ -25,6 +25,7 @@
 		71A0F7CD26FD2B76008EAFD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71A0F7CC26FD2B76008EAFD8 /* Assets.xcassets */; };
 		71A0F7D026FD2B76008EAFD8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71A0F7CE26FD2B76008EAFD8 /* LaunchScreen.storyboard */; };
 		71A0F7D826FD2BBA008EAFD8 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A0F7D726FD2BBA008EAFD8 /* LoginView.swift */; };
+		71C1F1712743E4FE00757BB3 /* UITextField+SecureToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C1F1702743E4FE00757BB3 /* UITextField+SecureToggle.swift */; };
 		71D109B22705DD3B000A0633 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D109B12705DD3B000A0633 /* OnboardingViewController.swift */; };
 		71EF369027202E9E0089B202 /* UIViewController+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EF368F27202E9E0089B202 /* UIViewController+Utils.swift */; };
 		71EF3694272035A10089B202 /* Date+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EF3693272035A10089B202 /* Date+Utils.swift */; };
@@ -64,6 +65,7 @@
 		71A0F7CF26FD2B76008EAFD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		71A0F7D126FD2B76008EAFD8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71A0F7D726FD2BBA008EAFD8 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		71C1F1702743E4FE00757BB3 /* UITextField+SecureToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+SecureToggle.swift"; sourceTree = "<group>"; };
 		71D109B12705DD3B000A0633 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		71EF368F27202E9E0089B202 /* UIViewController+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Utils.swift"; sourceTree = "<group>"; };
 		71EF3693272035A10089B202 /* Date+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Utils.swift"; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				7128EA5F2737EDC900FFDBD0 /* CurrencyFormatter.swift */,
 				71F770942710E99A0025AC04 /* LocalState.swift */,
 				7156C414273EDAA000F29827 /* NSNotificationName.swift */,
+				71C1F1702743E4FE00757BB3 /* UITextField+SecureToggle.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				7128EA602737EDC900FFDBD0 /* CurrencyFormatter.swift in Sources */,
 				717ADC0D2703B80300C89FDB /* OnboardingContainerViewController.swift in Sources */,
 				7156C415273EDAA000F29827 /* NSNotificationName.swift in Sources */,
+				71C1F1712743E4FE00757BB3 /* UITextField+SecureToggle.swift in Sources */,
 				71FDBEC327147E7D006E710B /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
