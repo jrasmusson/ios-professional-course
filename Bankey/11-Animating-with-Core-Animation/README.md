@@ -84,101 +84,221 @@ import Foundation
 import UIKit
 
 class NotificationBellView: UIView {
-        
-    @IBOutlet var contentView: UIView!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        let bundle = Bundle.init(for: NotificationBellView.self)
-        bundle.loadNibNamed("NotificationBellView", owner: self, options: nil)
-        addSubview(contentView)
+    let imageView = UIImageView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        style()
+        layout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override var intrinsicContentSize: CGSize {
         return CGSize(width: 48, height: 48)
     }
 }
+
+extension NotificationBellView {
+    
+    func style() {
+        translatesAutoresizingMaskIntoConstraints = false
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+                
+        let image = UIImage(systemName: "bell.fill")!.withTintColor(.white, renderingMode: .alwaysOriginal)
+        
+        imageView.image = image
+    }
+    
+    func layout() {
+        addSubview(imageView)
+        
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: 24),
+            imageView.widthAnchor.constraint(equalToConstant: 24)
+        ])
+    }
+}
 ```
 
-- Create a new nib called `NotificationBellView`
-- Set the `File's Owner`
+Now let's add it to the view controller. Because we need the layout to be relative to the height of the table header, let's define a variable there first. And then use it when we do the layout in the `AccountSummaryViewController`.
 
-![](images/0.png)
-
-- Control + Option + Command + Enter should now show associated code file in assistant
-- Control drag the nib `View` to `contentView` in the code file.
-- If outlet won't connect - restart Xcode
-
-Nib is now ready to be worked on.
-
-### Creating the bell
-
-We are going to add the bell as in `UIImageView` and the set it's image as an SF Symbol `bell.fill`.
-
-- Add image view
-- Set image to `bell.fill`
-- Set tint to `Label Color`
-- Center in view
-- Set height/width constraints to `28pt`
-
-### Adding it to our view controller
-
-Going to add it programmatically as a view.
-
-First let's turn off login.
-
-**LoginViewController**
+**AccountSummaryHeaderView**
 
 ```swift
-//        if username.isEmpty || password.isEmpty {
-//            configureView(withMessage: "Username / password cannot be blank")
-//            return
-//        }
-        
-        if username == "" && password == "" {
-```
+static let height: CGFloat = 144
 
-Then let's add to view controller.
+override var intrinsicContentSize: CGSize {
+   return CGSize(width: UIView.noIntrinsicMetric, height: 144)
+}
+```
 
 **AccountSummaryViewController**
 
 ```swift
-let notificiationBellView = NotificationBellView()
-    
-    
-private func setup() {
-    setupTableView()
-    setupTableHeaderView()
-    setupNotificationBell()
-    fetchData()
-}    
+let notificationBellView = NotificationBellView()
 
-    private func setupNotificationBell() {
-        notificiationBellView.translatesAutoresizingMaskIntoConstraints = false
-        notificiationBellView.backgroundColor = .orange
-        view.addSubview(notificiationBellView)
-        
-        NSLayoutConstraint.activate([
-            notificiationBellView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
-            notificiationBellView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2)
-        ])
-    }
+private func setup() {
+     setupTableView()
+     setupTableHeaderView()
+     setupNotificationBellView()
+     fetchData()
+}
+
+private func setupNotificationBellView() {
+    notificationBellView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(notificationBellView)
+    
+    NSLayoutConstraint.activate([
+        view.trailingAnchor.constraint(equalToSystemSpacingAfter: notificationBellView.trailingAnchor, multiplier: 2),
+        notificationBellView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: AccountSummaryHeaderView.height - 40)
+    ])
+}
 ```
 
-If we run this now, we will see our view, but no bell! Why?
+Before we run let's just speed things up a bit by going directly to the view controller we want.
 
-It's because of the way nibs and sizes work. The 
+**AppDelegate**
 
-![](images/1.png)	
+```swift
+setRootViewController(AccountSummaryViewController())
+//        displayLogin()
+```
 
+And now if we run we should see our Bell show up.
 
+![](images/0.png)
 
+If you ever want to see what a view looks like in its entirety, just sent its background color.
+
+```swift
+private func setupNotificationBellView() {
+    notificationBellView.translatesAutoresizingMaskIntoConstraints = false
+    notificationBellView.backgroundColor = .systemOrange
+```
 
 ### Making it tappable
 
+One last thing before we tackle the animation of shakey, we need to make it tappable. We don't necessary need to make it tappable from a design point of view, but it helps with debugging, and it's also a cool thing to know how to do.
+
+**NotificationBellView**
+
+```swift
+override init(frame: CGRect) {
+super.init(frame: frame)
+setup()
+}
+
+extension NotificationBellView {
+    
+    func setup() {
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_: )))
+        imageView.addGestureRecognizer(singleTap)
+        imageView.isUserInteractionEnabled = true
+    }
+}
+
+// MARK: - Actions
+extension NotificationBellView {
+    @objc func imageViewTapped(_ recognizer: UITapGestureRecognizer) {
+        // insert animation here...
+        print("Shaking!!!")
+    }
+}
+```
+
+If we run, we'll just see a print statement for now. But that's OK. Now we are ready to talk animation.
+
 ### Animating it in a test rig
 
-### Taking it for a test drive in the controller
+Explain and demo how animation works in test rig.
+
+[Swift Arcade Shakey Bell](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/ShakeyBell/README.md)
+
+### Adding the animation to the view
+
+So now that we understand how the animation works, let's add it.
+
+**NotificationBellView**
+
+```swift
+// MARK: - Actions
+extension NotificationBellView {
+    @objc func imageViewTapped(_ recognizer: UITapGestureRecognizer) {
+        shakeWith(duration: 1.0, angle: .pi/8, yOffset: 0.0)
+    }
+
+    private func shakeWith(duration: Double, angle: CGFloat, yOffset: CGFloat) {
+        print("duration: \(duration) angle: \(angle) offset: \(yOffset)")
+        
+        let numberOfFrames: Double = 6
+        let frameDuration = Double(1/numberOfFrames)
+        
+        imageView.setAnchorPoint(CGPoint(x: 0.5, y: yOffset))
+
+        print("anchorPoint: \(imageView.layer.anchorPoint)")
+
+        UIView.animateKeyframes(withDuration: duration, delay: 0, options: [],
+          animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0,
+                               relativeDuration: frameDuration) {
+                self.imageView.transform = CGAffineTransform(rotationAngle: -angle)
+            }
+            UIView.addKeyframe(withRelativeStartTime: frameDuration,
+                               relativeDuration: frameDuration) {
+                self.imageView.transform = CGAffineTransform(rotationAngle: +angle)
+            }
+            UIView.addKeyframe(withRelativeStartTime: frameDuration*2,
+                               relativeDuration: frameDuration) {
+                self.imageView.transform = CGAffineTransform(rotationAngle: -angle)
+            }
+            UIView.addKeyframe(withRelativeStartTime: frameDuration*3,
+                               relativeDuration: frameDuration) {
+                self.imageView.transform = CGAffineTransform(rotationAngle: +angle)
+            }
+            UIView.addKeyframe(withRelativeStartTime: frameDuration*4,
+                               relativeDuration: frameDuration) {
+                self.imageView.transform = CGAffineTransform(rotationAngle: -angle)
+            }
+            UIView.addKeyframe(withRelativeStartTime: frameDuration*5,
+                               relativeDuration: frameDuration) {
+                self.imageView.transform = CGAffineTransform.identity
+            }
+          },
+          completion: nil
+        )
+    }
+}
+
+// https://www.hackingwithswift.com/example-code/calayer/how-to-change-a-views-anchor-point-without-moving-it
+extension UIView {
+    func setAnchorPoint(_ point: CGPoint) {
+        var newPoint = CGPoint(x: bounds.size.width * point.x, y: bounds.size.height * point.y)
+        var oldPoint = CGPoint(x: bounds.size.width * layer.anchorPoint.x, y: bounds.size.height * layer.anchorPoint.y);
+
+        newPoint = newPoint.applying(transform)
+        oldPoint = oldPoint.applying(transform)
+
+        var position = layer.position
+
+        position.x -= oldPoint.x
+        position.x += newPoint.x
+
+        position.y -= oldPoint.y
+        position.y += newPoint.y
+
+        layer.position = position
+        layer.anchorPoint = point
+    }
+}
+```
+
 
 ### Adding a badge
 
