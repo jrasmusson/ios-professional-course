@@ -31,7 +31,10 @@ if username == "Flynn" && password == "Welcome" {
 }
 ```
 
-Shake the login button is username/password is wrong.
+Run the app. Error message if password wrong.
+
+Let's animate things by shaking the sign in button showing login failed.
+
 
 **LoginViewController**
 
@@ -54,9 +57,134 @@ private func shakeButton() {
 }
 ```
 
+Save your work
+
+```
+> git add -p
+> git commit -m "feat: Shake signin button if login fails"
+```
+
 ## Shakey Bell
 
-Let's add a bell that shakes everytime someone taps on it while also displaying a count for notifications.
+Now that's just one small simple but powerful example of what Core Animation can do. Let's now look at a more advanced example, and see if we can't add shakey bell.
+
+- Demo shakey bell.
+- Explain the mechanics behind how it works
+- Go over construction
+
+### Creating the view
+
+- Create a new dir called `Components`.
+- Create a new view called `NotificationBellView`
+
+**NotificationBellView**
+
+```swift
+import Foundation
+import UIKit
+
+class NotificationBellView: UIView {
+        
+    @IBOutlet var contentView: UIView!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        let bundle = Bundle.init(for: NotificationBellView.self)
+        bundle.loadNibNamed("NotificationBellView", owner: self, options: nil)
+        addSubview(contentView)
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: 48, height: 48)
+    }
+}
+```
+
+- Create a new nib called `NotificationBellView`
+- Set the `File's Owner`
+
+![](images/0.png)
+
+- Control + Option + Command + Enter should now show associated code file in assistant
+- Control drag the nib `View` to `contentView` in the code file.
+- If outlet won't connect - restart Xcode
+
+Nib is now ready to be worked on.
+
+### Creating the bell
+
+We are going to add the bell as in `UIImageView` and the set it's image as an SF Symbol `bell.fill`.
+
+- Add image view
+- Set image to `bell.fill`
+- Set tint to `Label Color`
+- Center in view
+- Set height/width constraints to `28pt`
+
+### Adding it to our view controller
+
+Going to add it programmatically as a view.
+
+First let's turn off login.
+
+**LoginViewController**
+
+```swift
+//        if username.isEmpty || password.isEmpty {
+//            configureView(withMessage: "Username / password cannot be blank")
+//            return
+//        }
+        
+        if username == "" && password == "" {
+```
+
+Then let's add to view controller.
+
+**AccountSummaryViewController**
+
+```swift
+let notificiationBellView = NotificationBellView()
+    
+    
+private func setup() {
+    setupTableView()
+    setupTableHeaderView()
+    setupNotificationBell()
+    fetchData()
+}    
+
+    private func setupNotificationBell() {
+        notificiationBellView.translatesAutoresizingMaskIntoConstraints = false
+        notificiationBellView.backgroundColor = .orange
+        view.addSubview(notificiationBellView)
+        
+        NSLayoutConstraint.activate([
+            notificiationBellView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
+            notificiationBellView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2)
+        ])
+    }
+```
+
+If we run this now, we will see our view, but no bell! Why?
+
+It's because of the way nibs and sizes work. The 
+
+![](images/1.png)	
+
+
+
+
+### Making it tappable
+
+### Animating it in a test rig
+
+### Taking it for a test drive in the controller
+
+### Adding a badge
+
+
+
+
 
 
 ### Links that help
