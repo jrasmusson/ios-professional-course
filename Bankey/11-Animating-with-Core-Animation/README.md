@@ -1,10 +1,11 @@
 # Animating with Core Animation
 
-Core Animation Intro.
+- Core Animation Intro.
+- Key concepts.
 
-Key concepts.
+While you can go deep with Core Animation, you don't have to become an expert in bezier curves to get some really cool effects.
 
-Examples...
+Let's know go back to our project and see how we can bright things up by adding some cool Core Animations to our project.
 
 
 ## Shaking the login button
@@ -52,6 +53,11 @@ private func shakeButton() {
     signInButton.layer.add(animation, forKey: "shake")
 }
 ```
+
+## Shakey Bell
+
+Let's add a bell that shakes everytime someone taps on it while also displaying a count for notifications.
+
 
 ### Links that help
 

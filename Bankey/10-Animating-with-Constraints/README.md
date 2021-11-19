@@ -6,6 +6,8 @@ When animating via Auto Layout constraints, we first setup the layout we want to
 
 In this case we are going to add an animation to the login page. We'll start by placing the title and subtitle off screen, and then animate then in after the page as appeared.
 
+## Setting up the constraints
+
 First define some variables to represent the edges of our constraints.
 
 **LoginViewController**
@@ -35,7 +37,24 @@ titleLeadingAnchor = titleLabel.leadingAnchor.constraint(equalTo: view.leadingAn
 titleLeadingAnchor?.isActive = true
 ```
 
-Then let's define the animation.
+Run the app now. And you the title should disappear. It is now offscreen. Ready to be animated in.
+
+## Animating in
+
+Now comes the fun part. Animating the title in. To do this we need to hook into the `viewDidAppear` lifecycle of the view controller. We want the auto layout to have fully completed (that's why we don't do this in `willAppear`). 
+
+Now we want to change the constraint and trigger the animation in.
+
+**LoginViewController**
+
+```swift
+override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    animate()
+}
+```
+
+Then we can animate the title label in.
 
 ```swift
 // MARK: - Animations
@@ -50,43 +69,25 @@ extension LoginViewController {
 }
 ```
 
-Run the app now. And you should see the title appear offscreen.
+Here we are using the `UIViewPropertyAnimator`. We can specify duration and curve. Where we want to animate `to` is in the completion block.
 
-Now comes the fun part. Animating the title in. To do this we need to hook into the `viewDidAppear` lifecycle of the view controller. We want the auto layout to have fully completed (that's why we don't do this in `willAppear`). 
-
-Now we want to change the constraint and trigger the animation in.
-
-```swift
-override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    animate()
-}
-```
-
-What makes this all work is this line here:
+And it's a good idea to explicitly call:
 
 ```swift
 self.view.layoutIfNeeded()
 ```
 
-This is a signal to layout the subview immediately if any values have changed. Which they have.
+To signal to Auto Layout engine that our constraints have changed, and we need another layout applied to the new updated view.
 
-If we run this now, we should see the title label animate in.
-
-Let's save our work.
-
-```
-> git add -p
-> git commit -m "feat: Animate in login title label"
-```
+If we run this now we'll see or title nicely animate in.
 
 ### Challenge - Animate in the subtitle
 
 OK your turn. Following the step we just did for title, see if you can animate in the `subtitleLabel` just like we did for `titleLabel`.
 
 - Define the constraint
-- Update the layout to grab the leading edge
-- Then set in the animation block.
+- Update the layout to grab the leading edge - set it to `1000`
+- Then update the constraint to the new value `16` just like we did for title in the animation block.
 
 Solution.
 
@@ -105,6 +106,9 @@ subtitleLeadingAnchor?.isActive = true
 self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
 ```
 
+
+## Chaining animations together
+
 Demo. Cool! That works nicely. But watch what we can do with animations. We can chain them together.
 
 Let's create a second animator and do our subitle animation in there.
@@ -117,13 +121,6 @@ let animator2 = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
 animator2.startAnimation(afterDelay: 0.25)
 ```
 
-Save your work.
-
-```
-> git add -p
-> git commit -m "feat: Add separate animation for subtitle label"
-```
-
 
 ## 🪲 Debugging
 
@@ -131,7 +128,7 @@ If you ever want to see your animations in slow motion, select your simulator an
 
 `Debug > Slow Animations`
 
-## Playing with visibility and alpha
+## Animating visiblity with alpha
 
 One common technique for making controls appear and fade is to play with this visibility and alpha.
 
@@ -197,7 +194,7 @@ Save your work.
 
 ```
 > git add -p
-> git commit -m "feat: Add fade in animation to login titles"
+> git commit -m "feat: Add login animation"
 > git push
 ```
 
