@@ -194,7 +194,7 @@ Save your work.
 
 ```
 > git add -p
-> git commit -m "feat: Add login animation"
+> git commit -m "feat: Add login animations"
 > git push
 ```
 
