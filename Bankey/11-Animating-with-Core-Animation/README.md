@@ -200,19 +200,21 @@ If we run, we'll just see a print statement for now. But that's OK. Now we are r
 
 ### Animating it in a test rig
 
-Explain and demo how animation works in test rig.
+Let's first talk about how the animation works.
 
 [Swift Arcade Shakey Bell](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/ShakeyBell/README.md)
 
+And then let me show you a really cool way of playing with your animations - by creating a test rig.
+
 ### Adding the animation to the view
 
-So now that we understand how the animation works, let's add it.
+So now that we understand how the animation works, let's add it to our view.
 
-**NotificationBellView**
+**ShakeyBellView**
 
 ```swift
 // MARK: - Actions
-extension NotificationBellView {
+extension ShakeyBellView {
     @objc func imageViewTapped(_ recognizer: UITapGestureRecognizer) {
         shakeWith(duration: 1.0, angle: .pi/8, yOffset: 0.0)
     }
@@ -224,8 +226,6 @@ extension NotificationBellView {
         let frameDuration = Double(1/numberOfFrames)
         
         imageView.setAnchorPoint(CGPoint(x: 0.5, y: yOffset))
-
-        print("anchorPoint: \(imageView.layer.anchorPoint)")
 
         UIView.animateKeyframes(withDuration: duration, delay: 0, options: [],
           animations: {
@@ -282,8 +282,13 @@ extension UIView {
 }
 ```
 
+Yay 🎉. Cool animation added.
+
 
 ### Adding a badge
+
+Let's make one more adjustment to our cool shakey animation bell. Let's add a badge.
+
 
 
 

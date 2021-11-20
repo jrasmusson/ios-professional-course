@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -23,46 +23,46 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="DDy-Lf-QCQ">
-                    <rect key="frame" x="114" y="297" width="186" height="302.5"/>
+                    <rect key="frame" x="110" y="297" width="194" height="302.5"/>
                     <subviews>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="fvg-KZ-Cs0">
-                            <rect key="frame" x="-2" y="0.0" width="190" height="31"/>
+                            <rect key="frame" x="-2" y="0.0" width="198" height="31"/>
                             <connections>
                                 <action selector="durationChanged:" destination="-1" eventType="valueChanged" id="ceI-Dz-6vb"/>
                             </connections>
                         </slider>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Duration" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJN-yz-eGY">
-                            <rect key="frame" x="0.0" y="50" width="186" height="20.5"/>
+                            <rect key="frame" x="0.0" y="50" width="194" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="xwO-7o-2Tt">
-                            <rect key="frame" x="-2" y="90.5" width="190" height="31"/>
+                            <rect key="frame" x="-2" y="90.5" width="198" height="31"/>
                             <connections>
                                 <action selector="angleChanged:" destination="-1" eventType="valueChanged" id="c4Q-pj-TUz"/>
                             </connections>
                         </slider>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Angle" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KPw-Ib-gkf">
-                            <rect key="frame" x="0.0" y="140.5" width="186" height="20.5"/>
+                            <rect key="frame" x="0.0" y="140.5" width="194" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="LVt-gg-1S6">
-                            <rect key="frame" x="-2" y="181" width="190" height="31"/>
+                            <rect key="frame" x="-2" y="181" width="198" height="31"/>
                             <connections>
                                 <action selector="offsetChanged:" destination="-1" eventType="valueChanged" id="lvc-de-bH6"/>
                             </connections>
                         </slider>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Offset" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FmH-Ng-hkH">
-                            <rect key="frame" x="0.0" y="231" width="186" height="20.5"/>
+                            <rect key="frame" x="0.0" y="231" width="194" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HoG-ms-QYA">
-                            <rect key="frame" x="0.0" y="271.5" width="186" height="31"/>
+                            <rect key="frame" x="0.0" y="271.5" width="194" height="31"/>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="Reset"/>
                             <connections>
