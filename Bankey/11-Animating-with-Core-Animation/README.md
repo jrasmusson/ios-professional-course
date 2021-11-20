@@ -205,7 +205,6 @@ If we run, we'll just see a print statement for now. But that's OK. Now we are r
 Let's first review how the animation works, and then I will show you one nice technique for getting the animation you want.
 
 - [How it works](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/ShakeyBell/README.md)
-[Swift Arcade Shakey Bell](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/ShakeyBell/README.md)
 - Demo the test rig
 
 
