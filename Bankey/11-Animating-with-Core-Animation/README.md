@@ -284,10 +284,48 @@ extension UIView {
 
 Yay 🎉. Cool animation added.
 
+Save your work
+
+```
+> git add -p
+> git commit -m "feat: Shake the bell"
+```
+
 
 ### Adding a badge
 
 Let's make one more adjustment to our cool shakey animation bell. Let's add a badge.
+
+**ShakeyBellView**
+
+```swift
+let buttonView = UIButton()
+
+let buttonHeight: CGFloat = 16
+
+func style() {
+            
+    buttonView.translatesAutoresizingMaskIntoConstraints = false
+    buttonView.backgroundColor = .systemRed
+    buttonView.titleLabel?.font = UIFont.systemFont(ofSize: 13)
+    buttonView.layer.cornerRadius = buttonHeight/2
+    buttonView.setTitle("9", for: .normal)
+    buttonView.setTitleColor(.white, for: .normal)
+}
+
+func layout() {
+    addSubview(imageView)
+    addSubview(buttonView)
+
+    // Button
+    NSLayoutConstraint.activate([
+        buttonView.topAnchor.constraint(equalTo: imageView.topAnchor),
+        buttonView.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -9),
+        buttonView.widthAnchor.constraint(equalToConstant: 16),
+        buttonView.heightAnchor.constraint(equalToConstant: 16)
+    ])
+}
+```
 
 
 
