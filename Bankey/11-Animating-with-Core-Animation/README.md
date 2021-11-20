@@ -147,19 +147,35 @@ let shakeyBellView = ShakeyBellView()
 And then adding it to our view and doing Auto Layout just like any other control.
 
 ```swift
-
+private func commonInit() {
+        setupShakeyBell()
+    }
+    
+    private func setupShakeyBell() {
+        shakeyBellView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(shakeyBellView)
+        
+        NSLayoutConstraint.activate([
+            shakeyBellView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            shakeyBellView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+}
 ```
+
+![](images/0.png)
+
 
 ### Making it tappable
 
-One last thing before we tackle the animation of shakey, we need to make it tappable. We don't necessary need to make it tappable from a design point of view, but it helps with debugging, and it's also a cool thing to know how to do.
+One last thing before we tackle the animation, we need to make it tappable. We don't necessary need to make it tappable from a design point of view, but it helps with debugging, and it's also a cool thing to know how to do.
 
-**NotificationBellView**
+**ShakeyBellView**
 
 ```swift
 override init(frame: CGRect) {
 super.init(frame: frame)
-setup()
+    setup()
 }
 
 extension NotificationBellView {
@@ -172,7 +188,7 @@ extension NotificationBellView {
 }
 
 // MARK: - Actions
-extension NotificationBellView {
+extension ShakeyBellView {
     @objc func imageViewTapped(_ recognizer: UITapGestureRecognizer) {
         // insert animation here...
         print("Shaking!!!")
