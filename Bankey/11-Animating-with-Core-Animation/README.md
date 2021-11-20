@@ -1,9 +1,19 @@
 # Animating with Core Animation
 
-- Core Animation Intro.
-- Key concepts.
+## Overview
 
-While you can go deep with Core Animation, you don't have to become an expert in bezier curves to get some really cool effects.
+- What is Core Animation?
+- How does it work?
+- How can we use it in our apps
+
+Things to go through:
+
+- [Core Graphics](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/CoreGraphicsIntro/README.md)
+- [Core Animation Intro](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/CoreAnimation/Intro/README.md)
+- [Apple Core Animation Docs](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/CoreAnimationBasics/CoreAnimationBasics.html#//apple_ref/doc/uid/TP40004514-CH2-SW3)
+- [Aniimatable properties](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/AnimatableProperties/AnimatableProperties.html)
+
+While you can go deep with Core Animation, you don't have to become an expert it to do useful things.
 
 Let's know go back to our project and see how we can bright things up by adding some cool Core Animations to our project.
 
