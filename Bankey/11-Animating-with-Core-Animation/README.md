@@ -220,8 +220,6 @@ extension ShakeyBellView {
     }
 
     private func shakeWith(duration: Double, angle: CGFloat, yOffset: CGFloat) {
-        print("duration: \(duration) angle: \(angle) offset: \(yOffset)")
-        
         let numberOfFrames: Double = 6
         let frameDuration = Double(1/numberOfFrames)
         
@@ -263,7 +261,7 @@ extension ShakeyBellView {
 extension UIView {
     func setAnchorPoint(_ point: CGPoint) {
         var newPoint = CGPoint(x: bounds.size.width * point.x, y: bounds.size.height * point.y)
-        var oldPoint = CGPoint(x: bounds.size.width * layer.anchorPoint.x, y: bounds.size.height * layer.anchorPoint.y);
+        var oldPoint = CGPoint(x: bounds.size.width * layer.anchorPoint.x, y: bounds.size.height * layer.anchorPoint.y)
 
         newPoint = newPoint.applying(transform)
         oldPoint = oldPoint.applying(transform)
