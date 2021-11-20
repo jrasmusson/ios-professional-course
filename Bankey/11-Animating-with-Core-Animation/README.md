@@ -87,7 +87,7 @@ Now that's just one small simple but powerful example of what Core Animation can
 ### Create the bell
 
 - Create a new dir called `Components`.
-- Create a new view called `NotificationBellView`
+- Create a new view called `ShakeyBellView`
 
 **ShakeyBellView**
 
@@ -188,7 +188,7 @@ super.init(frame: frame)
     setup()
 }
 
-extension NotificationBellView {
+extension ShakeyBellView {
     
     func setup() {
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_: )))
