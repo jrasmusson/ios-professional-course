@@ -101,7 +101,6 @@ class ShakeyBellView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         style()
         layout()
     }
@@ -120,9 +119,7 @@ extension ShakeyBellView {
     func style() {
         translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
-                
         let image = UIImage(systemName: "bell.fill")!.withTintColor(.white, renderingMode: .alwaysOriginal)
-        
         imageView.image = image
     }
     
@@ -142,11 +139,6 @@ extension ShakeyBellView {
 ### Add it to the table view header
 
 Because we are in a table view, and because the header is right at the top, to include our shakey bell in the table we need to add it to the header.
-
-
-Now this is going to seem weird. Our header is designed as a nib, and really we should probably design our shakey bell that way too, but I want to show you how you can programmatically add elements in nibs that aren't nibs themselves.
-
-We start by simply defining the variable.
 
 **AccountSummaryHeaderView**
 
@@ -178,13 +170,13 @@ private func commonInit() {
 
 ### Making it tappable
 
-One last thing before we tackle the animation, we need to make it tappable. We don't necessary need to make it tappable from a design point of view, but it helps with debugging, and it's also a cool thing to know how to do.
+It would be nice if it was tappable for testing. 
 
 **ShakeyBellView**
 
 ```swift
 override init(frame: CGRect) {
-super.init(frame: frame)
+    super.init(frame: frame)
     setup()
 }
 
@@ -210,11 +202,12 @@ If we run, we'll just see a print statement for now. But that's OK. Now we are r
 
 ### Animating it in a test rig
 
-Let's first talk about how the animation works.
+Let's first review how the animation works, and then I will show you one nice technique for getting the animation you want.
 
+- [How it works](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/ShakeyBell/README.md)
 [Swift Arcade Shakey Bell](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/ShakeyBell/README.md)
+- Demo the test rig
 
-And then let me show you a really cool way of playing with your animations - by creating a test rig.
 
 ### Adding the animation to the view
 
