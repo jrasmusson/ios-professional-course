@@ -69,21 +69,23 @@ Save your work
 Now that's just one small simple but powerful example of what Core Animation can do. Let's now look at a more advanced example, and see if we can't add shakey bell.
 
 - Demo shakey bell.
-- Explain the mechanics behind how it works
-- Go over construction
+- Explain the mechanics behind how it works.
+ - Programmatically going to build a custom view
+ - Going to add the shake animation in there
+ - Display in our header view  
 
-### Creating the view
+### Create the bell
 
 - Create a new dir called `Components`.
 - Create a new view called `NotificationBellView`
 
-**NotificationBellView**
+**ShakeyBellView**
 
 ```swift
 import Foundation
 import UIKit
 
-class NotificationBellView: UIView {
+class ShakeyBellView: UIView {
     
     let imageView = UIImageView()
     
@@ -103,7 +105,7 @@ class NotificationBellView: UIView {
     }
 }
 
-extension NotificationBellView {
+extension ShakeyBellView {
     
     func style() {
         translatesAutoresizingMaskIntoConstraints = false
@@ -127,60 +129,25 @@ extension NotificationBellView {
 }
 ```
 
-Now let's add it to the view controller. Because we need the layout to be relative to the height of the table header, let's define a variable there first. And then use it when we do the layout in the `AccountSummaryViewController`.
+### Add it to the table view header
+
+Because we are in a table view, and because the header is right at the top, to include our shakey bell in the table we need to add it to the header.
+
+
+Now this is going to seem weird. Our header is designed as a nib, and really we should probably design our shakey bell that way too, but I want to show you how you can programmatically add elements in nibs that aren't nibs themselves.
+
+We start by simply defining the variable.
 
 **AccountSummaryHeaderView**
 
 ```swift
-static let height: CGFloat = 144
-
-override var intrinsicContentSize: CGSize {
-   return CGSize(width: UIView.noIntrinsicMetric, height: 144)
-}
+let shakeyBellView = ShakeyBellView()
 ```
 
-**AccountSummaryViewController**
+And then adding it to our view and doing Auto Layout just like any other control.
 
 ```swift
-let notificationBellView = NotificationBellView()
 
-private func setup() {
-     setupTableView()
-     setupTableHeaderView()
-     setupNotificationBellView()
-     fetchData()
-}
-
-private func setupNotificationBellView() {
-    notificationBellView.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(notificationBellView)
-    
-    NSLayoutConstraint.activate([
-        view.trailingAnchor.constraint(equalToSystemSpacingAfter: notificationBellView.trailingAnchor, multiplier: 2),
-        notificationBellView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: AccountSummaryHeaderView.height - 40)
-    ])
-}
-```
-
-Before we run let's just speed things up a bit by going directly to the view controller we want.
-
-**AppDelegate**
-
-```swift
-setRootViewController(AccountSummaryViewController())
-//        displayLogin()
-```
-
-And now if we run we should see our Bell show up.
-
-![](images/0.png)
-
-If you ever want to see what a view looks like in its entirety, just sent its background color.
-
-```swift
-private func setupNotificationBellView() {
-    notificationBellView.translatesAutoresizingMaskIntoConstraints = false
-    notificationBellView.backgroundColor = .systemOrange
 ```
 
 ### Making it tappable
