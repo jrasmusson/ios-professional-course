@@ -15,6 +15,8 @@ class AccountSummaryHeaderView: UIView {
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var dateLabel: UILabel!
     
+    let shakeyBellView = ShakeyBellView()
+
     struct ViewModel {
         let welcomeMessage: String
         let name: String
@@ -51,6 +53,18 @@ class AccountSummaryHeaderView: UIView {
         contentView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         contentView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+        
+        setupShakeyBell()
+    }
+    
+    private func setupShakeyBell() {
+        shakeyBellView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(shakeyBellView)
+        
+        NSLayoutConstraint.activate([
+            shakeyBellView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            shakeyBellView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
     
     func configure(viewModel: ViewModel) {
@@ -58,4 +72,6 @@ class AccountSummaryHeaderView: UIView {
         nameLabel.text = viewModel.name
         dateLabel.text = viewModel.dateFormatted
     }
+    
+    
 }
