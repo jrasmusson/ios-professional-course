@@ -86,6 +86,8 @@ Now that's just one small simple but powerful example of what Core Animation can
 
 ### Create the bell
 
+![](images/5.png)
+
 - Create a new dir called `Components`.
 - Create a new view called `ShakeyBellView`
 
@@ -296,7 +298,7 @@ Save your work
 
 Let's make one more adjustment to our cool shakey animation bell. Let's add a badge.
 
-![](images/2.png)
+![](images/2a.png)
 
 **ShakeyBellView**
 
