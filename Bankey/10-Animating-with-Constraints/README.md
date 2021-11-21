@@ -1,3 +1,18 @@
+# Overview
+
+## Overview
+
+- What is iOS Animation?
+- How does it work?
+- How can we use it in our apps
+
+Things to go through:
+
+- [Core Graphics](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/CoreGraphicsIntro/README.md)
+- [Core Animation Intro](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/CoreAnimation/Intro/README.md)
+
+Let's know go back to our project and see how we can bright things up by adding some cool Core Animations to our project.
+
 # Animating with constraints
 
 When animating via Auto Layout constraints, we first setup the layout we want to animate `from`, then we modify the constraint in an animation block for where we want to animate `to`.
