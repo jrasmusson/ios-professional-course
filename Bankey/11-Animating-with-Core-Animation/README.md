@@ -11,7 +11,7 @@ Things to go through:
 - [Core Graphics](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/CoreGraphicsIntro/README.md)
 - [Core Animation Intro](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/CoreAnimation/Intro/README.md)
 - [Apple Core Animation Docs](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/CoreAnimationBasics/CoreAnimationBasics.html#//apple_ref/doc/uid/TP40004514-CH2-SW3)
-- [Aniimatable properties](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/AnimatableProperties/AnimatableProperties.html)
+- [Animatable properties](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/AnimatableProperties/AnimatableProperties.html)
 
 While you can go deep with Core Animation, you don't have to become an expert it to do useful things.
 
@@ -70,7 +70,7 @@ private func shakeButton() {
 Save your work
 
 ```
-> git add -p
+> git add .
 > git commit -m "feat: Shake signin button if login fails"
 ```
 
@@ -287,7 +287,7 @@ Yay 🎉. Cool animation added.
 Save your work
 
 ```
-> git add -p
+> git add .
 > git commit -m "feat: Shake the bell"
 ```
 
@@ -295,6 +295,8 @@ Save your work
 ### Adding a badge
 
 Let's make one more adjustment to our cool shakey animation bell. Let's add a badge.
+
+![](images/2.png)
 
 **ShakeyBellView**
 
@@ -327,9 +329,21 @@ func layout() {
 }
 ```
 
+Discussion:
 
+- why the hard coded font size of 13
+- point out the corner radius
+- limitation is only one digit
+- hard coding to white
 
+![](images/3.png)
 
+Save your work
+
+```
+> git add .
+> git commit -m "feat: Adding the badge"
+```
 
 
 
