@@ -79,7 +79,7 @@ Save your work
 Now that's just one small simple but powerful example of what Core Animation can do. Let's now look at a more advanced example, and see if we can't add shakey bell.
 
 - Demo shakey bell.
-- Explain the mechanics behind how it works.
+- Explain the [mechanics](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/ShakeyBell/README.md) behind how it works.
  - Programmatically going to build a custom view
  - Going to add the shake animation in there
  - Display in our header view  
