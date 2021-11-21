@@ -107,17 +107,6 @@ Discuss Pros / Cons of NotificationCenter.
 
 - With great power comes great responsibility.
 
-
-### Adding a launch screen
-
-Add a launch screen image.
-
-- Open `LaunchScreen.storyboard`.
-- Add a `UIImageView` with image `banknote.fill`.
-- Give width `240 pt`
-- Give height `142 pt`
-- Center
-
 ### Showing the password
 
 Add an eye to show password. Create a new extension.

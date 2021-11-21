@@ -122,7 +122,7 @@ self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
 ```
 
 
-## Chaining animations together
+## Multiple animations together
 
 Demo. Cool! That works nicely. But watch what we can do with animations. We can chain them together.
 
@@ -208,7 +208,7 @@ self.subtitleLabel.alpha = 1
 Save your work.
 
 ```
-> git add -p
+> git add .
 > git commit -m "feat: Add login animations"
 > git push
 ```
