@@ -138,14 +138,19 @@ Voila. Accounts parsed.
 - Create a dir called `Models`.
 - Add `AccountModel` and `ProfileModel` into there.
 
+## Making the network calls
+
+Now that we know we can parse the incoming JSON, we just need to do it for real by calling the end-point APIs.
+
+Let's start with by creating a playground for `Profile` and see if we can test out our networking in there.
+
+
+
 
 ## Unit testing
 
 Now as good as our playgrounds are, it would be really nice if we could capture this work in the form of an automated test.
 
-## Bridging two worlds
-
-Now that we've got our `ViewModels` for our UI, and our JSON models for our network requests, we need to line them up.
 
 
 ### Links that help
