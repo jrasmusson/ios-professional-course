@@ -2,9 +2,96 @@
 
 In this section we are going to add networking to our app.
 
+- Going to look at different ways of importing data in
+- Different ways of utilizing tools like playgrounds
+- And end looking at how we can unit test network code in our projects
+
+## Let's head to the playground
+
+- Create a new playground.
+- Copy the following code into it.
+
+```swift
+import Foundation
+
+let url = URL(string: "https://jsonplaceholder.typicode.com/posts")!
+
+struct Post: Decodable {
+    let title: String
+    let body: String
+}
+
+enum NetworkError: Error {
+    case domainError
+    case decodingError
+}
+
+func fetchPosts(url: URL, completion: @escaping (Result<[Post],NetworkError>) -> Void) {
+
+    URLSession.shared.dataTask(with: url) { data, response, error in
+
+        guard let data = data, error == nil else {
+            if let error = error as NSError?, error.domain == NSURLErrorDomain {
+                    completion(.failure(.domainError))
+            }
+            return
+        }
+
+        do {
+            let posts = try JSONDecoder().decode([Post].self, from: data)
+            completion(.success(posts))
+        } catch {
+            completion(.failure(.decodingError))
+        }
+
+    }.resume()
+
+}
+
+fetchPosts(url: url) { result in
+    switch result {
+    case .success(let posts):
+        print(posts)
+    case .failure(let error):
+        print(error.localizedDescription)
+    }
+}
+
+// Returning success/failure
+// completion(.success(posts))
+// completion(.failure(.domainError))
+// completion(.success(())) if no result
+```
+
+This is how we are going to do networking in our application.
+
+- `URLSession.shared.dataTask` is how we are going to make network calls
+- `Codeable` is the protocol we are going to adhere to to parse JSON returned from our requests
+- `Result` is the return type we are going to use in our completion block to indicate success for failure.
+
+Let's review each of these quickly.
+
+## URLSession
+
+- Simple. Elegant. No need for third party libraries though many projects do.
+- Main thing to note is when the completion block returns you may not necessarily be on the main thread.
+
+But we can put ourselves there with code like this:
+
+```swift
+DispatchQueue.main.async {
+   completion(.success(posts))
+}
+```
+
+We will look at an example of where/how to do that later.
+
+
 ## Codable
 
-Let's quickly review how JSON and Codeable work.
+- `Codeable` is actually a combination of x2 protocols
+- Complying with this protocol, or alias, means your type can convert itself into and out of an external representation. In this case json.
+- By using a `JSONDecoder` we can convert incoming messages into Swift objects, and if neccessary go in the other direction Swift > JSON.
 
 ## ResultType
 
@@ -140,12 +227,28 @@ Voila. Accounts parsed.
 
 ## Making the network calls
 
-Now that we know we can parse the incoming JSON, we just need to do it for real by calling the end-point APIs.
+### Profile
 
-Let's start with by creating a playground for `Profile` and see if we can test out our networking in there.
+- Create a new class `AccountSummaryViewController+Networking`.
+- Add the following network code into there
+- Update our UI to get the results as follows.
 
+There. We can now fetch and load profile data into our header.
 
+Let's do the same for accounts. UR HERE
 
+### Accounts
+
+### Add to project
+
+Discuss:
+
+- different ways we could add
+- func in ViewController
+- create manager and inject in as a variable
+- extract into extension
+- point is to keep view controller as small and dumb as possible
+- extract all other logic out
 
 ## Unit testing
 
