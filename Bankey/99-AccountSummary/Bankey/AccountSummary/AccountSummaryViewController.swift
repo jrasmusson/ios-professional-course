@@ -9,12 +9,12 @@ import UIKit
 
 class AccountSummaryViewController: UIViewController {
     
-    struct Profile {
+    struct ProfileViewModel {
         let firstName: String
         let lastName: String
     }
 
-    var profile: Profile?
+    var profile: ProfileViewModel?
     var accounts: [AccountSummaryCell.ViewModel] = []
 
     var headerView = AccountSummaryHeaderView(frame: .zero)
@@ -104,6 +104,7 @@ extension AccountSummaryViewController {
     private func fetchData() {
         fetchAccounts()
         fetchProfile()
+        populateTable()
     }
     
     private func fetchAccounts() {
@@ -135,11 +136,16 @@ extension AccountSummaryViewController {
     }
     
     private func fetchProfile() {
-        profile = Profile(firstName: "Kevin", lastName: "Smith")
+        profile = ProfileViewModel(firstName: "Kevin", lastName: "Smith")
+    }
+
+    // Call this once all network calls have been made
+    private func populateTable() {
         configureTableHeaderView(with: profile!)
+        tableView.reloadData()
     }
     
-    private func configureTableHeaderView(with profile: Profile) {
+    private func configureTableHeaderView(with profile: ProfileViewModel) {
         let vm = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Good morning,", name: profile.firstName, date: Date())
         headerView.configure(viewModel: vm)
     }
