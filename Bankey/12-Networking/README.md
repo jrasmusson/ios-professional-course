@@ -90,8 +90,10 @@ We will look at an example of where/how to do that later.
 ## Codable
 
 - `Codeable` is actually a combination of x2 protocols
-- Complying with this protocol, or alias, means your type can convert itself into and out of an external representation. In this case json.
+- Complying with this protocol, or alias, means your type can convert itself into and out of an external representation. In this case JSON.
 - By using a `JSONDecoder` we can convert incoming messages into Swift objects, and if neccessary go in the other direction Swift > JSON.
+
+[Examples](https://github.com/jrasmusson/level-up-swift/blob/master/11-JSON/1-json.md)
 
 ## ResultType
 
@@ -123,10 +125,8 @@ We are going to need a `Codeable` object to injest this in. Let's open a Swift p
 
 - Playgrounds are nice because...
 - Note the use of `CodingKeys`.
-- Names are tricky - could have called this:
- - `ProfileViewModel` because used in the view
- - `ProfileRequestModel` because it is also `Codeable`
- - We will go with `ProfileModel` and hope the `Codeable` protocol is enough to tell readers this struct is JSON parsable.
+- Let's call it `ProfileViewModel` because used in the view
+- Note however that it is `Codeable`
 
 **Playground**
 
@@ -141,7 +141,7 @@ let json = """
 }
 """
 
-struct ProfileModel: Codable {
+struct ProfileViewModel: Codable {
     let id: String
     let firstName: String
     let lastName: String
@@ -154,7 +154,7 @@ struct ProfileModel: Codable {
 }
 
 let jsonData = json.data(using: .utf8)!
-let result = try! JSONDecoder().decode(ProfileModel.self, from: jsonData)
+let result = try! JSONDecoder().decode(ProfileViewModel.self, from: jsonData)
 ```
 
 OK - let's now repeat for `Accounts`.
@@ -220,18 +220,95 @@ let result = try! decoder.decode([AccountModel].self, from: jsonData)
 
 Voila. Accounts parsed.
 
-### Add these models to our project
-
-- Create a dir called `Models`.
-- Add `AccountModel` and `ProfileModel` into there.
+Note: This one is not a `ViewModel` we are going to do some translation. See how to do that in a moment.
 
 ## Making the network calls
 
 ### Profile
 
+You don't have to, but I worked out the networking for profile first in a playground like this.
+
+Open playground.
+
+Here I can try it out. Make sure everthing is good. And then bring into the project.
+
+Now when we do bring it into the project, we need to decide where to put it.
+
+Discussion - how to add networking to view controller:
+
+- func in ViewController (closest)
+- create manager (if were going to reuse)
+- extract into extension (if local to vc)
+- point is to keep view controller as small and dumb as possible
+- extract all other logic out
+
+Current project I am working on goes the extension route - so let's put it there.
+
 - Create a new class `AccountSummaryViewController+Networking`.
 - Add the following network code into there
-- Update our UI to get the results as follows.
+
+**AccountSummaryViewController+Networking**
+
+```swift
+import Foundation
+
+enum NetworkError: Error {
+    case domainError
+    case decodingError
+}
+
+struct ProfileViewModel: Codable {
+    let id: String
+    let firstName: String
+    let lastName: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case firstName = "first_name"
+        case lastName = "last_name"
+    }
+}
+
+extension AccountSummaryViewController {
+    func fetchProfile(forUserId userId: String, completion: @escaping (Result<ProfileModel,NetworkError>) -> Void) {
+        
+        let url = URL(string: "https://fierce-retreat-36855.herokuapp.com/bankey/profile/\(userId)")!
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            guard let data = data, error == nil else {
+                if let error = error as NSError?, error.domain == NSURLErrorDomain {
+                    completion(.failure(.domainError))
+                }
+                return
+            }
+            
+            do {
+                let posts = try JSONDecoder().decode(ProfileViewModel.self, from: data)
+                completion(.success(posts))
+            } catch {
+                completion(.failure(.decodingError))
+            }
+            
+        }.resume()
+    }
+}
+```
+
+Discussion:
+
+- How are errors represented in Swift
+
+Then to call it from our UI we need to update the vc as follows.
+
+**AccountSummaryViewController**
+
+```swift
+class AccountSummaryViewController: UIViewController {
+    
+    var profile: ProfileViewModel?
+```
+
 
 There. We can now fetch and load profile data into our header.
 
@@ -243,12 +320,6 @@ Let's do the same for accounts. UR HERE
 
 Discuss:
 
-- different ways we could add
-- func in ViewController
-- create manager and inject in as a variable
-- extract into extension
-- point is to keep view controller as small and dumb as possible
-- extract all other logic out
 
 ## Unit testing
 
@@ -258,3 +329,4 @@ Now as good as our playgrounds are, it would be really nice if we could capture 
 
 ### Links that help
 
+- [Apple docs - Fetching website data into memory](https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory)

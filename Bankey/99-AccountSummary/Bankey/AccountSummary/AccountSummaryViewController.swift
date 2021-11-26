@@ -9,11 +9,6 @@ import UIKit
 
 class AccountSummaryViewController: UIViewController {
     
-    struct ProfileViewModel {
-        let firstName: String
-        let lastName: String
-    }
-
     var profile: ProfileViewModel?
     var accounts: [AccountSummaryCell.ViewModel] = []
 
@@ -136,7 +131,15 @@ extension AccountSummaryViewController {
     }
     
     private func fetchProfile() {
-        profile = ProfileViewModel(firstName: "Kevin", lastName: "Smith")
+        fetchProfile(forUserId: "1") { result in
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+
     }
 
     // Call this once all network calls have been made

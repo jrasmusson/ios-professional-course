@@ -14,30 +14,26 @@ struct ProfileModel: Codable {
 }
 
 enum NetworkError: Error {
-    case domainError
+    case serverError
     case decodingError
 }
 
 func fetchProfile(forUserId userId: String, completion: @escaping (Result<ProfileModel,NetworkError>) -> Void) {
-
     let url = URL(string: "https://fierce-retreat-36855.herokuapp.com/bankey/profile/\(userId)")!
 
     URLSession.shared.dataTask(with: url) { data, response, error in
 
         guard let data = data, error == nil else {
-            if let error = error as NSError?, error.domain == NSURLErrorDomain {
-                    completion(.failure(.domainError))
-            }
+            completion(.failure(.serverError))
             return
         }
-
+        
         do {
             let posts = try JSONDecoder().decode(ProfileModel.self, from: data)
             completion(.success(posts))
         } catch {
             completion(.failure(.decodingError))
         }
-
     }.resume()
 
 }
@@ -54,4 +50,3 @@ fetchProfile(forUserId: "1") { result in
 // Returning success/failure
 // completion(.success(posts))
 // completion(.failure(.domainError))
-// completion(.success(())) if no result
