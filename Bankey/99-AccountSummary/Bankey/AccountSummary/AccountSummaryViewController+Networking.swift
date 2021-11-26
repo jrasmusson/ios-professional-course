@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 enum NetworkError: Error {
-    case domainError
+    case serverError
     case decodingError
 }
 
@@ -27,25 +27,20 @@ struct ProfileViewModel: Codable {
 
 extension AccountSummaryViewController {
     func fetchProfile(forUserId userId: String, completion: @escaping (Result<ProfileViewModel,NetworkError>) -> Void) {
-        
         let url = URL(string: "https://fierce-retreat-36855.herokuapp.com/bankey/profile/\(userId)")!
-        
+
         URLSession.shared.dataTask(with: url) { data, response, error in
-            
             guard let data = data, error == nil else {
-                if let error = error as NSError?, error.domain == NSURLErrorDomain {
-                    completion(.failure(.domainError))
-                }
+                completion(.failure(.serverError))
                 return
             }
             
             do {
-                let result = try JSONDecoder().decode(ProfileViewModel.self, from: data)
-                completion(.success(result))
+                let posts = try JSONDecoder().decode(ProfileViewModel.self, from: data)
+                completion(.success(posts))
             } catch {
                 completion(.failure(.decodingError))
             }
-            
         }.resume()
     }
 }

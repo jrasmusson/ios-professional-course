@@ -6,72 +6,29 @@ In this section we are going to add networking to our app.
 - Different ways of utilizing tools like playgrounds
 - And end looking at how we can unit test network code in our projects
 
-## Let's head to the playground
-
-- Create a new playground.
-- Copy the following code into it.
-
-```swift
-import Foundation
-
-let url = URL(string: "https://jsonplaceholder.typicode.com/posts")!
-
-struct Post: Decodable {
-    let title: String
-    let body: String
-}
-
-enum NetworkError: Error {
-    case domainError
-    case decodingError
-}
-
-func fetchPosts(url: URL, completion: @escaping (Result<[Post],NetworkError>) -> Void) {
-
-    URLSession.shared.dataTask(with: url) { data, response, error in
-
-        guard let data = data, error == nil else {
-            if let error = error as NSError?, error.domain == NSURLErrorDomain {
-                    completion(.failure(.domainError))
-            }
-            return
-        }
-
-        do {
-            let posts = try JSONDecoder().decode([Post].self, from: data)
-            completion(.success(posts))
-        } catch {
-            completion(.failure(.decodingError))
-        }
-
-    }.resume()
-
-}
-
-fetchPosts(url: url) { result in
-    switch result {
-    case .success(let posts):
-        print(posts)
-    case .failure(let error):
-        print(error.localizedDescription)
-    }
-}
-
-// Returning success/failure
-// completion(.success(posts))
-// completion(.failure(.domainError))
-// completion(.success(())) if no result
-```
+## Profile
 
 This is how we are going to do networking in our application.
 
-- `URLSession.shared.dataTask` is how we are going to make network calls
-- `Codeable` is the protocol we are going to adhere to to parse JSON returned from our requests
-- `Result` is the return type we are going to use in our completion block to indicate success for failure.
+Open playground. And go through.
 
-Let's review each of these quickly.
+1. Codeable
+2. URLSession
+3. Result
+
+
+## Codable
+
+- `Codeable` is actually a combination of x2 protocols
+- Complying with this protocol, or alias, means your type can convert itself into and out of an external representation. In this case JSON.
+- By using a `JSONDecoder` we can convert incoming messages into Swift objects, and if neccessary go in the other direction Swift > JSON.
+
+[Examples](https://github.com/jrasmusson/level-up-swift/blob/master/11-JSON/1-json.md)
+
 
 ## URLSession
+
+[Apple docs - Fetching website data into memory](https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory)
 
 - Simple. Elegant. No need for third party libraries though many projects do.
 - Main thing to note is when the completion block returns you may not necessarily be on the main thread.
@@ -84,82 +41,13 @@ DispatchQueue.main.async {
 }
 ```
 
-We will look at an example of where/how to do that later.
-
-
-## Codable
-
-- `Codeable` is actually a combination of x2 protocols
-- Complying with this protocol, or alias, means your type can convert itself into and out of an external representation. In this case JSON.
-- By using a `JSONDecoder` we can convert incoming messages into Swift objects, and if neccessary go in the other direction Swift > JSON.
-
-[Examples](https://github.com/jrasmusson/level-up-swift/blob/master/11-JSON/1-json.md)
-
 ## ResultType
 
 Let's quickly review this dedicated enum called result type.
 
-## Fetch Profile
-
-- Explain plan of attach
-  - Profile we are going to bring in directly as a ViewModel
-  - Account we are going to translate translate so you can see both
-
-Let's start by parsing profile.
-
-This is the JSON we need to parse for a users profile.
-
-[End point](https://fierce-retreat-36855.herokuapp.com/bankey/profile/1)
-
-**Profile JSON**
-
-```
-{
-"id": "1",
-"first_name": "Kevin",
-"last_name": "Flynn",
-}
-```
-
-We are going to need a `Codeable` object to injest this in. Let's open a Swift playground and create it first there.
-
-- Playgrounds are nice because...
-- Note the use of `CodingKeys`.
-- Let's call it `ProfileViewModel` because used in the view
-- Note however that it is `Codeable`
-
-**Playground**
-
-```swift
-import UIKit
-
-let json = """
-{
-"id": "1",
-"first_name": "Kevin",
-"last_name": "Flynn",
-}
-"""
-
-struct ProfileViewModel: Codable {
-    let id: String
-    let firstName: String
-    let lastName: String
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case firstName = "first_name"
-        case lastName = "last_name"
-    }
-}
-
-let jsonData = json.data(using: .utf8)!
-let result = try! JSONDecoder().decode(ProfileViewModel.self, from: jsonData)
-```
-
-OK - let's now repeat for `Accounts`.
-
 ## Fetch Accounts
+
+Let's fetch account just like we did profile.
 
 [End point](https://fierce-retreat-36855.herokuapp.com/bankey/customer/1/accounts)
 
@@ -222,15 +110,7 @@ Voila. Accounts parsed.
 
 Note: This one is not a `ViewModel` we are going to do some translation. See how to do that in a moment.
 
-## Making the network calls
-
-### Profile
-
-You don't have to, but I worked out the networking for profile first in a playground like this.
-
-Open playground.
-
-Here I can try it out. Make sure everthing is good. And then bring into the project.
+## Bringing it into the app
 
 Now when we do bring it into the project, we need to decide where to put it.
 

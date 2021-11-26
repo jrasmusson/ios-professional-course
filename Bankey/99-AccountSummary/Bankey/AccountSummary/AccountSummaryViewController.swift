@@ -148,6 +148,7 @@ extension AccountSummaryViewController {
         tableView.reloadData()
     }
     
+    // UR HERE How best to hook this up....you already have a ViewModel here...so maybe don't need another
     private func configureTableHeaderView(with profile: ProfileViewModel) {
         let vm = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Good morning,", name: profile.firstName, date: Date())
         headerView.configure(viewModel: vm)
