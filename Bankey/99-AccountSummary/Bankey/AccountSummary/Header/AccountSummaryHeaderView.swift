@@ -72,6 +72,4 @@ class AccountSummaryHeaderView: UIView {
         nameLabel.text = viewModel.name
         dateLabel.text = viewModel.dateFormatted
     }
-    
-    
 }

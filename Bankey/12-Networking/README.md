@@ -17,7 +17,7 @@ Open playground. And go through.
 3. Result
 
 
-## Codable
+### Codable
 
 - `Codeable` is actually a combination of x2 protocols
 - Complying with this protocol, or alias, means your type can convert itself into and out of an external representation. In this case JSON.
@@ -26,7 +26,7 @@ Open playground. And go through.
 [Examples](https://github.com/jrasmusson/level-up-swift/blob/master/11-JSON/1-json.md)
 
 
-## URLSession
+### URLSession
 
 [Apple docs - Fetching website data into memory](https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory)
 
@@ -41,7 +41,7 @@ DispatchQueue.main.async {
 }
 ```
 
-## ResultType
+### ResultType
 
 Let's quickly review this dedicated enum called result type.
 
@@ -63,7 +63,7 @@ We can start like this:
 
 ```swift
 
-struct AccountModel: Codable {
+struct Account: Codable {
     // 🕹 Game on here
     let id: String
     let type: String
@@ -112,32 +112,21 @@ Note: This one is not a `ViewModel` we are going to do some translation. See how
 
 ## Bringing it into the app
 
-Now when we do bring it into the project, we need to decide where to put it.
+Let create an extension and put our networking code in there `AccountSummaryViewController+Networking`.
 
-Discussion - how to add networking to view controller:
-
-- func in ViewController (closest)
-- create manager (if were going to reuse)
-- extract into extension (if local to vc)
-- point is to keep view controller as small and dumb as possible
-- extract all other logic out
-
-Current project I am working on goes the extension route - so let's put it there.
-
-- Create a new class `AccountSummaryViewController+Networking`.
-- Add the following network code into there
 
 **AccountSummaryViewController+Networking**
 
 ```swift
 import Foundation
+import UIKit
 
 enum NetworkError: Error {
-    case domainError
+    case serverError
     case decodingError
 }
 
-struct ProfileViewModel: Codable {
+struct Profile: Codable {
     let id: String
     let firstName: String
     let lastName: String
@@ -150,56 +139,141 @@ struct ProfileViewModel: Codable {
 }
 
 extension AccountSummaryViewController {
-    func fetchProfile(forUserId userId: String, completion: @escaping (Result<ProfileModel,NetworkError>) -> Void) {
-        
+    func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile,NetworkError>) -> Void) {
         let url = URL(string: "https://fierce-retreat-36855.herokuapp.com/bankey/profile/\(userId)")!
-        
+
         URLSession.shared.dataTask(with: url) { data, response, error in
-            
             guard let data = data, error == nil else {
-                if let error = error as NSError?, error.domain == NSURLErrorDomain {
-                    completion(.failure(.domainError))
-                }
+                completion(.failure(.serverError))
                 return
             }
             
             do {
-                let posts = try JSONDecoder().decode(ProfileViewModel.self, from: data)
+                let posts = try JSONDecoder().decode(Profile.self, from: data)
                 completion(.success(posts))
             } catch {
                 completion(.failure(.decodingError))
             }
-            
+        }.resume()
+    }
+}
+
+```
+
+Then we are going to do some refactoring and call from our vc as follows.
+
+First let's refactor the code to clearer communicate what is a request model vs what is a view model.
+
+We'll fetch our data via requests, and then convert to view models as the data comes in.
+
+**AccountSummaryViewController**
+
+```swift
+// Request Models
+var profile: Profile?
+    
+// View Models
+var headerViewModel = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Welcome", name: "", date: Date())
+var accountCellViewModels: [AccountSummaryCell.ViewModel] = []
+```
+
+The profile is going to feed our header. And when we get to the accounts that is going to feed our cells.
+
+Let's also rename `fetchData`. I'm normally not a fan of giving functions more than one responsibility, but in this case I am OK and we'll see why shortly.
+
+```swift
+private func setup() {
+    fetchDataAndLoadViews()
+}
+```
+
+Then finally, let's call `fetchProfile`, get our profile data, and then configure it in our header view.
+
+```swift
+// MARK: - Networking
+extension AccountSummaryViewController {
+    private func fetchDataAndLoadViews() {
+        
+        fetchProfile(forUserId: "1") { result in
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+                self.configureTableHeaderView(with: profile) // Demo background thread 💥
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+
+        fetchAccounts()
+    }
+
+private func configureTableHeaderView(with profile: Profile) {
+    let vm = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Good morning,",
+                                                name: profile.firstName,
+                                                date: Date())
+    headerView.configure(viewModel: vm)
+}
+```
+
+Now watch what happens when we run this. Boom 💥!
+
+Here's what's going on here...
+
+And Xcode is even trying to tell us. Look at `AccountSummaryHeaderView.configure`.
+
+![](images/0.png)
+
+The way to fix this is to ensure that we are on the main ui thread whenever we update the UI.
+
+```swift
+DispatchQueue.main.async {
+   // OK to update UI ✅
+}
+```
+
+We can do this everytime we update the UI in our views or view controllers. Or we could do it once in our network call, and ensure we return on the main UI thread from there. Let's do that.
+
+**AccountSummaryViewController+Networking**
+
+```swift
+extension AccountSummaryViewController {
+    func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile,NetworkError>) -> Void) {
+        let url = URL(string: "https://fierce-retreat-36855.herokuapp.com/bankey/profile/\(userId)")!
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            DispatchQueue.main.async {
+                guard let data = data, error == nil else {
+                    completion(.failure(.serverError))
+                    return
+                }
+                
+                do {
+                    let posts = try JSONDecoder().decode(Profile.self, from: data)
+                    completion(.success(posts))
+                } catch {
+                    completion(.failure(.decodingError))
+                }
+            }
         }.resume()
     }
 }
 ```
 
-Discussion:
-
-- How are errors represented in Swift
-
-Then to call it from our UI we need to update the vc as follows.
-
-**AccountSummaryViewController**
-
-```swift
-class AccountSummaryViewController: UIViewController {
-    
-    var profile: ProfileViewModel?
-```
-
-
-There. We can now fetch and load profile data into our header.
-
-Let's do the same for accounts. UR HERE
+Now when we run, the error and warning go away.
 
 ### Accounts
+
+Let's repeat this process for accounts.
+
+
 
 ### Add to project
 
 Discuss:
 
+## Refactoring
+
+- Extract AccountViewModel
 
 ## Unit testing
 

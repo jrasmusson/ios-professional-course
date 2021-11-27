@@ -36,9 +36,9 @@ let json = """
   ]
 """
 
-struct AccountModel: Codable {
+struct Account: Codable {
     // 🕹 Game on here
 }
 
 let jsonData = json.data(using: .utf8)!
-let result = try! JSONDecoder().decode([AccountModel].self, from: jsonData)
+let result = try! JSONDecoder().decode([Account].self, from: jsonData)
