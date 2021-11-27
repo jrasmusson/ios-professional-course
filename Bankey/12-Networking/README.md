@@ -484,9 +484,9 @@ Let's add some unit tests to verify we can parse our JSON and handle network req
 
 First let's create a dir for `Utils` and stick our existing tests in there.
 
-Then let's create another folder called `AccountSummary` and in there create a file called `AccountSummaryProfileTests` and to it add the code from our playground.
+Then let's create another folder called `AccountSummary` and in there create a file called `ProfileTests` and to it add the code from our playground.
 
-**AccountSummaryProfileTests**
+**ProfileTests**
 
 ```swift
 import Foundation
@@ -528,7 +528,6 @@ Let's do the same for account. Let's create a new test for `Account`.
 **AccountTests**
 
 ```swift
-
 import Foundation
 import XCTest
 
