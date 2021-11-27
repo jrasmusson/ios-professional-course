@@ -3,18 +3,24 @@
 In this section we are going to add networking to our app.
 
 - Going to look at different ways of importing data in
-- Different ways of utilizing tools like playgrounds
-- And end looking at how we can unit test network code in our projects
+- Different ways of utilizing tools like playgrounds for quick rapid prototyping
+- And how to unit testing thing like JSON parsing when writing code
+
+
 
 ## Profile
 
 This is how we are going to do networking in our application.
 
-Open playground. And go through.
+![](images/1.png)
+
+In code that looks like this. Open playground. And go through.
 
 1. Codeable
 2. URLSession
 3. Result
+
+
 
 
 ### Codable
