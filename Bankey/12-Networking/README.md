@@ -383,6 +383,171 @@ Now as good as our playgrounds are, it would be really nice if we could capture 
 
 Let's add some unit tests to verify we can parse our JSON and handle network requests.
 
+First let's create a dir for `Utils` and stick our existing tests in there.
+
+Then let's create another folder called `AccountSummary` and in there create a file called `AccountSummaryProfileTests` and to it add the code from our playground.
+
+**AccountSummaryProfileTests**
+
+```swift
+import Foundation
+import XCTest
+
+@testable import Bankey
+
+class ProfileTests: XCTestCase {
+    
+    override func setUp() {
+        super.setUp()
+    }
+    
+    func testCanParse() throws {
+        let json = """
+        {
+        "id": "1",
+        "first_name": "Kevin",
+        "last_name": "Flynn",
+        }
+        """
+        
+        let data = json.data(using: .utf8)!
+        let result = try! JSONDecoder().decode(Profile.self, from: data)
+        
+        XCTAssertEqual(result.id, "1")
+        XCTAssertEqual(result.firstName, "Kevin")
+        XCTAssertEqual(result.lastName, "Flynn")
+    }
+}
+```
+
+This is basically our playground, but captured in the form of a unit test.
+
+### Challenge
+
+Let's do the same for account. Let's create a new test for `Account`.
+
+**AccountTests**
+
+```swift
+
+import Foundation
+import XCTest
+
+@testable import Bankey
+
+class AccountTests: XCTestCase {
+    
+    override func setUp() {
+        super.setUp()
+    }
+    
+    func testCanParse() throws {
+        let json = """
+         [
+           {
+             "id": "1",
+             "type": "Banking",
+             "name": "Basic Savings",
+             "amount": 929466.23,
+             "createdDateTime" : "2010-06-21T15:29:32Z"
+           },
+           {
+             "id": "2",
+             "type": "Banking",
+             "name": "No-Fee All-In Chequing",
+             "amount": 17562.44,
+             "createdDateTime" : "2011-06-21T15:29:32Z"
+           },
+          ]
+        """
+
+        // Game on here 🕹
+    }
+}
+```
+
+Add see if you can write the unit test for parsing account.
+
+### Solution
+
+**AccountTests**
+
+```swift
+import Foundation
+import XCTest
+
+@testable import Bankey
+
+class AccountTests: XCTestCase {
+    
+    override func setUp() {
+        super.setUp()
+    }
+    
+    func testCanParse() throws {
+        let json = """
+         [
+           {
+             "id": "1",
+             "type": "Banking",
+             "name": "Basic Savings",
+             "amount": 929466.23,
+             "createdDateTime" : "2010-06-21T15:29:32Z"
+           },
+           {
+             "id": "2",
+             "type": "Banking",
+             "name": "No-Fee All-In Chequing",
+             "amount": 17562.44,
+             "createdDateTime" : "2011-06-21T15:29:32Z"
+           },
+          ]
+        """
+
+        // Game on here 🕹
+        let data = json.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let result = try decoder.decode([Account].self, from: data)
+        
+        XCTAssertEqual(result.count, 2)
+        
+        let account1 = result[0]
+        XCTAssertEqual(account1.id, "1")
+        XCTAssertEqual(account1.type, .Banking)
+        XCTAssertEqual(account1.name, "Basic Savings")
+        XCTAssertEqual(account1.amount, 929466.23)
+        XCTAssertEqual(account1.createdDateTime.monthDayYearString, "Jun 21, 2010")
+    }
+}
+```
+
+### Save our work
+
+```
+> git add .
+> git commit -m "test: Add unit tests for JSON parsing"
+```
+
+### Summary
+
+Good stuff! In this section we:
+
+- We've added networking
+- Parsed JSON
+- Worked with `URLSession`
+- Saw how to use `Result` type
+- Re-inforced the importance of updating the UI on the main thread
+- Added unit tests for JSON parsing
+
+And now our app is really starting to take shape. 
+
+Next up, in affordances, you will see how professional iOS develoeprs take things on step further and add some really nice affordances that make their apps even more delightful and easier to use.
+
+Can't wait! See you there.
+
+
 
 
 
