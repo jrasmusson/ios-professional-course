@@ -6,7 +6,15 @@ import Foundation
  3. Result
  */
 
-struct ProfileViewModel: Codable {
+let json = """
+        {
+        "id": "1",
+        "first_name": "Jonathan",
+        "last_name": "Smith",
+        }
+        """
+
+struct Profile: Codable {
     let id: String
     let firstName: String
     let lastName: String
@@ -23,7 +31,7 @@ enum NetworkError: Error {
     case decodingError
 }
 
-func fetchProfile(forUserId userId: String, completion: @escaping (Result<ProfileViewModel,NetworkError>) -> Void) {
+func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile,NetworkError>) -> Void) {
     let url = URL(string: "https://fierce-retreat-36855.herokuapp.com/bankey/profile/\(userId)")!
 
     URLSession.shared.dataTask(with: url) { data, response, error in
@@ -33,8 +41,8 @@ func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profil
         }
         
         do {
-            let posts = try JSONDecoder().decode(ProfileViewModel.self, from: data)
-            completion(.success(posts))
+            let profile = try JSONDecoder().decode(Profile.self, from: data)
+            completion(.success(profile))
         } catch {
             completion(.failure(.decodingError))
         }
@@ -44,8 +52,8 @@ func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profil
 
 fetchProfile(forUserId: "1") { result in
     switch result {
-    case .success(let posts):
-        print(posts)
+    case .success(let profile):
+        print(profile)
     case .failure(let error):
         print(error.localizedDescription)
     }
