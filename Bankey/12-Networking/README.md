@@ -37,7 +37,7 @@ But we can put ourselves there with code like this:
 
 ```swift
 DispatchQueue.main.async {
-   completion(.success(posts))
+   // On main thread
 }
 ```
 
@@ -149,8 +149,8 @@ extension AccountSummaryViewController {
             }
             
             do {
-                let posts = try JSONDecoder().decode(Profile.self, from: data)
-                completion(.success(posts))
+                let profile = try JSONDecoder().decode(Profile.self, from: data)
+                completion(.success(profile))
             } catch {
                 completion(.failure(.decodingError))
             }
@@ -198,7 +198,8 @@ extension AccountSummaryViewController {
             switch result {
             case .success(let profile):
                 self.profile = profile
-                self.configureTableHeaderView(with: profile) // Demo background thread 💥
+                self.configureTableHeaderView(with: profile)
+                self.tableView.reloadData()
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -248,8 +249,8 @@ extension AccountSummaryViewController {
                 }
                 
                 do {
-                    let posts = try JSONDecoder().decode(Profile.self, from: data)
-                    completion(.success(posts))
+                    let profile = try JSONDecoder().decode(Profile.self, from: data)
+                    completion(.success(profile))
                 } catch {
                     completion(.failure(.decodingError))
                 }
@@ -265,22 +266,127 @@ Now when we run, the error and warning go away.
 
 Let's repeat this process for accounts.
 
+Because we are going to reuse `AccountType` in our view and our request, let's pull this out globally as a type so everyone can access while also making it `Codeable`.
+
+**AccountSummaryCell**
+
+```swift
+enum AccountType: String, Codable {
+    case Banking
+    case CreditCard
+    case Investment
+}
+
+class AccountSummaryCell: UITableViewCell {
+    
+    struct ViewModel {
+        let accountType: AccountType
+        let accountName: String
+        let balance: Decimal
+```
 
 
-### Add to project
+**AccountSummaryViewController+Networking**
 
-Discuss:
+```swift
+struct Account: Codable {
+    let id: String
+    let type: AccountType
+    let name: String
+    let amount: Decimal
+    let createdDateTime: Date
+}
 
-## Refactoring
+extension AccountSummaryViewController {
+    func fetchAccounts(forUserId userId: String, completion: @escaping (Result<[Account],NetworkError>) -> Void) {
+        let url = URL(string: "https://fierce-retreat-36855.herokuapp.com/bankey/profile/\(userId)/accounts")!
 
-- Extract AccountViewModel
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            DispatchQueue.main.async {
+                guard let data = data, error == nil else {
+                    completion(.failure(.serverError))
+                    return
+                }
+                
+                do {
+                    let decoder = JSONDecoder()
+                    decoder.dateDecodingStrategy = .iso8601
+                    
+                    let accounts = try decoder.decode([Account].self, from: data)
+                    completion(.success(accounts))
+                } catch {
+                    completion(.failure(.decodingError))
+                }
+            }
+        }.resume()
+    }
+}
+```
+
+**AccountSummaryViewController**
+
+```swift
+// Request Models
+var profile: Profile?
+var accounts: [Account] = []
+```
+
+And the fetch.
+
+```swift
+// MARK: - Networking
+extension AccountSummaryViewController {
+    private func fetchDataAndLoadViews() {
+        
+        fetchProfile(forUserId: "1") { result in
+            ...
+        }
+
+        fetchAccounts(forUserId: "1") { result in
+            switch result {
+            case .success(let accounts):
+                self.accounts = accounts
+                self.configureTableCells(with: accounts)
+                self.tableView.reloadData()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func configureTableCells(with accounts: [Account]) {
+        accountCellViewModels = accounts.map {
+            AccountSummaryCell.ViewModel(accountType: $0.type,
+                                         accountName: $0.name,
+                                         balance: $0.amount)
+        }
+    }
+}
+```
+
+Discuss [map](- [Map filter reduce](https://useyourloaf.com/blog/swift-guide-to-map-filter-reduce/)).
+
+If we run the app now everything loads - 🎉.
+
+Let's delete the old hard coded data `fetchAccounts()`.
+
+### Save our work
+
+```
+> git add .
+> git commit -m "feat: Add networking to AccountSummary"
+```
 
 ## Unit testing
 
 Now as good as our playgrounds are, it would be really nice if we could capture this work in the form of an automated test.
+
+Let's add some unit tests to verify we can parse our JSON and handle network requests.
+
 
 
 
 ### Links that help
 
 - [Apple docs - Fetching website data into memory](https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory)
+- [Map filter reduce](https://useyourloaf.com/blog/swift-guide-to-map-filter-reduce/)

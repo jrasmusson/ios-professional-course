@@ -36,10 +36,16 @@ let json = """
   ]
 """
 
+enum AccountType: String, Codable {
+    case Banking
+    case CreditCard
+    case Investment
+}
+
 struct Account: Codable {
     // 🕹 Game on here
     let id: String
-    let type: String
+    let type: AccountType
     let name: String
     let amount: Decimal
     let createdDateTime: Date
