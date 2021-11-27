@@ -118,6 +118,71 @@ Note: This one is not a `ViewModel` we are going to do some translation. See how
 
 ## Bringing it into the app
 
+### Making the header configurable
+
+Before we can populate our header dynamically, we need to make it configurable.
+
+That means adding outlets:
+
+- `welcomeLabel`
+- `nameLabel`
+- `dateLabel`
+
+
+Add a view model to our header.
+
+**AccountSummaryHeaderView**
+
+```swift
+let shakeyBellView = ShakeyBellView()
+    
+struct ViewModel {
+    let welcomeMessage: String
+    let name: String
+    let date: Date
+    
+    var dateFormatted: String {
+        return date.monthDayYearString
+    }
+}
+```
+
+And let's also add a method at the bottom called `configure`.
+
+```swift
+func configure(viewModel: ViewModel) {
+    welcomeLabel.text = viewModel.welcomeMessage
+    nameLabel.text = viewModel.name
+    dateLabel.text = viewModel.dateFormatted
+}
+```
+
+### Formatting the Date
+
+Let's create a Util class for formatting dates.
+
+**Date+Utils**
+
+```swift
+import Foundation
+
+extension Date {
+    static var bankeyDateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone(abbreviation: "MDT")
+        return formatter
+    }
+    
+    var monthDayYearString: String {
+        let dateFormatter = Date.bankeyDateFormatter
+        dateFormatter.dateFormat = "MMM d, yyyy"
+        return dateFormatter.string(from: self)
+    }
+}
+```
+
+### Fetching in the view controller
+
 Let create an extension and put our networking code in there `AccountSummaryViewController+Networking`.
 
 
@@ -163,14 +228,11 @@ extension AccountSummaryViewController {
         }.resume()
     }
 }
-
 ```
 
-Then we are going to do some refactoring and call from our vc as follows.
 
-First let's refactor the code to clearer communicate what is a request model vs what is a view model.
 
-We'll fetch our data via requests, and then convert to view models as the data comes in.
+Do the fetch in the view controller.
 
 **AccountSummaryViewController**
 
@@ -185,10 +247,13 @@ var accountCellViewModels: [AccountSummaryCell.ViewModel] = []
 
 The profile is going to feed our header. And when we get to the accounts that is going to feed our cells.
 
-Let's also rename `fetchData`. I'm normally not a fan of giving functions more than one responsibility, but in this case I am OK and we'll see why shortly.
+Rename `fetchData` to `fetchAccounts` and then comment it out.
+
+And then add a new method to fetch and load like this one.
 
 ```swift
 private func setup() {
+    // fetchAccounts()
     fetchDataAndLoadViews()
 }
 ```
@@ -213,16 +278,42 @@ extension AccountSummaryViewController {
 
         fetchAccounts()
     }
-
-private func configureTableHeaderView(with profile: Profile) {
-    let vm = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Good morning,",
-                                                name: profile.firstName,
-                                                date: Date())
-    headerView.configure(viewModel: vm)
+    
+    private func configureTableHeaderView(with profile: Profile) {
+        let vm = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Good morning,",
+                                                    name: profile.firstName,
+                                                    date: Date())
+        headerView.configure(viewModel: vm)
+    }
 }
 ```
 
-Now watch what happens when we run this. Boom 💥!
+Because we are updating our `headerView` we need to pull it out of the setup function and make it a variable.
+
+Rename it `headerView`
+
+```swift
+    private func setupTableHeaderView() {
+        let headerView = AccountSummaryHeaderView(frame: .zero)
+```
+
+And then pull it up and make it a variable.
+
+```swift
+var tableView = UITableView()
+var headerView = AccountSummaryHeaderView(frame: .zero)
+```
+
+### Ready to run - Boom!
+
+OK we are finally ready to give this a go. Now watch what happens when we run this. Boom 💥!
+
+![](images/2.png)
+
+```
+=================================================================
+Main Thread Checker: UI API called on a background thread: -[UILabel setText:]
+```
 
 Here's what's going on here...
 
@@ -267,6 +358,8 @@ extension AccountSummaryViewController {
 ```
 
 Now when we run, the error and warning go away.
+
+![](images/3.png)
 
 ### Accounts
 
