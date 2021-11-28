@@ -12,7 +12,7 @@ In this section we are going to add networking to our app.
 
 This is how we are going to do networking in our application.
 
-![](images/1.png)
+![](images/1a.png)
 
 In code that looks like this. Open playground. And go through.
 
@@ -638,6 +638,7 @@ Good stuff! In this section we:
 - Saw how to use `Result` type
 - Re-inforced the importance of updating the UI on the main thread
 - Added unit tests for JSON parsing
+- How to leverage playgrounds
 - Even did a little bit of funtional programming with Map
 
 And now our app is really starting to take shape. 
