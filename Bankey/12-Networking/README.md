@@ -283,7 +283,7 @@ extension AccountSummaryViewController {
         let vm = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Good morning,",
                                                     name: profile.firstName,
                                                     date: Date())
-        headerView.configure(viewModel: vm)
+        headerViewModel.configure(viewModel: vm)
     }
 }
 ```
@@ -316,6 +316,8 @@ Main Thread Checker: UI API called on a background thread: -[UILabel setText:]
 ```
 
 Here's what's going on here...
+
+[Apple Docs Main Thread](https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory)
 
 And Xcode is even trying to tell us. Look at `AccountSummaryHeaderView.configure`.
 
@@ -463,7 +465,9 @@ extension AccountSummaryViewController {
 }
 ```
 
-Discuss [map](- [Map filter reduce](https://useyourloaf.com/blog/swift-guide-to-map-filter-reduce/)).
+Discuss
+
+- [Map filter reduce](https://useyourloaf.com/blog/swift-guide-to-map-filter-reduce/)).
 
 If we run the app now everything loads - 🎉.
 

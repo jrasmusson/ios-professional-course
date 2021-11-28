@@ -36,9 +36,26 @@ let json = """
   ]
 """
 
-struct Account: Codable {
-    // 🕹 Game on here
+enum AccountType: String, Codable {
+    case Banking
+    case CreditCard
+    case Investment
 }
 
+struct Account: Codable {
+    // 🕹 Game on here
+    let id: String
+    let type: AccountType
+    let name: String
+    let amount: Decimal
+    let createdDateTime: Date
+}
+
+//let jsonData = json.data(using: .utf8)!
+//let result = try! JSONDecoder().decode([Account].self, from: jsonData)
+
 let jsonData = json.data(using: .utf8)!
-let result = try! JSONDecoder().decode([Account].self, from: jsonData)
+let decoder = JSONDecoder()
+decoder.dateDecodingStrategy = .iso8601
+let result = try! decoder.decode([Account].self, from: jsonData)
+print(result)
