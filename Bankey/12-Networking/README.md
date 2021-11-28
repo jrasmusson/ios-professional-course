@@ -20,9 +20,6 @@ In code that looks like this. Open playground. And go through.
 2. URLSession
 3. Result
 
-
-
-
 ### Codable
 
 - `Codeable` is actually a combination of x2 protocols
@@ -467,7 +464,7 @@ extension AccountSummaryViewController {
 
 Discuss
 
-- [Map filter reduce](https://useyourloaf.com/blog/swift-guide-to-map-filter-reduce/)).
+- [Map filter reduce](https://useyourloaf.com/blog/swift-guide-to-map-filter-reduce/)
 
 If we run the app now everything loads - 🎉.
 
