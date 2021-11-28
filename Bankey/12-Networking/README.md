@@ -638,6 +638,7 @@ Good stuff! In this section we:
 - Saw how to use `Result` type
 - Re-inforced the importance of updating the UI on the main thread
 - Added unit tests for JSON parsing
+- Even did a little bit of funtional programming with Map
 
 And now our app is really starting to take shape. 
 
