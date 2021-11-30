@@ -63,6 +63,9 @@ Pull to refresh is a feature a lot of mobile apps have where you can pull down o
 
 A lot of major apps have it. But we can have it too. And it's really easy to add now that we've grouped our network calls together.
 
+### UIRefresh
+
+[UIRefresh](https://developer.apple.com/documentation/uikit/uirefreshcontrol)
 
 This is a control you can attach to any `UIScrollView`, including table views and collection views. It gives your users a standard way to refresh their contents. When the user drags the top of the scrollable content area downward, the scroll view reveals the refresh control, begings animating its progress indicator, and notifies your app. Use that notification to update your content and dismiss the refresh control.
 
@@ -90,8 +93,14 @@ private func setupRefreshControl() {
     tableView.refreshControl = refreshControl
 }
 
-DispatchQueue.main.async {
-      self.myScrollingView.refreshControl?.endRefreshing()
+// MARK: Actions
+extension AccountSummaryViewController {
+    @objc func refreshContent() {
+        DispatchQueue.main.async {
+            self.fetchDataAndLoadViews()
+            self.tableView.refreshControl?.endRefreshing()
+        }
+    }
 }
 ```
 
