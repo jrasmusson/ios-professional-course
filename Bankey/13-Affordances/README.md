@@ -108,6 +108,253 @@ extension AccountSummaryViewController {
 
 Those nice shimmery boxes of grey that signal to the user things are loading.
 
+Do understand the mechanics behind how to add skeleton loaders we first need to understand:
+
+- [Gradients](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/CoreAnimation/Gradients/README.md)
+- [Skeleton Loaders](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/Shimmer/README.md)
+
+### Create a SkeletonCell
+
+Let's start by creating a placeholder `SkeletonCell`.
+
+**SkeletonCell**
+
+```swift
+//
+//  SkeletonCell.swift
+//  Bankey
+//
+//  Created by jrasmusson on 2021-11-30.
+//
+
+import UIKit
+
+class SkeletonCell: UITableViewCell {
+    
+    let typeLabel = UILabel()
+    let underlineView = UIView()
+    let nameLabel = UILabel()
+        
+    let balanceStackView = UIStackView()
+    let balanceLabel = UILabel()
+    let balanceAmountLabel = UILabel()
+        
+    let chevronImageView = UIImageView()
+
+    static let reuseID = "SkeletonCell"
+    static let rowHeight: CGFloat = 112
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setup()
+        layout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension SkeletonCell {
+    
+    private func setup() {
+        typeLabel.translatesAutoresizingMaskIntoConstraints = false
+        typeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        typeLabel.adjustsFontForContentSizeCategory = true
+        typeLabel.text = "Account type"
+        
+        underlineView.translatesAutoresizingMaskIntoConstraints = false
+        underlineView.backgroundColor = appColor
+
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.text = "Account name"
+
+        balanceStackView.translatesAutoresizingMaskIntoConstraints = false
+        balanceStackView.axis = .vertical
+        balanceStackView.spacing = 0
+
+        balanceLabel.translatesAutoresizingMaskIntoConstraints = false
+        balanceLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        balanceLabel.textAlignment = .right
+        balanceLabel.adjustsFontSizeToFitWidth = true
+        balanceLabel.text = "Some balance"
+
+        balanceAmountLabel.translatesAutoresizingMaskIntoConstraints = false
+        balanceAmountLabel.textAlignment = .right
+        balanceAmountLabel.text = "$XXX,XXX.XX"
+        
+        chevronImageView.translatesAutoresizingMaskIntoConstraints = false
+        let chevronImage = UIImage(systemName: "chevron.right")!.withTintColor(appColor, renderingMode: .alwaysOriginal)
+        chevronImageView.image = chevronImage
+    }
+    
+    private func layout() {
+        contentView.addSubview(typeLabel)
+        contentView.addSubview(underlineView)
+        contentView.addSubview(nameLabel)
+        
+        balanceStackView.addArrangedSubview(balanceLabel)
+        balanceStackView.addArrangedSubview(balanceAmountLabel)
+        
+        contentView.addSubview(balanceStackView)
+        contentView.addSubview(chevronImageView)
+
+        NSLayoutConstraint.activate([
+            typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
+            typeLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+            underlineView.topAnchor.constraint(equalToSystemSpacingBelow: typeLabel.bottomAnchor, multiplier: 1),
+            underlineView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+            underlineView.widthAnchor.constraint(equalToConstant: 60),
+            underlineView.heightAnchor.constraint(equalToConstant: 4),
+            nameLabel.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 2),
+            nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+            balanceStackView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 0),
+            balanceStackView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 4),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: balanceStackView.trailingAnchor, multiplier: 4),
+            chevronImageView.topAnchor.constraint(equalToSystemSpacingBelow: underlineView.bottomAnchor, multiplier: 1),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: chevronImageView.trailingAnchor, multiplier: 1)
+        ])
+    }
+}
+```
+
+This is basically a copy of our `AccountSummaryCell` without the `ViewModel` and `configure` methods.
+
+The layout is the same. Which is basically what we want.
+
+Next let's add these into our `tableView`.
+
+### Load Skeletons into TableView
+
+The way skeletons work is we want our `UITableView` to be loaded and displaying these while are actual network calls are going on.
+
+When our network calls completely, we will swap out the `SkeletonCell`, and display the `AccountSummaryCell` configured with our loaded data.
+
+There are a couple of ways we could do this:
+
+1. We could define a variable called `isLoaded` and use that to signal when our skeletons should be displayed.
+2. We could add a property onto `Account` called `isSkeleton`, and let the `Account` objects create the necessary `ViewModels` in such a way that when initially loaded, they can figure out for themselve whether they are skeletons or not.
+
+Let's go with the former, because I think it is simpler and it will make seeing how skeleton loaders work easier to understand.
+
+**AccountSummaryViewController**
+
+```swift
+// Components
+var tableView = UITableView()
+var headerView = AccountSummaryHeaderView(frame: .zero)
+let refreshControl = UIRefreshControl()
+
+var isLoaded = false
+```
+
+Then we need to register our `SkeletonCell` identifier with the `tableView`.
+
+```swift
+tableView.register(AccountSummaryCell.self, forCellReuseIdentifier: AccountSummaryCell.reuseID)
+tableView.register(SkeletonCell.self, forCellReuseIdentifier: SkeletonCell.reuseID)
+```
+
+Then we need to intially load the `accounts` with fake data so our skeletons have something to show on the page.
+
+Let's create a factory method on `Account` to create a fake skeleton account for loading.
+
+**Account**
+
+```swift
+struct Account: Codable {
+    let id: String
+    let type: AccountType
+    let name: String
+    let amount: Decimal
+    let createdDateTime: Date
+    
+    static func makeSkeleton() -> Account {
+        return Account(id: "1", type: .Banking, name: "", amount: 0.0, createdDateTime: Date())
+    }
+}
+```
+
+**AccountSummaryViewController**
+
+Then let's use that to populate our `accountCellViewModels` which are what drive and power the `tableView`. We can configure those as part of our `setup`.
+
+```swift
+// MARK: - Setup
+extension AccountSummaryViewController {
+    private func setup() {
+        setupNavigationBar()
+        setupTableView()
+        setupTableHeaderView()
+        setupRefreshControl()
+        setupSkeletons() //
+        fetchDataAndLoadViews()
+    }
+    
+    private func setupSkeletons() {
+        let row = Account.makeSkeleton()
+        accounts = Array(repeating: row, count: 10)
+        
+        configureTableCells(with: accounts)
+    }
+```
+
+With our skeletons setup and ready to go, we just need to add some logic to display them when the table initially loads.
+
+```swift
+extension AccountSummaryViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard !accountCellViewModels.isEmpty else { return UITableViewCell() }
+
+        let account = accountCellViewModels[indexPath.row]
+
+        if isLoaded {
+            let cell = tableView.dequeueReusableCell(withIdentifier: AccountSummaryCell.reuseID, for: indexPath) as! AccountSummaryCell
+            cell.configure(with: account)
+            return cell
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: SkeletonCell.reuseID, for: indexPath) as! SkeletonCell
+        return cell
+    }
+```
+
+Now we just need to remember to set our `isLoaded` flag to true once the data loads.
+
+```swift
+group.notify(queue: .main) {
+    self.isLoaded = true
+    self.tableView.reloadData()
+}
+```
+
+And that should be it! Let's give it a go.
+
+It happens so fast that we can't even see the skeletons. Let's comment out the networking temporarily just to see the skeletons load.
+
+```swift
+// MARK: - Setup
+extension AccountSummaryViewController {
+    private func setup() {
+        setupNavigationBar()
+        setupTableView()
+        setupTableHeaderView()
+        setupRefreshControl()
+        setupSkeletons()
+//        fetchDataAndLoadViews()
+    }
+```
+
+And if we run it now. Yay! Skeletons.
+
+![](images/3.png)
+
+Next, let's make those skeletons shimmer.
+
+## Making the skeletons shimmer
+
 
 
 ### Links that help

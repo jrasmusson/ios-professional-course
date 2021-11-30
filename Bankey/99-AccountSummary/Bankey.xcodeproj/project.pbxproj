@@ -34,6 +34,7 @@
 		71EF369027202E9E0089B202 /* UIViewController+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EF368F27202E9E0089B202 /* UIViewController+Utils.swift */; };
 		71EF3694272035A10089B202 /* Date+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EF3693272035A10089B202 /* Date+Utils.swift */; };
 		71F770952710E99A0025AC04 /* LocalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F770942710E99A0025AC04 /* LocalState.swift */; };
+		71FD9E4A275663DE00F3943A /* SkeletonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD9E49275663DE00F3943A /* SkeletonCell.swift */; };
 		71FDBEC327147E7D006E710B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FDBEC227147E7D006E710B /* MainViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -78,6 +79,7 @@
 		71EF368F27202E9E0089B202 /* UIViewController+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Utils.swift"; sourceTree = "<group>"; };
 		71EF3693272035A10089B202 /* Date+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Utils.swift"; sourceTree = "<group>"; };
 		71F770942710E99A0025AC04 /* LocalState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalState.swift; sourceTree = "<group>"; };
+		71FD9E49275663DE00F3943A /* SkeletonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonCell.swift; sourceTree = "<group>"; };
 		71FDBEC227147E7D006E710B /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -229,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				719D5771271631BC00DE5D4F /* AccountSummaryCell.swift */,
+				71FD9E49275663DE00F3943A /* SkeletonCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 				71D109B22705DD3B000A0633 /* OnboardingViewController.swift in Sources */,
 				719D576827149FF800DE5D4F /* UIFont+Utils.swift in Sources */,
 				7128EA602737EDC900FFDBD0 /* CurrencyFormatter.swift in Sources */,
+				71FD9E4A275663DE00F3943A /* SkeletonCell.swift in Sources */,
 				717ADC0D2703B80300C89FDB /* OnboardingContainerViewController.swift in Sources */,
 				7156C415273EDAA000F29827 /* NSNotificationName.swift in Sources */,
 				71C1F1712743E4FE00757BB3 /* UITextField+SecureToggle.swift in Sources */,
