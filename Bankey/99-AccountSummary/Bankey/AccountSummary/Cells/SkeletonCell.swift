@@ -7,9 +7,13 @@
 
 import UIKit
 
+extension SkeletonCell: SkeletonLoadable {}
+
 class SkeletonCell: UITableViewCell {
     
     let typeLabel = UILabel()
+    let typeLayer = CAGradientLayer()
+
     let underlineView = UIView()
     let nameLabel = UILabel()
         
@@ -18,6 +22,7 @@ class SkeletonCell: UITableViewCell {
     let balanceAmountLabel = UILabel()
         
     let chevronImageView = UIImageView()
+    
 
     static let reuseID = "SkeletonCell"
     static let rowHeight: CGFloat = 112
@@ -25,11 +30,20 @@ class SkeletonCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
+        setupLayers()
+        setupAnimation()
         layout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        typeLayer.frame = typeLabel.bounds
+        typeLayer.cornerRadius = typeLabel.bounds.height / 2
     }
 }
 
@@ -40,7 +54,7 @@ extension SkeletonCell {
         typeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         typeLabel.adjustsFontForContentSizeCategory = true
         typeLabel.text = "Account type"
-        
+                
         underlineView.translatesAutoresizingMaskIntoConstraints = false
         underlineView.backgroundColor = appColor
 
@@ -66,6 +80,18 @@ extension SkeletonCell {
         chevronImageView.translatesAutoresizingMaskIntoConstraints = false
         let chevronImage = UIImage(systemName: "chevron.right")!.withTintColor(appColor, renderingMode: .alwaysOriginal)
         chevronImageView.image = chevronImage
+    }
+    
+    private func setupLayers() {
+        typeLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        typeLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        typeLabel.layer.addSublayer(typeLayer)
+    }
+    
+    private func setupAnimation() {
+        let titleGroup = makeAnimationGroup()
+        titleGroup.beginTime = 0.0
+        typeLayer.add(titleGroup, forKey: "backgroundColor")
     }
     
     private func layout() {

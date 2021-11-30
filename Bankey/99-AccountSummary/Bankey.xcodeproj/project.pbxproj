@@ -35,6 +35,8 @@
 		71EF3694272035A10089B202 /* Date+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EF3693272035A10089B202 /* Date+Utils.swift */; };
 		71F770952710E99A0025AC04 /* LocalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F770942710E99A0025AC04 /* LocalState.swift */; };
 		71FD9E4A275663DE00F3943A /* SkeletonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD9E49275663DE00F3943A /* SkeletonCell.swift */; };
+		71FD9E4C275670DA00F3943A /* UIColor+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD9E4B275670DA00F3943A /* UIColor+Utils.swift */; };
+		71FD9E4E2756710200F3943A /* SkeletonLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD9E4D2756710200F3943A /* SkeletonLoadable.swift */; };
 		71FDBEC327147E7D006E710B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FDBEC227147E7D006E710B /* MainViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +82,8 @@
 		71EF3693272035A10089B202 /* Date+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Utils.swift"; sourceTree = "<group>"; };
 		71F770942710E99A0025AC04 /* LocalState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalState.swift; sourceTree = "<group>"; };
 		71FD9E49275663DE00F3943A /* SkeletonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonCell.swift; sourceTree = "<group>"; };
+		71FD9E4B275670DA00F3943A /* UIColor+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Utils.swift"; sourceTree = "<group>"; };
+		71FD9E4D2756710200F3943A /* SkeletonLoadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonLoadable.swift; sourceTree = "<group>"; };
 		71FDBEC227147E7D006E710B /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -232,6 +236,7 @@
 			children = (
 				719D5771271631BC00DE5D4F /* AccountSummaryCell.swift */,
 				71FD9E49275663DE00F3943A /* SkeletonCell.swift */,
+				71FD9E4D2756710200F3943A /* SkeletonLoadable.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -247,6 +252,7 @@
 				71F770942710E99A0025AC04 /* LocalState.swift */,
 				7156C414273EDAA000F29827 /* NSNotificationName.swift */,
 				71C1F1702743E4FE00757BB3 /* UITextField+SecureToggle.swift */,
+				71FD9E4B275670DA00F3943A /* UIColor+Utils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -366,6 +372,7 @@
 			files = (
 				719D5772271631BC00DE5D4F /* AccountSummaryCell.swift in Sources */,
 				71EF369027202E9E0089B202 /* UIViewController+Utils.swift in Sources */,
+				71FD9E4E2756710200F3943A /* SkeletonLoadable.swift in Sources */,
 				719D57642714962C00DE5D4F /* AccountSummaryViewController.swift in Sources */,
 				719D57662714973600DE5D4F /* AccountSummaryHeaderView.swift in Sources */,
 				71A0F7C826FD2B75008EAFD8 /* LoginViewController.swift in Sources */,
@@ -375,6 +382,7 @@
 				71A0F7C426FD2B75008EAFD8 /* AppDelegate.swift in Sources */,
 				71EF3694272035A10089B202 /* Date+Utils.swift in Sources */,
 				71A0F7D826FD2BBA008EAFD8 /* LoginView.swift in Sources */,
+				71FD9E4C275670DA00F3943A /* UIColor+Utils.swift in Sources */,
 				71B0F978275105840000BD53 /* AccountSummaryViewController+Networking.swift in Sources */,
 				719D5776271846F600DE5D4F /* Decimal+Utils.swift in Sources */,
 				71D109B22705DD3B000A0633 /* OnboardingViewController.swift in Sources */,

@@ -355,6 +355,136 @@ Next, let's make those skeletons shimmer.
 
 ## Making the skeletons shimmer
 
+To make our skeletons shimmer we are going to define a `SkeletonLoadable` protocol, let it create our shimmer animation group, and then inherit that in our `SkeletonCell`.
+
+But first let's define some colors.
+
+**UIColor+Utils**
+
+```swift
+import UIKit
+
+extension UIColor {
+    static var gradientDarkGrey: UIColor {
+        return UIColor(red: 239 / 255.0, green: 241 / 255.0, blue: 241 / 255.0, alpha: 1)
+    }
+
+    static var gradientLightGrey: UIColor {
+        return UIColor(red: 201 / 255.0, green: 201 / 255.0, blue: 201 / 255.0, alpha: 1)
+    }
+}
+```
+
+Then let's defining the protocol.
+
+**SkeletonLoadable**
+
+```swift
+import UIKit
+
+/*
+ Functional programming inheritance.
+ */
+
+protocol SkeletonLoadable {}
+
+extension SkeletonLoadable {
+    
+    func makeAnimationGroup(previousGroup: CAAnimationGroup? = nil) -> CAAnimationGroup {
+        let animDuration: CFTimeInterval = 1.5
+        let anim1 = CABasicAnimation(keyPath: #keyPath(CAGradientLayer.backgroundColor))
+        anim1.fromValue = UIColor.gradientLightGrey.cgColor
+        anim1.toValue = UIColor.gradientDarkGrey.cgColor
+        anim1.duration = animDuration
+        anim1.beginTime = 0.0
+
+        let anim2 = CABasicAnimation(keyPath: #keyPath(CAGradientLayer.backgroundColor))
+        anim2.fromValue = UIColor.gradientDarkGrey.cgColor
+        anim2.toValue = UIColor.gradientLightGrey.cgColor
+        anim2.duration = animDuration
+        anim2.beginTime = anim1.beginTime + anim1.duration
+
+        let group = CAAnimationGroup()
+        group.animations = [anim1, anim2]
+        group.repeatCount = .greatestFiniteMagnitude // infinite
+        group.duration = anim2.beginTime + anim2.duration
+        group.isRemovedOnCompletion = false
+
+        if let previousGroup = previousGroup {
+            // Offset groups by 0.33 seconds for effect
+            group.beginTime = previousGroup.beginTime + 0.33
+        }
+
+        return group
+    }
+    
+}
+```
+
+Then let's use that protocol in our `SkeletonCell`.
+
+**SkeletonCell**
+
+```swift
+// inherit
+extension SkeletonCell: SkeletonLoadable {}
+```
+
+This is how we do inheritance in Swift. Via protcols. By implement this we get access to `makeAnimationGroup`.
+
+Now we just need to make our cell shimmer. This is where we add our gradients to our labels.
+
+Let's start with one.
+
+```swift
+let typeLabel = UILabel()
+let typeLayer = CAGradientLayer()
+
+override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+    setup()
+    setupLayers() //
+    setupAnimation() //
+    layout()
+}
+
+extension SkeletonCell {
+      
+    private func setupLayers() {
+        typeLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        typeLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        typeLabel.layer.addSublayer(typeLayer)
+    }
+    
+    private func setupAnimation() {
+        let titleGroup = makeAnimationGroup()
+        titleGroup.beginTime = 0.0
+        typeLayer.add(titleGroup, forKey: "backgroundColor")
+    }
+```
+
+OK. If we run this now we will see our `typeLabel` shimmer!
+
+![](4.png)
+
+Now it's just a matter of doing it for the rest of the controls on the page.
+
+### Challenge
+
+See if you can make the `nameLabel` shimmer. Follow the steps we did for `typeLabel`.
+
+- Add a `nameLayer` gradient
+- Setup the layer
+- Setup the animation
+
+And then step your `nameLayer` animation on top of the `typeLayer` by doing something like this.
+
+```swift
+let nameGroup = makeAnimationGroup(previousGroup: typeGroup)
+nameLayer.add(nameGroup, forKey: "backgroundColor")
+```
+
+Good luck!
 
 
 ### Links that help
