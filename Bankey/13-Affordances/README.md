@@ -553,6 +553,44 @@ private func setupAnimation() {
 
 OK not bad. Just a couple of little touches up that would be good to make.
 
+You see how there is a little black dot peaking out from the edges of our shimmer labels? That's the underlying text of our `SkeletonCell` labels poking through.
+
+Let clean that up by assigning those labels blank spaces and dashes so the underlying text doesn't poke through.
+
+**SkeletonCell**
+
+```swift
+private func setup() {
+    typeLabel.text = "           "
+            
+    nameLabel.text = "           "
+
+    balanceLabel.text = "-Some balance-"
+
+    balanceAmountLabel.text = "-XXX,XXX.X-"    
+}
+```
+
+![](images/6.png)
+
+Alright! Good stuff. Let's now comment back in our `fetch` call for the networking.
+
+**AccountSummaryViewController**
+
+```swift
+// MARK: - Setup
+extension AccountSummaryViewController {
+    private func setup() {
+        setupNavigationBar()
+        setupTableView()
+        setupTableHeaderView()
+        setupRefreshControl()
+        setupSkeletons()
+        fetchDataAndLoadViews() //
+    }
+```
+
+And unfortunately the network call happens so fast we still can't see our skeleton cells loading. But we can slow down the network and force a slow network call by using a link conditioner like this.
 
 
 
