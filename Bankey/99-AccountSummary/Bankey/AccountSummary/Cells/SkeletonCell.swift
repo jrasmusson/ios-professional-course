@@ -12,18 +12,21 @@ extension SkeletonCell: SkeletonLoadable {}
 class SkeletonCell: UITableViewCell {
     
     let typeLabel = UILabel()
-    let typeLayer = CAGradientLayer()
-
     let underlineView = UIView()
     let nameLabel = UILabel()
-        
+
     let balanceStackView = UIStackView()
     let balanceLabel = UILabel()
     let balanceAmountLabel = UILabel()
         
     let chevronImageView = UIImageView()
     
-
+    // Gradients
+    let typeLayer = CAGradientLayer()
+    let nameLayer = CAGradientLayer()
+    let balanceLayer = CAGradientLayer()
+    let balanceAmountLayer = CAGradientLayer()
+    
     static let reuseID = "SkeletonCell"
     static let rowHeight: CGFloat = 112
     
@@ -43,7 +46,16 @@ class SkeletonCell: UITableViewCell {
         super.layoutSubviews()
         
         typeLayer.frame = typeLabel.bounds
-        typeLayer.cornerRadius = typeLabel.bounds.height / 2
+        typeLayer.cornerRadius = typeLabel.bounds.height/2
+        
+        nameLayer.frame = nameLabel.bounds
+        nameLayer.cornerRadius = nameLabel.bounds.height/2
+
+        balanceLayer.frame = balanceLabel.bounds
+        balanceLayer.cornerRadius = balanceLabel.bounds.height/2
+
+        balanceAmountLayer.frame = balanceAmountLabel.bounds
+        balanceAmountLayer.cornerRadius = balanceAmountLabel.bounds.height/2
     }
 }
 
@@ -86,12 +98,33 @@ extension SkeletonCell {
         typeLayer.startPoint = CGPoint(x: 0, y: 0.5)
         typeLayer.endPoint = CGPoint(x: 1, y: 0.5)
         typeLabel.layer.addSublayer(typeLayer)
+        
+        nameLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        nameLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        nameLabel.layer.addSublayer(nameLayer)
+
+        balanceLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        balanceLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        balanceLabel.layer.addSublayer(balanceLayer)
+
+        balanceAmountLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        balanceAmountLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        balanceAmountLabel.layer.addSublayer(balanceAmountLayer)
     }
     
     private func setupAnimation() {
-        let titleGroup = makeAnimationGroup()
-        titleGroup.beginTime = 0.0
-        typeLayer.add(titleGroup, forKey: "backgroundColor")
+        let typeGroup = makeAnimationGroup()
+        typeGroup.beginTime = 0.0
+        typeLayer.add(typeGroup, forKey: "backgroundColor")
+        
+        let nameGroup = makeAnimationGroup(previousGroup: typeGroup)
+        nameLayer.add(nameGroup, forKey: "backgroundColor")
+        
+        let balanceGroup = makeAnimationGroup(previousGroup: nameGroup)
+        balanceLayer.add(balanceGroup, forKey: "backgroundColor")
+
+        let balanceAmountGroup = makeAnimationGroup(previousGroup: balanceGroup)
+        balanceAmountLayer.add(balanceAmountGroup, forKey: "backgroundColor")
     }
     
     private func layout() {
