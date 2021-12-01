@@ -55,7 +55,7 @@ struct Account: Codable {
     let createdDateTime: Date
     
     static func makeSkeleton() -> Account {
-        return Account(id: "1", type: .Banking, name: "", amount: 0.0, createdDateTime: Date())
+        return Account(id: "1", type: .Banking, name: "Acount name", amount: 0.0, createdDateTime: Date())
     }
 }
 

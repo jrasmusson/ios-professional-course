@@ -592,9 +592,35 @@ extension AccountSummaryViewController {
 
 And unfortunately the network call happens so fast we still can't see our skeleton cells loading. But we can slow down the network and force a slow network call by using a link conditioner like this.
 
+## Network Link Conditioner
+
+Network Link Conditioner is Apple's offical too for simulating network connections.
+
+- [How to simulate poor network conditions](https://medium.com/macoclock/how-to-simulate-poor-network-conditions-on-ios-simulator-and-iphone-faf35f0da1b5)
+
+By following these instructions above you can install the tool in Xcode and slow down the network connections for your iPhone simulator and computer! So remember to turn it off when you are done.
+
+To start follow the instructions above to install.
+
+If your run into an error:
+
+> Could not load network link conditioner preference pane
+ 
+[Try installing](https://github.com/NSHipster/articles/issues/772) the Xcode 12.5 tool set even through you are working in Xcode 13. It a bug and this is the only way I could get it to work.
+ 
+![](images/7.png)
+
+But once installed you can use it to do things like this.
+
+- Demo network conditioner
+
+
+
+
 
 
 ### Links that help
 
 - [UIRefeshControl](https://developer.apple.com/documentation/uikit/uirefreshcontrol)
+- [How to simulate poor network conditions](https://medium.com/macoclock/how-to-simulate-poor-network-conditions-on-ios-simulator-and-iphone-faf35f0da1b5)
 
