@@ -141,6 +141,7 @@ extension AccountSummaryViewController {
             group.leave()
         }
 
+        group.enter()
         fetchAccounts(forUserId: "1") { result in
             switch result {
             case .success(let accounts):
@@ -149,6 +150,7 @@ extension AccountSummaryViewController {
             case .failure(let error):
                 print(error.localizedDescription)
             }
+            group.leave()
         }
         
         group.notify(queue: .main) {

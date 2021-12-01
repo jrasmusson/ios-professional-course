@@ -652,6 +652,21 @@ extension AccountSummaryViewController {
 }
 ```
 
+It's hard to see the skeletons when you network connection is fast. But we can see them there if we comment out fetching the data and running again.
+
+```swift
+// MARK: Actions
+extension AccountSummaryViewController {
+    
+    @objc func refreshContent() {
+        reset()
+        setupSkeletons()
+        tableView.reloadData()
+//        fetchData()
+    }
+```
+
+When we pull to refresh our skeletons will show
 
 ### Links that help
 
