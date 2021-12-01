@@ -23,7 +23,7 @@ Fortunately there is. It's called `DispatchGroup`. And it works like this.
 ```swift
 // MARK: - Networking
 extension AccountSummaryViewController {
-    private func fetchDataAndLoadViews() {
+    private func fetchData() {
         let group = DispatchGroup()
 
         group.enter()
@@ -84,7 +84,7 @@ private func setup() {
     setupTableView()
     setupTableHeaderView()
     setupRefreshControl() //
-    fetchDataAndLoadViews()
+    fetchData()
 }
 
 private func setupRefreshControl() {
@@ -96,12 +96,25 @@ private func setupRefreshControl() {
 // MARK: Actions
 extension AccountSummaryViewController {
     @objc func refreshContent() {
-        DispatchQueue.main.async {
-            self.fetchDataAndLoadViews()
-            self.tableView.refreshControl?.endRefreshing()
+            fetchData()
         }
     }
 }
+```
+
+And we will end the pull to refresh when our network calls return.
+
+```swift
+// MARK: - Networking
+extension AccountSummaryViewController {
+    private func fetchData() {
+   
+        group.notify(queue: .main) {
+            self.isLoaded = true
+            self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing() // 
+        }
+    }
 ```
 
 ## Skeleton loaders
@@ -290,7 +303,7 @@ extension AccountSummaryViewController {
         setupTableHeaderView()
         setupRefreshControl()
         setupSkeletons() //
-        fetchDataAndLoadViews()
+        fetchData()
     }
     
     private func setupSkeletons() {
@@ -343,7 +356,7 @@ extension AccountSummaryViewController {
         setupTableHeaderView()
         setupRefreshControl()
         setupSkeletons()
-//        fetchDataAndLoadViews()
+//        fetchData()
     }
 ```
 
@@ -586,7 +599,7 @@ extension AccountSummaryViewController {
         setupTableHeaderView()
         setupRefreshControl()
         setupSkeletons()
-        fetchDataAndLoadViews() //
+        fetchData() //
     }
 ```
 
@@ -599,7 +612,7 @@ One way to check there are working is to set a break point just when our network
 ```swift
 // MARK: - Networking
 extension AccountSummaryViewController {
-    private func fetchDataAndLoadViews() {
+    private func fetchData() {
         group.notify(queue: .main) {
             self.isLoaded = true
             self.tableView.reloadData() // 
@@ -615,7 +628,29 @@ One last nice little touch up would be to show skeletons when doing a pull to re
 
 We can do that by calling our skeleton setup when pull to refresh occurs and then let it refresh itself once the network calls are done.
 
+**AccountSummaryViewController**
 
+```swift
+// MARK: Actions
+extension AccountSummaryViewController {
+    @objc func logoutTapped(sender: UIButton) {
+        NotificationCenter.default.post(name: .logout, object: nil)
+    }
+    
+    @objc func refreshContent() {
+        reset()
+        loadSkeletons()
+        tableView.reloadData()
+        fetchData()
+    }
+    
+    private func reset() {
+        profile = nil
+        accounts = []
+        isLoaded = false
+    }
+}
+```
 
 
 ### Links that help

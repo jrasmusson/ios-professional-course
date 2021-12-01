@@ -44,7 +44,7 @@ extension AccountSummaryViewController {
         setupTableHeaderView()
         setupRefreshControl()
         setupSkeletons()
-        fetchDataAndLoadViews()
+        fetchData()
     }
     
     func setupNavigationBar() {
@@ -126,7 +126,7 @@ extension AccountSummaryViewController: UITableViewDelegate {
 
 // MARK: - Networking
 extension AccountSummaryViewController {
-    private func fetchDataAndLoadViews() {
+    private func fetchData() {
         let group = DispatchGroup()
         
         group.enter()
@@ -154,6 +154,7 @@ extension AccountSummaryViewController {
         group.notify(queue: .main) {
             self.isLoaded = true
             self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
     
@@ -180,9 +181,15 @@ extension AccountSummaryViewController {
     }
     
     @objc func refreshContent() {
-        DispatchQueue.main.async {
-            self.fetchDataAndLoadViews()
-            self.tableView.refreshControl?.endRefreshing()
-        }
+        reset()
+        setupSkeletons()
+        tableView.reloadData()
+        fetchData()
+    }
+    
+    private func reset() {
+        profile = nil
+        accounts = []
+        isLoaded = false
     }
 }
