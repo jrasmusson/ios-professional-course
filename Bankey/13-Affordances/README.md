@@ -40,9 +40,31 @@ extension AccountSummaryViewController {
 			group.leave()
         }
 
-        group.notify(queue: .main) {
-            self.tableView.reloadData()
+```
+
+Add then let's move the `tableView.reloadData()`.
+
+```swift
+        fetchProfile(forUserId: userId) { result in
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+                self.configureTableHeaderView(with: profile)
+                self.tableView.reloadData() // delete
         }
+
+        fetchAccounts(forUserId: userId) { result in
+            switch result {
+            case .success(let accounts):
+                self.accounts = accounts
+                self.configureTableCells(with: accounts)
+                self.tableView.reloadData() // delete
+        }
+
+        group.notify(queue: .main) {
+            self.tableView.reloadData() // add
+        }
+
 ```
 
 ### Save our work
@@ -121,7 +143,6 @@ private func setupRefreshControl() {
 extension AccountSummaryViewController {
     @objc func refreshContent() {
             fetchData()
-        }
     }
 }
 ```
@@ -171,10 +192,12 @@ Now when we pull to refresh, we will see the data change.
 
 Skeleton loaders are those nice shimmery boxes of grey that signal to the user things are loading.
 
-Do understand the mechanics behind how to add skeleton loaders we first need to understand:
+Demo.
+
+To understand the mechanics behind how to add skeleton loaders we first need to understand:
 
 - [Gradients](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/CoreAnimation/Gradients/README.md)
-- [Skeleton Loaders](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/Shimmer/README.md)
+- [How skeleton loaders work](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/Shimmer/README.md)
 
 ## Defining a protocol
 
@@ -408,14 +431,7 @@ Next let's add these into our `tableView`.
 
 ### Load Skeletons into TableView
 
-In order to show our skeleton cell while the network calls are loading we need to swap cells.
-
-There are a couple of ways we could do this:
-
-1. We could define a variable called `isLoaded` and use that to signal when our skeletons should be displayed.
-2. We could add a property onto `Account` called `isSkeleton`, and let the `Account` objects create the necessary `ViewModels` in such a way that when initially loaded, they can figure out for themselve whether they are skeletons or not.
-
-Let's go with the former, because I think it is simpler and it will make seeing how skeleton loaders work easier to understand.
+In order to show our skeleton cell while the network calls are loading let's define a variable called `isLoaded` and use that to signal when our skeletons should be displayed.
 
 **AccountSummaryViewController**
 
@@ -559,20 +575,6 @@ extension AccountSummaryViewController {
 }
 ```
 
-It's hard to see the skeletons when you network connection is fast. But we can see them there if we comment out fetching the data and running again.
-
-```swift
-// MARK: Actions
-extension AccountSummaryViewController {
-    
-    @objc func refreshContent() {
-        reset()
-        setupSkeletons()
-        tableView.reloadData()
-//        fetchData()
-    }
-```
-
 Now this is still hard to see. Because our network calls are so quick, it doesn't give time for our skeletons to appear.
 
 One thing we can in an attempt to slow our network requests down is to use the Network Link Conditioner.
@@ -598,6 +600,8 @@ If your run into an error:
 But once installed you can use it to do things like this.
 
 - Demo network conditioner
+- Re-install app if cacheing occurs too frequently
+- Turn of network link conditioner!
 
 
 ### Links that help
