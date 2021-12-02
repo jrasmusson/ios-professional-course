@@ -221,6 +221,16 @@ extension SkeletonLoadable {
         return group
     }
 }
+
+extension UIColor {
+    static var gradientDarkGrey: UIColor {
+        return UIColor(red: 239 / 255.0, green: 241 / 255.0, blue: 241 / 255.0, alpha: 1)
+    }
+
+    static var gradientLightGrey: UIColor {
+        return UIColor(red: 201 / 255.0, green: 201 / 255.0, blue: 201 / 255.0, alpha: 1)
+    }
+}
 ```
 
 Discussion
@@ -475,7 +485,6 @@ With our skeletons setup and ready to go, we just need to add some logic to disp
 extension AccountSummaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !accountCellViewModels.isEmpty else { return UITableViewCell() }
-
         let account = accountCellViewModels[indexPath.row]
 
         if isLoaded {
@@ -493,8 +502,9 @@ Now we just need to remember to set our `isLoaded` flag to true once the data lo
 
 ```swift
 group.notify(queue: .main) {
-    self.isLoaded = true
+    self.isLoaded = true // 
     self.tableView.reloadData()
+    self.tableView.refreshControl?.endRefreshing()
 }
 ```
 
@@ -517,265 +527,7 @@ extension AccountSummaryViewController {
 
 And if we run it now. Yay! Skeletons.
 
-![](images/3.png)
-
-Next, let's make those skeletons shimmer.
-
-## Making the skeletons shimmer
-
-To make our skeletons shimmer we are going to define a `SkeletonLoadable` protocol, let it create our shimmer animation group, and then inherit that in our `SkeletonCell`.
-
-But first let's define some colors.
-
-**UIColor+Utils**
-
-```swift
-import UIKit
-
-extension UIColor {
-    static var gradientDarkGrey: UIColor {
-        return UIColor(red: 239 / 255.0, green: 241 / 255.0, blue: 241 / 255.0, alpha: 1)
-    }
-
-    static var gradientLightGrey: UIColor {
-        return UIColor(red: 201 / 255.0, green: 201 / 255.0, blue: 201 / 255.0, alpha: 1)
-    }
-}
-```
-
-Then let's defining the protocol.
-
-**SkeletonLoadable**
-
-```swift
-import UIKit
-
-/*
- Functional programming inheritance.
- */
-
-protocol SkeletonLoadable {}
-
-extension SkeletonLoadable {
-    
-    func makeAnimationGroup(previousGroup: CAAnimationGroup? = nil) -> CAAnimationGroup {
-        let animDuration: CFTimeInterval = 1.5
-        let anim1 = CABasicAnimation(keyPath: #keyPath(CAGradientLayer.backgroundColor))
-        anim1.fromValue = UIColor.gradientLightGrey.cgColor
-        anim1.toValue = UIColor.gradientDarkGrey.cgColor
-        anim1.duration = animDuration
-        anim1.beginTime = 0.0
-
-        let anim2 = CABasicAnimation(keyPath: #keyPath(CAGradientLayer.backgroundColor))
-        anim2.fromValue = UIColor.gradientDarkGrey.cgColor
-        anim2.toValue = UIColor.gradientLightGrey.cgColor
-        anim2.duration = animDuration
-        anim2.beginTime = anim1.beginTime + anim1.duration
-
-        let group = CAAnimationGroup()
-        group.animations = [anim1, anim2]
-        group.repeatCount = .greatestFiniteMagnitude // infinite
-        group.duration = anim2.beginTime + anim2.duration
-        group.isRemovedOnCompletion = false
-
-        if let previousGroup = previousGroup {
-            // Offset groups by 0.33 seconds for effect
-            group.beginTime = previousGroup.beginTime + 0.33
-        }
-
-        return group
-    }
-    
-}
-```
-
-Then let's use that protocol in our `SkeletonCell`.
-
-**SkeletonCell**
-
-```swift
-// inherit
-extension SkeletonCell: SkeletonLoadable {}
-```
-
-This is how we do inheritance in Swift. Via protcols. By implement this we get access to `makeAnimationGroup`.
-
-Now we just need to make our cell shimmer. This is where we add our gradients to our labels.
-
-Let's start with one.
-
-```swift
-let typeLabel = UILabel()
-let typeLayer = CAGradientLayer()
-
-override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-    super.init(style: style, reuseIdentifier: reuseIdentifier)
-    setup()
-    setupLayers() //
-    setupAnimation() //
-    layout()
-}
-
-extension SkeletonCell {
-      
-    private func setupLayers() {
-        typeLayer.startPoint = CGPoint(x: 0, y: 0.5)
-        typeLayer.endPoint = CGPoint(x: 1, y: 0.5)
-        typeLabel.layer.addSublayer(typeLayer)
-    }
-    
-    private func setupAnimation() {
-        let typeGroup = makeAnimationGroup()
-        typeGroup.beginTime = 0.0
-        typeLayer.add(typeGroup, forKey: "backgroundColor")
-    }
-```
-
-OK. If we run this now we will see our `typeLabel` shimmer!
-
-![](4.png)
-
-Now it's just a matter of doing it for the rest of the controls on the page.
-
-### Challenge
-
-See if you can make the `nameLabel` shimmer. Follow the steps we did for `typeLabel`.
-
-- Add a `nameLayer` gradient
-- Setup the layer
-- Setup the animation
-
-And then step your `nameLayer` animation on top of the `typeLayer` by doing something like this.
-
-```swift
-let nameGroup = makeAnimationGroup(previousGroup: typeGroup)
-nameLayer.add(nameGroup, forKey: "backgroundColor")
-```
-
-Good luck!
-
-### Solution
-
-Here are the rest of the elements shimmering.
-
-**SkeletonCell**
-
-```swift
-// Gradients
-let typeLayer = CAGradientLayer()
-let nameLayer = CAGradientLayer()
-let balanceLayer = CAGradientLayer()
-let balanceAmountLayer = CAGradientLayer()
-
-override func layoutSubviews() {
-    super.layoutSubviews()
-    
-    typeLayer.frame = typeLabel.bounds
-    typeLayer.cornerRadius = typeLabel.bounds.height/2
-    
-    nameLayer.frame = nameLabel.bounds
-    nameLayer.cornerRadius = nameLabel.bounds.height/2
-
-    balanceLayer.frame = balanceLabel.bounds
-    balanceLayer.cornerRadius = balanceLabel.bounds.height/2
-
-    balanceAmountLayer.frame = balanceAmountLabel.bounds
-    balanceAmountLayer.cornerRadius = balanceAmountLabel.bounds.height/2
-}
-
-private func setupLayers() {
-    typeLayer.startPoint = CGPoint(x: 0, y: 0.5)
-    typeLayer.endPoint = CGPoint(x: 1, y: 0.5)
-    typeLabel.layer.addSublayer(typeLayer)
-    
-    nameLayer.startPoint = CGPoint(x: 0, y: 0.5)
-    nameLayer.endPoint = CGPoint(x: 1, y: 0.5)
-    nameLabel.layer.addSublayer(nameLayer)
-
-    balanceLayer.startPoint = CGPoint(x: 0, y: 0.5)
-    balanceLayer.endPoint = CGPoint(x: 1, y: 0.5)
-    balanceLabel.layer.addSublayer(balanceLayer)
-
-    balanceAmountLayer.startPoint = CGPoint(x: 0, y: 0.5)
-    balanceAmountLayer.endPoint = CGPoint(x: 1, y: 0.5)
-    balanceAmountLabel.layer.addSublayer(balanceAmountLayer)
-}
-
-private func setupAnimation() {
-    let typeGroup = makeAnimationGroup()
-    typeGroup.beginTime = 0.0
-    typeLayer.add(typeGroup, forKey: "backgroundColor")
-    
-    let nameGroup = makeAnimationGroup(previousGroup: typeGroup)
-    nameLayer.add(nameGroup, forKey: "backgroundColor")
-    
-    let balanceGroup = makeAnimationGroup(previousGroup: nameGroup)
-    balanceLayer.add(balanceGroup, forKey: "backgroundColor")
-
-    let balanceAmountGroup = makeAnimationGroup(previousGroup: balanceGroup)
-    balanceAmountLayer.add(balanceAmountGroup, forKey: "backgroundColor")
-}
-```
-
-![](images/5.png)
-
-OK not bad. Just a couple of little touches up that would be good to make.
-
-You see how there is a little black dot peaking out from the edges of our shimmer labels? That's the underlying text of our `SkeletonCell` labels poking through.
-
-Let clean that up by assigning those labels blank spaces and dashes so the underlying text doesn't poke through.
-
-**SkeletonCell**
-
-```swift
-private func setup() {
-    typeLabel.text = "           "
-            
-    nameLabel.text = "           "
-
-    balanceLabel.text = "-Some balance-"
-
-    balanceAmountLabel.text = "-XXX,XXX.X-"    
-}
-```
-
-![](images/6.png)
-
-Alright! Good stuff. Let's now comment back in our `fetch` call for the networking.
-
-**AccountSummaryViewController**
-
-```swift
-// MARK: - Setup
-extension AccountSummaryViewController {
-    private func setup() {
-        setupNavigationBar()
-        setupTableView()
-        setupTableHeaderView()
-        setupRefreshControl()
-        setupSkeletons()
-        fetchData() //
-    }
-```
-
-And unfortunately the network call happens so fast we still can't see our skeleton cells loading. 
-
-One way to check there are working is to set a break point just when our network calls complete.
-
-**AccountSummaryViewController**
-
-```swift
-// MARK: - Networking
-extension AccountSummaryViewController {
-    private func fetchData() {
-        group.notify(queue: .main) {
-            self.isLoaded = true
-            self.tableView.reloadData() // 
-        }
-    }
-```
-
-If we do that and run we will see our skeleton is loading. And by continuing our network call will complete.
+![](images/3a.png)
 
 ## Swapping skeletons in on pull to refresh
 
@@ -794,7 +546,7 @@ extension AccountSummaryViewController {
     
     @objc func refreshContent() {
         reset()
-        loadSkeletons()
+        setupSkeletons()
         tableView.reloadData()
         fetchData()
     }
@@ -821,7 +573,32 @@ extension AccountSummaryViewController {
     }
 ```
 
-When we pull to refresh our skeletons will show
+Now this is still hard to see. Because our network calls are so quick, it doesn't give time for our skeletons to appear.
+
+One thing we can in an attempt to slow our network requests down is to use the Network Link Conditioner.
+
+## Network Link Conditioner (Optional)
+
+Network Link Conditioner is Apple's offical too for simulating network connections.
+
+- [How to simulate poor network conditions](https://medium.com/macoclock/how-to-simulate-poor-network-conditions-on-ios-simulator-and-iphone-faf35f0da1b5)
+
+By following these instructions above you can install the tool in Xcode and slow down the network connections for your iPhone simulator and computer! So remember to turn it off when you are done.
+
+To start follow the instructions above to install.
+
+If your run into an error:
+
+> Could not load network link conditioner preference pane
+ 
+[Try installing](https://github.com/NSHipster/articles/issues/772) the Xcode 12.5 tool set even through you are working in Xcode 13. It a bug and this is the only way I could get it to work.
+ 
+![](images/7.png)
+
+But once installed you can use it to do things like this.
+
+- Demo network conditioner
+
 
 ### Links that help
 
