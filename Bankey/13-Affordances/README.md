@@ -1,8 +1,8 @@
 # Affordances
 
-## Dispatch Group
+## DispatchGroup
 
-It's hard to see, but sometimes parts of our app can load before others leading to a jarring `tableView.reload` experience. That, and because calling `tableView.reload` twice isn't very optimal, it would be nice if there was a way to only refresh the `tableView` once all the data has been fetched.
+It's hard to see, but sometimes parts of our app can load before others leading to a jarring `tableView.reload` experience. What would be nice if there was a way to group all our network calls together, and only reload the `tableView` once they've all completed.
 
 ![](images/0.png)
 
@@ -19,6 +19,10 @@ Fortunately there is. It's called `DispatchGroup`. And it works like this.
 ![](images/2.png)
 
 **AccountSummaryViewController**
+
+First let's rename `fetchDataAndLoadViews` > `fetchData`. Demo refactoring.
+
+Then let's add the `DispatchGroup`.
 
 ```swift
 // MARK: - Networking
@@ -61,7 +65,7 @@ Pull to refresh is a feature a lot of mobile apps have where you can pull down o
 - YouTube
 - Starbucks
 
-A lot of major apps have it. But we can have it too. And it's really easy to add now that we've grouped our network calls together.
+A lot of major apps have it. And we can have it too. And it's really easy to add now that we've grouped our network calls together.
 
 ### UIRefresh
 
@@ -71,7 +75,27 @@ This is a control you can attach to any `UIScrollView`, including table views an
 
 Let's add one to our account summary view.
 
+First let's move `setupNavigationBar` to `setup` where it belongs.
+
 **AccountSummaryViewController**
+
+```swift
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setup()
+        setupNavigationBar() //
+    }
+    
+    private func setup() {
+        setupNavigationBar() //
+        setupTableView()
+        setupTableHeaderView()
+        fetchData()
+    }
+
+```
+
+Then add refresh.
 
 ```swift
 // Components
@@ -110,61 +134,158 @@ extension AccountSummaryViewController {
     private func fetchData() {
    
         group.notify(queue: .main) {
-            self.isLoaded = true
             self.tableView.reloadData()
             self.tableView.refreshControl?.endRefreshing() // 
         }
     }
 ```
 
+Demo. Can now see the refresh control. But can't notice any different in the UI. Purely for testing purposes, lets randomize our networking and call different accounts every time the data is fetched.
+
+```swift
+// MARK: - Networking
+extension AccountSummaryViewController {
+    private func fetchData() {
+        let group = DispatchGroup()
+        
+        // Testing - random number selection
+        let userId = String(Int.random(in: 1..<4))
+        
+        group.enter()
+        fetchProfile(forUserId: userId) { result in
+        
+        group.enter()
+        fetchAccounts(forUserId: userId) { result in
+```
+
+Now when we pull to refresh, we will see the data change.
+
+### Save our work
+
+```
+> git add .
+> git commit -m "feat: Add refresh control"
+```
+
 ## Skeleton loaders
 
-Those nice shimmery boxes of grey that signal to the user things are loading.
+Skeleton loaders are those nice shimmery boxes of grey that signal to the user things are loading.
 
 Do understand the mechanics behind how to add skeleton loaders we first need to understand:
 
 - [Gradients](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/CoreAnimation/Gradients/README.md)
 - [Skeleton Loaders](https://github.com/jrasmusson/swift-arcade/blob/master/Animation/Shimmer/README.md)
 
+## Defining a protocol
+
+Wouldn't it be nice if we could have a class that handled the making of that animation group for us? Let's define a `SkeletonLoadable` protocol and put that logic in there.
+
+Create a new file called `SkeletonLoadable` in the `Cells` directory.
+
+```swift
+import UIKit
+
+/*
+ Functional programming inheritance.
+ */
+
+protocol SkeletonLoadable {}
+
+extension SkeletonLoadable {
+    
+    func makeAnimationGroup(previousGroup: CAAnimationGroup? = nil) -> CAAnimationGroup {
+        let animDuration: CFTimeInterval = 1.5
+        let anim1 = CABasicAnimation(keyPath: #keyPath(CAGradientLayer.backgroundColor))
+        anim1.fromValue = UIColor.gradientLightGrey.cgColor
+        anim1.toValue = UIColor.gradientDarkGrey.cgColor
+        anim1.duration = animDuration
+        anim1.beginTime = 0.0
+
+        let anim2 = CABasicAnimation(keyPath: #keyPath(CAGradientLayer.backgroundColor))
+        anim2.fromValue = UIColor.gradientDarkGrey.cgColor
+        anim2.toValue = UIColor.gradientLightGrey.cgColor
+        anim2.duration = animDuration
+        anim2.beginTime = anim1.beginTime + anim1.duration
+
+        let group = CAAnimationGroup()
+        group.animations = [anim1, anim2]
+        group.repeatCount = .greatestFiniteMagnitude // infinite
+        group.duration = anim2.beginTime + anim2.duration
+        group.isRemovedOnCompletion = false
+
+        if let previousGroup = previousGroup {
+            // Offset groups by 0.33 seconds for effect
+            group.beginTime = previousGroup.beginTime + 0.33
+        }
+
+        return group
+    }
+}
+```
+
+Discussion
+
+- Swift inheritance and how it is done with protocols
+
+
 ### Create a SkeletonCell
 
-Let's start by creating a placeholder `SkeletonCell`.
+Now let's create a `SkeletonCell` in `Cells` to contain our shimmering.
 
 **SkeletonCell**
 
 ```swift
-//
-//  SkeletonCell.swift
-//  Bankey
-//
-//  Created by jrasmusson on 2021-11-30.
-//
-
 import UIKit
+
+extension SkeletonCell: SkeletonLoadable {}
 
 class SkeletonCell: UITableViewCell {
     
     let typeLabel = UILabel()
     let underlineView = UIView()
     let nameLabel = UILabel()
-        
+
     let balanceStackView = UIStackView()
     let balanceLabel = UILabel()
     let balanceAmountLabel = UILabel()
         
     let chevronImageView = UIImageView()
-
+    
+    // Gradients
+    let typeLayer = CAGradientLayer()
+    let nameLayer = CAGradientLayer()
+    let balanceLayer = CAGradientLayer()
+    let balanceAmountLayer = CAGradientLayer()
+    
     static let reuseID = "SkeletonCell"
     static let rowHeight: CGFloat = 112
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
+        setupLayers()
+        setupAnimation()
         layout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        typeLayer.frame = typeLabel.bounds
+        typeLayer.cornerRadius = typeLabel.bounds.height/2
+        
+        nameLayer.frame = nameLabel.bounds
+        nameLayer.cornerRadius = nameLabel.bounds.height/2
+
+        balanceLayer.frame = balanceLabel.bounds
+        balanceLayer.cornerRadius = balanceLabel.bounds.height/2
+
+        balanceAmountLayer.frame = balanceAmountLabel.bounds
+        balanceAmountLayer.cornerRadius = balanceAmountLabel.bounds.height/2
     }
 }
 
@@ -174,15 +295,15 @@ extension SkeletonCell {
         typeLabel.translatesAutoresizingMaskIntoConstraints = false
         typeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         typeLabel.adjustsFontForContentSizeCategory = true
-        typeLabel.text = "Account type"
-        
+        typeLabel.text = "           "
+                
         underlineView.translatesAutoresizingMaskIntoConstraints = false
         underlineView.backgroundColor = appColor
 
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.preferredFont(forTextStyle: .body)
         nameLabel.adjustsFontSizeToFitWidth = true
-        nameLabel.text = "Account name"
+        nameLabel.text = "           "
 
         balanceStackView.translatesAutoresizingMaskIntoConstraints = false
         balanceStackView.axis = .vertical
@@ -192,15 +313,48 @@ extension SkeletonCell {
         balanceLabel.font = UIFont.preferredFont(forTextStyle: .body)
         balanceLabel.textAlignment = .right
         balanceLabel.adjustsFontSizeToFitWidth = true
-        balanceLabel.text = "Some balance"
+        balanceLabel.text = "-Some balance-"
 
         balanceAmountLabel.translatesAutoresizingMaskIntoConstraints = false
         balanceAmountLabel.textAlignment = .right
-        balanceAmountLabel.text = "$XXX,XXX.XX"
+        balanceAmountLabel.text = "-XXX,XXX.X-"
         
         chevronImageView.translatesAutoresizingMaskIntoConstraints = false
         let chevronImage = UIImage(systemName: "chevron.right")!.withTintColor(appColor, renderingMode: .alwaysOriginal)
         chevronImageView.image = chevronImage
+    }
+    
+    private func setupLayers() {
+        typeLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        typeLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        typeLabel.layer.addSublayer(typeLayer)
+        
+        nameLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        nameLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        nameLabel.layer.addSublayer(nameLayer)
+
+        balanceLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        balanceLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        balanceLabel.layer.addSublayer(balanceLayer)
+
+        balanceAmountLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        balanceAmountLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        balanceAmountLabel.layer.addSublayer(balanceAmountLayer)
+    }
+    
+    private func setupAnimation() {
+        let typeGroup = makeAnimationGroup()
+        typeGroup.beginTime = 0.0
+        typeLayer.add(typeGroup, forKey: "backgroundColor")
+        
+        let nameGroup = makeAnimationGroup(previousGroup: typeGroup)
+        nameLayer.add(nameGroup, forKey: "backgroundColor")
+        
+        let balanceGroup = makeAnimationGroup(previousGroup: nameGroup)
+        balanceLayer.add(balanceGroup, forKey: "backgroundColor")
+
+        let balanceAmountGroup = makeAnimationGroup(previousGroup: balanceGroup)
+        balanceAmountLayer.add(balanceAmountGroup, forKey: "backgroundColor")
     }
     
     private func layout() {
@@ -233,17 +387,18 @@ extension SkeletonCell {
 }
 ```
 
-This is basically a copy of our `AccountSummaryCell` without the `ViewModel` and `configure` methods.
+This is basically a copy of our `AccountSummaryCell` without the `ViewModel` and `configure` methods. The layout is the same. 
 
-The layout is the same. Which is basically what we want.
+Discussion
+
+- Show inheritance of `makeAnimationGroup` function
+- Show text filler used and why
 
 Next let's add these into our `tableView`.
 
 ### Load Skeletons into TableView
 
-The way skeletons work is we want our `UITableView` to be loaded and displaying these while are actual network calls are going on.
-
-When our network calls completely, we will swap out the `SkeletonCell`, and display the `AccountSummaryCell` configured with our loaded data.
+In order to show our skeleton cell while the network calls are loading we need to swap cells.
 
 There are a couple of ways we could do this:
 

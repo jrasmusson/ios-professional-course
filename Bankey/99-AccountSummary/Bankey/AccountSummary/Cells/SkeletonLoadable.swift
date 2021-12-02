@@ -42,5 +42,4 @@ extension SkeletonLoadable {
 
         return group
     }
-    
 }
