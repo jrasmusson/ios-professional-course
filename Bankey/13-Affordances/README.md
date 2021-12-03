@@ -608,6 +608,7 @@ But once installed you can use it to do things like this.
 
 ### Links that help
 
+- [DispatchGroup](https://developer.apple.com/documentation/dispatch/dispatchgroup)
 - [UIRefeshControl](https://developer.apple.com/documentation/uikit/uirefreshcontrol)
 - [How to simulate poor network conditions](https://medium.com/macoclock/how-to-simulate-poor-network-conditions-on-ios-simulator-and-iphone-faf35f0da1b5)
 
