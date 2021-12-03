@@ -1,5 +1,7 @@
 # Affordances
 
+![](images/8.png)
+
 ## DispatchGroup
 
 It's hard to see, but sometimes parts of our app can load before others leading to a jarring `tableView.reload` experience. What would be nice if there was a way to group all our network calls together, and only reload the `tableView` once they've all completed.
