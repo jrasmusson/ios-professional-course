@@ -44,7 +44,7 @@ extension AccountSummaryViewController {
         setupTableHeaderView()
         setupRefreshControl()
         setupSkeletons()
-        fetchData()
+//        fetchData()
     }
     
     func setupNavigationBar() {

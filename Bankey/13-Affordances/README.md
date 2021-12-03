@@ -605,6 +605,12 @@ But once installed you can use it to do things like this.
 - Re-install app if cacheing occurs too frequently
 - Turn of network link conditioner!
 
+### Save your work
+
+```
+> git add .
+> git commit -m "feat: Add skeleton pull to refresh"
+```
 
 ### Links that help
 
