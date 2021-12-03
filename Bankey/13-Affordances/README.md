@@ -609,8 +609,17 @@ But once installed you can use it to do things like this.
 
 ```
 > git add .
-> git commit -m "feat: Add skeleton pull to refresh"
+> git commit -m "feat: Add skeleton to pull to refresh"
 ```
+
+### What we've learned
+
+- 🕸  How to group network calls together - DispatchGroup
+- 🔄  How to make your app refreshable - UIRefresh
+- 🌈 How to create gradients
+- 💀 How to signal app loading with skeleton loaders
+- 🪜 Swift inheritance
+- 🐌 How to simulate slow network calls - Network Link Conditioner
 
 ### Links that help
 
