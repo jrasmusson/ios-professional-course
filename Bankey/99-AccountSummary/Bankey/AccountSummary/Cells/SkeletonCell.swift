@@ -77,7 +77,7 @@ extension SkeletonCell {
 
         balanceStackView.translatesAutoresizingMaskIntoConstraints = false
         balanceStackView.axis = .vertical
-        balanceStackView.spacing = 0
+        balanceStackView.spacing = 4
 
         balanceLabel.translatesAutoresizingMaskIntoConstraints = false
         balanceLabel.font = UIFont.preferredFont(forTextStyle: .body)
