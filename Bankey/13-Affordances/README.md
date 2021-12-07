@@ -704,9 +704,9 @@ Let's pop up an alert and give them at left some feedback that we know something
 private func configureTableCells(with accounts: [Account]) {
 }
 
-private func showErroAlert() {
+private func showErrorAlert() {
     let alert = UIAlertController(title: "Network Error",
-                                  message: "There was an error fetching your profile. Please check your network connectivity or restart the app.",
+                                  message: "Please check your network connectivity and try again.",
                                   preferredStyle: .alert)
     
     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -761,17 +761,20 @@ fetchProfile(forUserId: userId) { result in
 }
 ```
 
-And then based on the error return, refactor the `showErrorAlert` funct to take a `title` and `message` String and display
+And then based on the error return, refactor the `showErrorAlert` func to take a `title` and `message` String and display one of the following messages:
 
-- `title` = `Server Error`
-- `message` = `We could not process your request. Please try again.`
+case serverError:
 
-If the error is of type server, and
+ - `title` = `Server Error`
+ - `message` = `Ensure you are connected to the internet. Please try again.`
 
-- `title` = `Network Error`
-- `message` = `Ensure you are connected to the internet. Please try again.`
+case decodingError:
 
-If the error is of type network. Go that a go. Come back, and we'll do it together.
+ - `title` = `Decoding Error`
+ - `message` = `We could not process your request. Please try again.`
+
+
+Give that a go. Comeback and we'll do it together. 
 
 ### Solution
 
@@ -798,10 +801,10 @@ case .failure(let error):
     switch error {
     case .serverError:
         title = "Server Error"
-        message = "We could not process your request. Please try again."
-    case .decodingError:
-        title = "Network Error"
         message = "Ensure you are connected to the internet. Please try again."
+    case .decodingError:
+        title = "Decoding Error"
+        message = "We could not process your request. Please try again."
     }
     self.showErrorAlert(title: title, message: message)
 }
@@ -892,6 +895,12 @@ extension AccountSummaryViewController {
 
 Good stuff. Network error cases handled.
 
+### Save your work
+
+```
+> git add .
+> git commit -m "feat: Handle network errors"
+```
 
 ### What we've learned
 
