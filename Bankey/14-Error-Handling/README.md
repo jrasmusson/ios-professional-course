@@ -72,7 +72,7 @@ fetchProfile(forUserId: userId) { result in
 
 If we run the app now we see an error alert pop-up.
 
-![](images/1.png)
+<img src="images/1.png" width="500">
 
 ### Challenge
 
