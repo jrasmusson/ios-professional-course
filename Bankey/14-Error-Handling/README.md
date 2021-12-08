@@ -34,7 +34,7 @@ This is an easy way to test and force and error in your app. Just hard code it a
 
 When we run the app now our screen just sits there stuck loading skeletons.
 
-![](images/0.png)
+<img src="images/0.png" width="500">
 
 Let's pop up an alert and give them at left some feedback that we know something is going wrong.
 
