@@ -34,7 +34,7 @@ This is an easy way to test and force and error in your app. Just hard code it a
 
 When we run the app now our screen just sits there stuck loading skeletons.
 
-![](images/9.png)
+![](images/0.png)
 
 Let's pop up an alert and give them at left some feedback that we know something is going wrong.
 
@@ -72,7 +72,7 @@ fetchProfile(forUserId: userId) { result in
 
 If we run the app now we see an error alert pop-up.
 
-![](images/10.png)
+![](images/1.png)
 
 ### Challenge
 
@@ -245,16 +245,12 @@ Good stuff. Network error cases handled.
 
 ### What we've learned
 
-- 🕸  How to group network calls together - DispatchGroup
-- 🔄  How to make your app refreshable - UIRefresh
-- 🌈 How to create gradients
-- 💀 How to signal app loading with skeleton loaders
-- 🪜 Swift inheritance
-- 🐌 How to simulate slow network calls - Network Link Conditioner
+- 💥  How to manually test for network errors
+- ⛑  How to fix them with pop-ups and alerts
+- 🚀  How to unit test network code
+- 🌟 How to build a more robust application
 
 ### Links that help
 
-- [DispatchGroup](https://developer.apple.com/documentation/dispatch/dispatchgroup)
-- [UIRefeshControl](https://developer.apple.com/documentation/uikit/uirefreshcontrol)
-- [How to simulate poor network conditions](https://medium.com/macoclock/how-to-simulate-poor-network-conditions-on-ios-simulator-and-iphone-faf35f0da1b5)
-
+- [UIAlertController](https://developer.apple.com/documentation/uikit/uialertcontroller)
+- [UIAlertControllerExample](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/UIAlertController/UIAlertController.md)
