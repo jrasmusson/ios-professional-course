@@ -1,5 +1,7 @@
 # Error Handling
 
+![](images/3.png)
+
 It's easy to stick to happy path scenarios when building apps. But just as important is adding affordances for when things go wrong.
 
 Let's look at a couple of ways we can anticipate things going wrong and then adding affordance to handle them.
@@ -251,17 +253,114 @@ Let's look at a couple of ways we could unit test the displaying or alerts, and 
 
 ### Dependency Injection
 
-- what is it
-- how does it work
-- why is is so handy for unit testing
+![](images/2.png)
 
-### Creating the protocol
+- What is it?
+- How does it work?
+- Why is is so handy for unit testing?
 
-### Refactoring the code to use the protocol
+### Define the protocol
 
-### Injecting it into our app
+This is the thing we are going to inject into our ViewController. Create a new section called `Networking` and create a new file in there called `ProfileManager`.
 
-### Leveraging it in our unit tests
+![](images/4.png)
+
+**ProfileManager**
+
+```swift
+protocol ProfileManageable {
+    func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile,NetworkError>) -> Void)
+}
+```
+
+### Create the concrete real implementation
+
+Now we need something to implement this protocol. Something that can do the actually networking.
+
+Currently this code is embedded in our `AccountSummaryViewController+Networking` extention. Let's extract it and all related code into it's this newly created file.
+
+**ProfileManager**
+
+```swift
+protocol ProfileManageable {
+    func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile,NetworkError>) -> Void)
+}
+
+enum NetworkError: Error {
+    case serverError
+    case decodingError
+}
+
+struct Profile: Codable {
+    let id: String
+    let firstName: String
+    let lastName: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case firstName = "first_name"
+        case lastName = "last_name"
+    }
+}
+
+struct ProfileManager: ProfileManageable {
+    func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile,NetworkError>) -> Void) {
+        let url = URL(string: "https://fierce-retreat-36855.herokuapp.com/bankey/profile/\(userId)")!
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            DispatchQueue.main.async {
+                guard let data = data, error == nil else {
+                    completion(.failure(.serverError))
+                    return
+                }
+
+                do {
+                    let profile = try JSONDecoder().decode(Profile.self, from: data)
+                    completion(.success(profile))
+                } catch {
+                    completion(.failure(.decodingError))
+                }
+            }
+        }.resume()
+    }
+}
+```
+
+Discussion:
+
+- Note how we are implementing the protocol
+
+Now we just need to update the `AccountSummaryViewController` to use it.
+
+**AccountSummaryViewController**
+
+```swift
+// Components
+...
+let refreshControl = UIRefreshControl()
+    
+// Networking
+var profileManageable = ProfileManager() //
+
+// MARK: - Networking
+extension AccountSummaryViewController {
+    private func fetchData() {
+		...        
+        group.enter()
+        profileManageable.fetchProfile(forUserId: userId) { //
+
+```
+
+Run the app. Everything should still work.
+
+But this is magic. Now that we have this protocol defined, we can *inject* whatever we want.
+
+Let's now head over to the unit testing section of our app, and see what tests we can write there.
+
+### Leveraging protocols in our unit tests
+
+
+
 
 
 ### What we've learned
