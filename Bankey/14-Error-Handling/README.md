@@ -243,6 +243,27 @@ Good stuff. Network error cases handled.
 > git commit -m "feat: Handle network errors"
 ```
 
+## Unit testing network failures
+
+As good as manually testing network errors are, what's even better is if we can automate them. 
+
+Let's look at a couple of ways we could unit test the displaying or alerts, and while keeping our application intact.
+
+### Dependency Injection
+
+- what is it
+- how does it work
+- why is is so handy for unit testing
+
+### Creating the protocol
+
+### Refactoring the code to use the protocol
+
+### Injecting it into our app
+
+### Leveraging it in our unit tests
+
+
 ### What we've learned
 
 - 💥  How to manually test for network errors
