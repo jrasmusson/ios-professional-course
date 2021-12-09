@@ -134,27 +134,8 @@ extension AccountSummaryViewController {
         // Testing - random number selection
         let userId = String(Int.random(in: 1..<4))
         
-        group.enter()
-        profileManageable.fetchProfile(forUserId: userId) { result in
-            switch result {
-            case .success(let profile):
-                self.profile = profile
-            case .failure(let error):
-                self.displayError(error)
-            }
-            group.leave()
-        }
-
-        group.enter()
-        fetchAccounts(forUserId: userId) { result in
-            switch result {
-            case .success(let accounts):
-                self.accounts = accounts
-            case .failure(let error):
-                self.displayError(error)
-            }
-            group.leave()
-        }
+        fetchProfile(group: group, userId: userId)
+        fetchAccounts(group: group, userId: userId)
         
         group.notify(queue: .main) {
             self.tableView.refreshControl?.endRefreshing()
@@ -165,6 +146,32 @@ extension AccountSummaryViewController {
             self.configureTableHeaderView(with: profile)
             self.configureTableCells(with: self.accounts)
             self.tableView.reloadData()
+        }
+    }
+    
+    func fetchProfile(group: DispatchGroup, userId: String) {
+        group.enter()
+        profileManageable.fetchProfile(forUserId: userId) { result in
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+            case .failure(let error):
+                self.displayError(error)
+            }
+            group.leave()
+        }
+    }
+    
+    func fetchAccounts(group: DispatchGroup, userId: String) {
+        group.enter()
+        fetchAccounts(forUserId: userId) { result in
+            switch result {
+            case .success(let accounts):
+                self.accounts = accounts
+            case .failure(let error):
+                self.displayError(error)
+            }
+            group.leave()
         }
     }
     

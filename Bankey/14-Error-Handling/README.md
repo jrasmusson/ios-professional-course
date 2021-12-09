@@ -359,8 +359,93 @@ Let's now head over to the unit testing section of our app, and see what tests w
 
 ### Leveraging protocols in our unit tests
 
+Let's create a new file called `ProfileNetworkingTests`.
 
+![](images/5.png)
 
+And let's start by writing a happy path scenario for what we expect to happen when `AccountSummaryViewController` calls `fetchProfile`.
+
+**ProfileNetworkingTests**
+
+```swift
+import Foundation
+
+import XCTest
+
+@testable import Bankey
+
+class ProfileNetworkingTests: XCTestCase {
+    var vc: AccountSummaryViewController!
+    
+    override func setUp() {
+        super.setUp()
+        vc = AccountSummaryViewController()
+        vc.loadViewIfNeeded()
+    }
+    
+    func testFetchProfile() throws {
+        
+    }
+}
+```
+
+What we really want to test here, is that the `profile` gets set after we successfully do a fetch.
+
+**AccountSummaryViewController**
+
+```swfit
+case .success(let profile):
+    self.profile = profile
+```
+
+The problem is we have no way of triggering it from our test. Let's make `AccountSummaryViewController` a little more testable by extracting `fetchProfile` and `fetchAccounts` into their own public methods, and then call these directly from our unit test.
+
+**AccountSummaryViewController**
+
+```swift
+fetchProfile(group: group, userId: userId)
+fetchAccounts(group: group, userId: userId)
+
+func fetchProfile(group: DispatchGroup, userId: String) {
+    group.enter()
+    profileManageable.fetchProfile(forUserId: userId) { result in
+        switch result {
+        case .success(let profile):
+            self.profile = profile
+        case .failure(let error):
+            self.displayError(error)
+        }
+        group.leave()
+    }
+}
+    
+func fetchAccounts(group: DispatchGroup, userId: String) {
+    group.enter()
+    fetchAccounts(forUserId: userId) { result in
+        switch result {
+        case .success(let accounts):
+            self.accounts = accounts
+        case .failure(let error):
+            self.displayError(error)
+        }
+        group.leave()
+    }
+}
+```
+
+Now we can call `fetchProfile` directly from our unit test and assert that profile gets set.
+
+We'll start first by asserting that initially the `profile` is `nil`.
+
+**ProfileNetworkingTests**
+
+```swift
+func testFetchProfile() throws {
+    XCTAssertNil(vc.profile)
+}
+```
+
+And then expand the test to verify that it is not `nil` after.
 
 
 ### What we've learned
