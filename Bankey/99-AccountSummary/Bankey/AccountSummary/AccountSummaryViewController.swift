@@ -23,7 +23,7 @@ class AccountSummaryViewController: UIViewController {
     let refreshControl = UIRefreshControl()
     
     // Networking
-    var profileManageable = ProfileManager()
+    var profileManageable: ProfileManageable = ProfileManager()
     
     var isLoaded = false
     
