@@ -398,15 +398,16 @@ case .success(let profile):
     self.profile = profile
 ```
 
-The problem is we have no way of triggering it from our test. Let's make `AccountSummaryViewController` a little more testable by extracting `fetchProfile` and `fetchAccounts` into their own public methods, and then call these directly from our unit test.
+The problem is we have no way of triggering it from our test. Let's make `AccountSummaryViewController` a little more testable by extracting `fetchProfile` and `fetchAccounts` into their own public methods.
 
 **AccountSummaryViewController**
 
 ```swift
 fetchProfile(group: group, userId: userId)
 fetchAccounts(group: group, userId: userId)
+self.reloadView()
 
-func fetchProfile(group: DispatchGroup, userId: String) {
+private func fetchProfile(group: DispatchGroup, userId: String) {
     group.enter()
     profileManageable.fetchProfile(forUserId: userId) { result in
         switch result {
@@ -419,7 +420,7 @@ func fetchProfile(group: DispatchGroup, userId: String) {
     }
 }
     
-func fetchAccounts(group: DispatchGroup, userId: String) {
+private func fetchAccounts(group: DispatchGroup, userId: String) {
     group.enter()
     fetchAccounts(forUserId: userId) { result in
         switch result {
@@ -431,21 +432,115 @@ func fetchAccounts(group: DispatchGroup, userId: String) {
         group.leave()
     }
 }
+
+private func reloadView() {
+    self.tableView.refreshControl?.endRefreshing()
+    
+    guard let profile = self.profile else { return }
+    
+    self.isLoaded = true
+    self.configureTableHeaderView(with: profile)
+    self.configureTableCells(with: self.accounts)
+    self.tableView.reloadData()
+}
 ```
 
-Now we can call `fetchProfile` directly from our unit test and assert that profile gets set.
+And then add a unit testing extension to access them publically.
 
-We'll start first by asserting that initially the `profile` is `nil`.
+```swift
+// MARK: Unit testing
+extension AccountSummaryViewController {
+    func forceFetchProfile() {
+        fetchProfile(group: DispatchGroup(), userId: "1")
+    }
+}
+```
+
+Discussion:
+
+- Why the unit testing extension?
+- Trade-offs of OO and testability
+
+Now that our view controller is a little more testable, let's start with the happy path scenario of simply calling `fetchProfile` and verifying it sets the profile it returns to non-nil.
 
 **ProfileNetworkingTests**
 
 ```swift
 func testFetchProfile() throws {
-    XCTAssertNil(vc.profile)
+    vc.profile = nil
+    
+    vc.forceFetchProfile()
+    XCTAssertNotNil(vc.profile)
 }
 ```
 
-And then expand the test to verify that it is not `nil` after.
+OK - if we run this now our test fails. Why? Because we are trying to do an asynchronous HTTP call. The way the view controller is configured, it is using the real `ProfileManageable` object that goes out and does the network call. We don't want that.
+
+Unit tests that make network calls aren't really unit tests. They are more integration tests. Which are valuable. They just aren't the kind of test we want to write here.
+
+What we want instead is something that is:
+
+- Deterministic
+- Not flakey
+- Can be run reliable
+- And is fast
+
+That's kind of what a unit test is. Something fast, that doesn't rely on external dependencies. And can be run over-and-over again and never fail.
+
+This is where our dependency-injection comes in. 
+
+We can swap out the real network call with a fake one by defining a `StubProfileManager`, inserting it into the view controller in the unit test, and then control what happens from there.
+
+Let's start by adding a `profileManager` to the test.
+
+**ProfileNetworkingTests**
+
+```swift
+var vc: AccountSummaryViewController!
+var profileManager: ProfileManageable! //
+```
+
+Then let create a stub to return hard coded values of synchronously of whatever we'd like to return.
+
+```swift
+struct StubProfileManager: ProfileManageable {
+    var profile = Profile(id: "1", firstName: "FirstName", lastName: "LastName")
+    
+    func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile, NetworkError>) -> Void) {
+        completion(.success(profile))
+    }
+}
+```
+
+Explain what this is doing.
+
+Then we can inject it into our view controller in the setup.
+
+```swift
+override func setUp() {
+    super.setUp()
+    vc = AccountSummaryViewController()
+    
+    profileManager = StubProfileManager() //
+    vc.profileManageable = profileManager! //
+    
+    vc.loadViewIfNeeded()
+}
+```
+
+Now when we run out tests they pass, because we are using the stub instead of the real network call manager.
+
+✅ Tests pass
+
+Disucssion:
+
+- Why we don't really want to do a real network call
+- How we make this synchronous
+- Stub vs Mock
+
+## Testing for errors
+
+U R HERE
 
 
 ### What we've learned
@@ -459,3 +554,4 @@ And then expand the test to verify that it is not `nil` after.
 
 - [UIAlertController](https://developer.apple.com/documentation/uikit/uialertcontroller)
 - [UIAlertControllerExample](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/UIAlertController/UIAlertController.md)
+- [Mocks vs Stubs](https://martinfowler.com/articles/mocksArentStubs.html)

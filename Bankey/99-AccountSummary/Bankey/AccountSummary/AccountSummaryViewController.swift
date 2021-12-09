@@ -138,18 +138,11 @@ extension AccountSummaryViewController {
         fetchAccounts(group: group, userId: userId)
         
         group.notify(queue: .main) {
-            self.tableView.refreshControl?.endRefreshing()
-            
-            guard let profile = self.profile else { return }
-            
-            self.isLoaded = true
-            self.configureTableHeaderView(with: profile)
-            self.configureTableCells(with: self.accounts)
-            self.tableView.reloadData()
+            self.reloadView()
         }
     }
     
-    func fetchProfile(group: DispatchGroup, userId: String) {
+    private func fetchProfile(group: DispatchGroup, userId: String) {
         group.enter()
         profileManageable.fetchProfile(forUserId: userId) { result in
             switch result {
@@ -162,7 +155,7 @@ extension AccountSummaryViewController {
         }
     }
     
-    func fetchAccounts(group: DispatchGroup, userId: String) {
+    private func fetchAccounts(group: DispatchGroup, userId: String) {
         group.enter()
         fetchAccounts(forUserId: userId) { result in
             switch result {
@@ -173,6 +166,17 @@ extension AccountSummaryViewController {
             }
             group.leave()
         }
+    }
+    
+    private func reloadView() {
+        self.tableView.refreshControl?.endRefreshing()
+        
+        guard let profile = self.profile else { return }
+        
+        self.isLoaded = true
+        self.configureTableHeaderView(with: profile)
+        self.configureTableCells(with: self.accounts)
+        self.tableView.reloadData()
     }
     
     private func configureTableHeaderView(with profile: Profile) {
@@ -232,5 +236,12 @@ extension AccountSummaryViewController {
         profile = nil
         accounts = []
         isLoaded = false
+    }
+}
+
+// MARK: Unit testing
+extension AccountSummaryViewController {
+    func forceFetchProfile() {
+        fetchProfile(group: DispatchGroup(), userId: "1")
     }
 }
