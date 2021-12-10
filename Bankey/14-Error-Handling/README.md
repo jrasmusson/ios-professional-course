@@ -268,10 +268,14 @@ This is the thing we are going to inject into our ViewController. Create a new s
 **ProfileManager**
 
 ```swift
-protocol ProfileManageable {
+protocol ProfileManageable: AnyObject {
     func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile,NetworkError>) -> Void)
 }
 ```
+
+Discussion:
+
+- Why `AnyObject`
 
 ### Create the concrete real implementation
 
@@ -303,7 +307,7 @@ struct Profile: Codable {
     }
 }
 
-struct ProfileManager: ProfileManageable {
+class ProfileManager: ProfileManageable {
     func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile,NetworkError>) -> Void) {
         let url = URL(string: "https://fierce-retreat-36855.herokuapp.com/bankey/profile/\(userId)")!
 
@@ -329,6 +333,7 @@ struct ProfileManager: ProfileManageable {
 Discussion:
 
 - Note how we are implementing the protocol
+- Note how this is a `class`.
 
 Now we just need to update the `AccountSummaryViewController` to use it.
 
@@ -460,6 +465,7 @@ Discussion:
 
 - Why the unit testing extension?
 - Trade-offs of OO and testability
+- Trading encapsulation for testability.
 
 Now that our view controller is a little more testable, let's start with the happy path scenario of simply calling `fetchProfile` and verifying it sets the profile it returns to non-nil.
 
@@ -482,7 +488,7 @@ What we want instead is something that is:
 
 - Deterministic
 - Not flakey
-- Can be run reliable
+- Can be run reliably
 - And is fast
 
 That's kind of what a unit test is. Something fast, that doesn't rely on external dependencies. And can be run over-and-over again and never fail.
@@ -497,10 +503,10 @@ Let's start by adding a `profileManager` to the test.
 
 ```swift
 var vc: AccountSummaryViewController!
-var profileManager: ProfileManageable! //
+var stubManager: StubProfileManager! //
 ```
 
-Then let create a stub to return hard coded values of synchronously of whatever we'd like to return.
+Then let create a stub implementing `ProfileManageable` to return hard coded values synchronously of whatever want - in this case a fake profile.
 
 ```swift
 struct StubProfileManager: ProfileManageable {
@@ -521,8 +527,8 @@ override func setUp() {
     super.setUp()
     vc = AccountSummaryViewController()
     
-    profileManager = StubProfileManager() //
-    vc.profileManageable = profileManager! //
+    stubManager = StubProfileManager() //
+    vc.profileManageable = stubManager //
     
     vc.loadViewIfNeeded()
 }
@@ -532,15 +538,42 @@ Now when we run out tests they pass, because we are using the stub instead of th
 
 ✅ Tests pass
 
-Disucssion:
+Discussion:
 
-- Why we don't really want to do a real network call
 - How we make this synchronous
 - Stub vs Mock
 
 ## Testing for errors
 
-U R HERE
+OK. Not bad. Happy path works. What we really want though are error conditions. Want to test that an alert pops up when these two errors occur:
+
+```swift
+enum NetworkError: Error {
+    case serverError
+    case decodingError
+}
+```
+
+Fortunately, we've done the heavily lifting, and can now leverage our stub to return an error instead of a profile.
+
+First let's add an optional error to our stub. And if the error is present, return it instead of the profile.
+
+**ProfileNetworkingTests**
+
+```swift
+struct StubProfileManager: ProfileManageable {
+    var profile = Profile(id: "1", firstName: "FirstName", lastName: "LastName")
+    var error: NetworkError? // 
+    
+    func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile, NetworkError>) -> Void) {
+        if let error = error { //
+            completion(.failure(error))
+        }
+        completion(.success(profile))
+    }
+}
+```
+
 
 
 ### What we've learned
