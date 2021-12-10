@@ -362,6 +362,177 @@ But this is magic. Now that we have this protocol defined, we can *inject* whate
 
 Let's now head over to the unit testing section of our app, and see what tests we can write there.
 
+## Unit testing view controllers
+
+Unit testing view controllers can be tricky.
+
+- View hierarchies between tests and production don't always match
+- Getting access to view and view controllers in tests can be tricky
+- And then you've got view controller life cycle stuff to worry about. Gotta know when `viewDidLoad` is called an how that affects your tests.
+
+Let's now look at a few options, and ask ourselves.
+
+1. What do we want to test.
+2. How can we test it.
+
+### Looking for effects
+
+Unit testing is about looking for effects. You do something - you expect something to change.
+
+For us, we want to test that:
+
+- when fetchProfile succeeds - profile gets set
+- when fetchProfile fails - an alert pops up
+
+  
+    Case 1: fetchProfile succeeds - happy path
+     
+     We can verify that the profile gets set on our view controller by
+     stubbing out the manager, and then checking that the vc.profile got set.
+     */
+    
+    func testFetch() throws {
+        vc.forceFetchProfile()
+        XCTAssertNotNil(stubManager.profile)
+    }
+
+    /*
+     Case 2: fetchProfile fails
+        2a - serverError
+        2b - decodingError
+     
+     Only way we know if one error occurs over the other is to check the
+     title and message of our UIAlertView. Getting access to viewControllers
+     in unit tests is tricky. You have a lot of view hierarchy warnings and issues and because
+     view heirarchies in tests don't always match runtime in production, setting up and testing
+     for the presence of view controllers can be tricky.
+     
+     For example if we tried asserting for the presence of the alert and its associated title
+     and message.
+    
+     We'd see warnings like this:
+     
+     Attempt to present <UIAlertController: 0x7feac005ea00> on <Bankey.AccountSummaryViewController: 0x7feac0031200> (from <Bankey.AccountSummaryViewController: 0x7feac0031200>) whose view is not in the window hierarchy.
+     
+     There are a couple of ways to deal with this.
+     
+     1. One is to break your logic down into smaller bits and do your unit tests on smaller pieces.
+     2. Is to create instance variables of the things that are affected as a result of your test,
+     and access those.
+     
+     Let's do both.
+     
+ ### Breaking things down into smaller pieces
+ 
+ The thing we really want to test is this bit here.
+ 
+ ```swift
+ private func displayError(_ error: NetworkError) {
+    let title: String
+    let message: String
+    switch error {
+    case .serverError:
+        title = "Server Error"
+        message = "We could not process your request. Please try again."
+    case .decodingError:
+        title = "Network Error"
+        message = "Ensure you are connected to the internet. Please try again."
+    }
+    self.showErrorAlert(title: title, message: message)
+}
+```
+
+The problem is the function is two fold.
+
+1. The logic we want to test is private.
+2. This function is doing two things - determining messages and displaying.
+
+Let's make this more testable by first
+
+1. Extracint a method that returns a `title` and `message` as a tuple.
+2. Making it public.
+
+```swift
+public func titleAndMessage(for error: NetworkError) -> (String, String) {
+    let title: String
+    let message: String
+    switch error {
+    case .serverError:
+        title = "Server Error"
+        message = "We could not process your request. Please try again."
+    case .decodingError:
+        title = "Network Error"
+        message = "Ensure you are connected to the internet. Please try again."
+    }
+    return (title, message)
+}
+```
+
+OK this is great. We can easily write a unit test for this, and be confident that the right title and message will be displayed given a certain error.
+
+But what about the alert?
+ 
+### Creating instance variables of the things you want to test
+
+In cases like this, one simple trick for getting access for things you want to test is to make them instances variables in the view controller, and the access them in your test after.
+
+For example, if we wanted to verify that an alert pops up with an error message is passed, we could by making the `UIAlertController` and variable like this.
+
+```swift
+// Error alert
+lazy var errorAlert: UIAlertController = {
+    let alert =  UIAlertController(title: "", message: "", preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    return alert
+}()
+```
+
+And then setting it when an error occurs like this.
+
+```swift
+private func showErrorAlert(title: String, message: String) {
+//        let alert = UIAlertController(title: title,
+//                                      message: message,
+//                                      preferredStyle: .alert)
+//
+//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    
+    errorAlert.title = title
+    errorAlert.message = message
+    
+    present(errorAlert, animated: true, completion: nil)
+}
+```
+
+We can first manually test that everything still works.
+
+But now we can write a unit test for the alert like this.
+
+```swift
+func testAlertForServerError() throws {
+    stubManager.error = NetworkError.serverError
+    vc.forceFetchProfile()
+    
+    XCTAssertEqual("Server Error", vc.errorAlert.title)
+    XCTAssertEqual("We could not process your request. Please try again.", vc.errorAlert.message)
+}
+
+```
+
+Discussion:
+
+- What is `loadViewIfNeeded()` and what it does in unit tests
+- Unit testing is a real art (being doing for years, many languages and still learning).
+
+Two maximum that help:
+
+1. Break thing down into smaller pieces.
+2. Dependency inject the things you want to change.
+
+
+
+## OLD
+
 ### Leveraging protocols in our unit tests
 
 Let's create a new file called `ProfileNetworkingTests`.

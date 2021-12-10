@@ -112,5 +112,12 @@ class ProfileNetworkingTests: XCTestCase {
                                       preferredStyle: .alert)
         XCTAssertEqual("a", alert.title)
     }
-
+    
+    func testAlertForServerError() throws {
+        stubManager.error = NetworkError.serverError
+        vc.forceFetchProfile()
+        
+        XCTAssertEqual("Server Error", vc.errorAlert.title)
+        XCTAssertEqual("We could not process your request. Please try again.", vc.errorAlert.message)
+    }
 }

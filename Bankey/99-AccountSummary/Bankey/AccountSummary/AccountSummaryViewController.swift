@@ -25,6 +25,13 @@ class AccountSummaryViewController: UIViewController {
     // Networking
     var profileManageable: ProfileManageable = ProfileManager()
     
+    // Error alert
+    lazy var errorAlert: UIAlertController = {
+        let alert =  UIAlertController(title: "", message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        return alert
+    }()
+    
     var isLoaded = false
     
     lazy var logoutBarButtonItem: UIBarButtonItem = {
@@ -195,6 +202,11 @@ extension AccountSummaryViewController {
     }
     
     private func displayError(_ error: NetworkError) {
+        let titleAndMessage = titleAndMessage(for: error)
+        self.showErrorAlert(title: titleAndMessage.0, message: titleAndMessage.1)
+    }
+
+    public func titleAndMessage(for error: NetworkError) -> (String, String) {
         let title: String
         let message: String
         switch error {
@@ -205,17 +217,20 @@ extension AccountSummaryViewController {
             title = "Network Error"
             message = "Ensure you are connected to the internet. Please try again."
         }
-        self.showErrorAlert(title: title, message: message)
+        return (title, message)
     }
     
     private func showErrorAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title,
-                                      message: message,
-                                      preferredStyle: .alert)
+//        let alert = UIAlertController(title: title,
+//                                      message: message,
+//                                      preferredStyle: .alert)
+//
+//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        errorAlert.title = title
+        errorAlert.message = message
         
-        present(alert, animated: true, completion: nil)
+        present(errorAlert, animated: true, completion: nil)
     }
 }
 
