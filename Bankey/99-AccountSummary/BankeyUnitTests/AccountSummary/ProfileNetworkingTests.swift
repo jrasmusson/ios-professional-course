@@ -13,9 +13,9 @@ import XCTest
 
 class ProfileNetworkingTests: XCTestCase {
     var vc: AccountSummaryViewController!
-    var stubManager: StubProfileManager!
+    var mockManager: MockProfileManager!
     
-    class StubProfileManager: ProfileManageable {
+    class MockProfileManager: ProfileManageable {
         var profile: Profile?
         var error: NetworkError?
         
@@ -32,108 +32,57 @@ class ProfileNetworkingTests: XCTestCase {
     override func setUp() {
         super.setUp()
         vc = AccountSummaryViewController()
+        // vc.loadViewIfNeeded()
         
-        stubManager = StubProfileManager()
-        vc.profileManageable = stubManager
+        mockManager = MockProfileManager()
+        vc.profileManager = mockManager
     }
-        
-//    func testAlertForServerError() throws {
-//        stubManager.error = NetworkError.serverError
-//
-////        vc.forceFetchProfile()
-//        vc.loadViewIfNeeded()
-//        let alertVC = vc.presentedViewController as? UIAlertController
-//
-//        XCTAssertNotNil(alertVC)
-//    }
-
-    /*
-     Unit testing is about looking for effects.
-     You do something - you expect something to change.
-     For us, we want to test that:
-      - when fetchProfile succeeds - profile gets set
-      - when fetchProfile fails - an alert pops up
-     */
     
-    /*
-    Case 1: fetchProfile succeeds - happy path
-     
-     We can verify that the profile gets set on our view controller by
-     stubbing out the manager, and then checking that the vc.profile got set.
-     */
-    
-    func testFetch() throws {
-        vc.forceFetchProfile()
-        XCTAssertNotNil(stubManager.profile)
+    func testTitleAndMessageForServerError() throws {
+        let titleAndMessage = vc.titleAndMessage(for: .serverError)
+        XCTAssertEqual("Server Error", titleAndMessage.0)
+        XCTAssertEqual("We could not process your request. Please try again.", titleAndMessage.1)
     }
-
-    /*
-     Case 2: fetchProfile fails
-        2a - serverError
-        2b - decodingError
-     
-     Only way we know if one error occurs over the other is to check the
-     title and message of our UIAlertView. Getting access to viewControllers
-     in unit tests is tricky. You have a lot of view hierarchy warnings and issues and because
-     view heirarchies in tests don't always match runtime in production, setting up and testing
-     for the presence of view controllers can be tricky.
-     
-     For example if we tried asserting for the presence of the alert and its associated title
-     and message.
     
-     We'd see warnings like this:
-     
-     Attempt to present <UIAlertController: 0x7feac005ea00> on <Bankey.AccountSummaryViewController: 0x7feac0031200> (from <Bankey.AccountSummaryViewController: 0x7feac0031200>) whose view is not in the window hierarchy.
-     
-     There are a couple of ways to deal with this.
-     
-     1. One is to break your logic down into smaller bits and do your unit tests on smaller pieces.
-     2. Is to create instance variables of the things that are affected as a result of your test,
-     and access those.
-     
-     Let's do both.
-     
-     
-     */
-
-    func testBadTest() throws {
-        stubManager.error = NetworkError.serverError
-        
-        vc.forceFetchProfile()
-        let alertVC = vc.presentedViewController as? UIAlertController
-        
-//        XCTAssertEqual("Server Error", alertVC?.title)
-//        XCTAssertEqual("We could not process your request. Please try again.", alertVC?.message)
+    func testTitleAndMessageForNetworkError() throws {
+        let titleAndMessage = vc.titleAndMessage(for: .decodingError)
+        XCTAssertEqual("Network Error", titleAndMessage.0)
+        XCTAssertEqual("Ensure you are connected to the internet. Please try again.", titleAndMessage.1)
     }
-
-    func testCheckForAlert() throws {
-        let alert = UIAlertController(title: "a",
-                                      message: "b",
-                                      preferredStyle: .alert)
-        XCTAssertEqual("a", alert.title)
+    
+    func testTitleAndMessageForServerErrorLessCoupling() throws {
+        let titleAndMessage = vc.titleAndMessage(for: .serverError)
+        XCTAssertTrue(titleAndMessage.0.contains("Server"))
+        XCTAssertTrue(titleAndMessage.1.contains("could not process"))
+    }
+    
+    func testTitleAndMessageForNetworkErrorLessCoupling() throws {
+        let titleAndMessage = vc.titleAndMessage(for: .decodingError)
+        XCTAssertTrue(titleAndMessage.0.contains("Network"))
+        XCTAssertTrue(titleAndMessage.1.contains("Ensure you are connected"))
     }
     
     func testAlertForServerError() throws {
-        stubManager.error = NetworkError.serverError
+        mockManager.error = NetworkError.serverError
         vc.forceFetchProfile()
         
         XCTAssertEqual("Server Error", vc.errorAlert.title)
         XCTAssertEqual("We could not process your request. Please try again.", vc.errorAlert.message)
         
+        // Less coupling
         XCTAssertTrue(vc.errorAlert.title!.contains("Server"))
         XCTAssertTrue(vc.errorAlert.message!.contains("process your request"))
     }
     
     func testAlertForDecodingError() throws {
-        stubManager.error = NetworkError.decodingError
+        mockManager.error = NetworkError.decodingError
         vc.forceFetchProfile()
         
         XCTAssertEqual("Network Error", vc.errorAlert.title)
         XCTAssertEqual("Ensure you are connected to the internet. Please try again.", vc.errorAlert.message)
         
+        // Less coupling
         XCTAssertTrue(vc.errorAlert.title!.contains("Network"))
-        XCTAssertTrue(vc.errorAlert.message!.contains("connected to the internet"))
-
+        XCTAssertTrue(vc.errorAlert.message!.contains("Ensure you are connected"))
     }
-
 }

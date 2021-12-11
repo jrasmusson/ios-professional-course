@@ -583,7 +583,7 @@ This is a trade-off we often make when testing UI related code. Trading off enca
 If we really wanted to keep this private we could. We could add an extension method purely for unit testing that would give us access to this internal method.
 
 ```swift
-// Unit testing
+// MARK: Unit testing
 extension AccountSummaryViewController {
     func titleAndMessageForTesting(for error: NetworkError) -> (String, String) {
             return titleAndMessage(for: error)
@@ -593,122 +593,44 @@ extension AccountSummaryViewController {
 
 Or extracted this logic into another component with a public method.
 
-I am generally OK with opening things up for testing. I find it makes the code cleaner and easier to read. But if you or others you are working with are sticklers for OO, feel free to add extension methods like this one above and keep your internals private.
+Talk to your team and see which method they prefer. I am generally OK with opening things up for testing. I find it makes the code cleaner and easier to read. 
 
-### Creating instance variables of the things you want to test
+But I am also OK keeping things private if that's what the rest of the team wants to do. So feel free to add extension methods like this one above and keep your internals private.
 
-In cases like this, one simple trick for getting access for things you want to test is to make them instances variables in the view controller, and the access them in your test after.
+### A little more extracting
 
-For example, if we wanted to verify that an alert pops up with an error message is passed, we could by making the `UIAlertController` and variable like this.
+Before we tackle unit testing the alert, let's do a little more refactoring to make our code even more testable.
 
-```swift
-// Error alert
-lazy var errorAlert: UIAlertController = {
-    let alert =  UIAlertController(title: "", message: "", preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-    return alert
-}()
-```
+One thing I'd like to do is call `fetchProfile` without calling `fetchAccount`. Right now it's all lumped together in `fetchData`.
 
-And then setting it when an error occurs like this.
+Let's extract a few functions from `fetchData` for testing.
+
+**AccountSummaryViewController**
 
 ```swift
-private func showErrorAlert(title: String, message: String) {
-//        let alert = UIAlertController(title: title,
-//                                      message: message,
-//                                      preferredStyle: .alert)
-//
-//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-    
-    errorAlert.title = title
-    errorAlert.message = message
-    
-    present(errorAlert, animated: true, completion: nil)
-}
-```
-
-We can first manually test that everything still works.
-
-But now we can write a unit test for the alert like this.
-
-```swift
-func testAlertForServerError() throws {
-    stubManager.error = NetworkError.serverError
-    vc.forceFetchProfile()
-    
-    XCTAssertEqual("Server Error", vc.errorAlert.title)
-    XCTAssertEqual("We could not process your request. Please try again.", vc.errorAlert.message)
-}
-
-```
-
-Discussion:
-
-- What is `loadViewIfNeeded()` and what it does in unit tests
-- Unit testing is a real art (being doing for years, many languages and still learning).
-
-Two maximum that help:
-
-1. Break thing down into smaller pieces.
-2. Dependency inject the things you want to change.
-
-
-
-## OLD
-
-### Leveraging protocols in our unit tests
-
-Let's create a new file called `ProfileNetworkingTests`.
-
-![](images/5.png)
-
-And let's start by writing a happy path scenario for what we expect to happen when `AccountSummaryViewController` calls `fetchProfile`.
-
-**ProfileNetworkingTests**
-
-```swift
-import Foundation
-
-import XCTest
-
-@testable import Bankey
-
-class ProfileNetworkingTests: XCTestCase {
-    var vc: AccountSummaryViewController!
-    
-    override func setUp() {
-        super.setUp()
-        vc = AccountSummaryViewController()
-        vc.loadViewIfNeeded()
-    }
-    
-    func testFetchProfile() throws {
+// MARK: - Networking
+extension AccountSummaryViewController {
+    private func fetchData() {
+        let group = DispatchGroup()
         
+        // Testing - random number selection
+        let userId = String(Int.random(in: 1..<4))
+        
+        fetchProfile(group: group, userId: userId)
+        fetchAccounts(group: group, userId: userId)
+        
+        group.notify(queue: .main) {
+            self.reloadView()
+        }
     }
-}
 ```
 
-What we really want to test here, is that the `profile` gets set after we successfully do a fetch.
-
-**AccountSummaryViewController**
-
-```swfit
-case .success(let profile):
-    self.profile = profile
-```
-
-The problem is we have no way of triggering it from our test. Let's make `AccountSummaryViewController` a little more testable by extracting `fetchProfile` and `fetchAccounts` into their own public methods.
-
-**AccountSummaryViewController**
+And add the following methods below.
 
 ```swift
-fetchProfile(group: group, userId: userId)
-fetchAccounts(group: group, userId: userId)
-self.reloadView()
-
 private func fetchProfile(group: DispatchGroup, userId: String) {
     group.enter()
-    profileManageable.fetchProfile(forUserId: userId) { result in
+    profileManager.fetchProfile(forUserId: userId) { result in
         switch result {
         case .success(let profile):
             self.profile = profile
@@ -731,7 +653,7 @@ private func fetchAccounts(group: DispatchGroup, userId: String) {
         group.leave()
     }
 }
-
+    
 private func reloadView() {
     self.tableView.refreshControl?.endRefreshing()
     
@@ -744,131 +666,167 @@ private func reloadView() {
 }
 ```
 
-And then add a unit testing extension to access them publically.
+For practice, let's also keep these methods private and add an extension method to access them from the outside. 
 
 ```swift
 // MARK: Unit testing
 extension AccountSummaryViewController {
+    func titleAndMessageForTesting(for error: NetworkError) -> (String, String) {
+        return titleAndMessage(for: error)
+    }
+    
     func forceFetchProfile() {
         fetchProfile(group: DispatchGroup(), userId: "1")
     }
 }
 ```
 
-Discussion:
+OK. Now let's tackle the alert.
 
-- Why the unit testing extension?
-- Trade-offs of OO and testability
-- Trading encapsulation for testability.
+## Testing the alert
 
-Now that our view controller is a little more testable, let's start with the happy path scenario of simply calling `fetchProfile` and verifying it sets the profile it returns to non-nil.
+Now, we've tested that we can return the correct text given certain error message, and for many that would be enough.
 
-**ProfileNetworkingTests**
+But what if we really wanted to make sure that the error messages actually made it into the alert controllers we pop-up. How could test the alert?
+
+To test the alert we'll need to do three things.
+
+1. Create an instance variable to of the alert in the view controller.
+3. Dependency inject a fake `ProfileManager` into our view controller.
+4. Write the test.
+
+## Creating instance variables of the things you want to test
+
+One trick to testing the state of things in view controllers is to create instance variables of them.
+
+For example, if we wanted to verify that an alert pops up with the correct error message is passed, we could create an instance of the alert controller like this.
+
+**AccountSummaryViewController**
 
 ```swift
-func testFetchProfile() throws {
-    vc.profile = nil
+// Networking
+var profileManager: ProfileManageable = ProfileManager()
     
-    vc.forceFetchProfile()
-    XCTAssertNotNil(vc.profile)
+// Error alert
+lazy var errorAlert: UIAlertController = {
+    let alert =  UIAlertController(title: "", message: "", preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    return alert
+}()
+```
+
+And then when the error occurs set it like this.
+
+```swift
+private func showErrorAlert(title: String, message: String) {
+//        let alert = UIAlertController(title: title,
+//                                      message: message,
+//                                      preferredStyle: .alert)
+//
+//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    
+    errorAlert.title = title
+    errorAlert.message = message
+    
+    present(errorAlert, animated: true, completion: nil)
 }
 ```
 
-OK - if we run this now our test fails. Why? Because we are trying to do an asynchronous HTTP call. The way the view controller is configured, it is using the real `ProfileManageable` object that goes out and does the network call. We don't want that.
+See what we did here? Instead of creating a brand new alert controller everytime the error occurs, we create one instance for the entire view controller, which then enables us to write a unit test for it liks this.
 
-Unit tests that make network calls aren't really unit tests. They are more integration tests. Which are valuable. They just aren't the kind of test we want to write here.
+## Dependency inject the mock
 
-What we want instead is something that is:
+To fake our the real `ProfileManager` with a fake one, we need to inject our `AccountSummaryViewController` with a mock.
 
-- Deterministic
-- Not flakey
-- Can be run reliably
-- And is fast
+Copy the following into our test.
 
-That's kind of what a unit test is. Something fast, that doesn't rely on external dependencies. And can be run over-and-over again and never fail.
-
-This is where our dependency-injection comes in. 
-
-We can swap out the real network call with a fake one by defining a `StubProfileManager`, inserting it into the view controller in the unit test, and then control what happens from there.
-
-Let's start by adding a `profileManager` to the test.
-
-**ProfileNetworkingTests**
+**AccountSummaryViewControllerTests**
 
 ```swift
-var vc: AccountSummaryViewController!
-var stubManager: StubProfileManager! //
-```
-
-Then let create a stub implementing `ProfileManageable` to return hard coded values synchronously of whatever want - in this case a fake profile.
-
-```swift
-struct StubProfileManager: ProfileManageable {
-    var profile = Profile(id: "1", firstName: "FirstName", lastName: "LastName")
+class ProfileNetworkingTests: XCTestCase {
+    var vc: AccountSummaryViewController!
+    var mockManager: MockProfileManager! // 
     
-    func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile, NetworkError>) -> Void) {
-        completion(.success(profile))
-    }
-}
-```
-
-Explain what this is doing.
-
-Then we can inject it into our view controller in the setup.
-
-```swift
-override func setUp() {
-    super.setUp()
-    vc = AccountSummaryViewController()
-    
-    stubManager = StubProfileManager() //
-    vc.profileManageable = stubManager //
-    
-    vc.loadViewIfNeeded()
-}
-```
-
-Now when we run out tests they pass, because we are using the stub instead of the real network call manager.
-
-✅ Tests pass
-
-Discussion:
-
-- How we make this synchronous
-- Stub vs Mock
-
-## Testing for errors
-
-OK. Not bad. Happy path works. What we really want though are error conditions. Want to test that an alert pops up when these two errors occur:
-
-```swift
-enum NetworkError: Error {
-    case serverError
-    case decodingError
-}
-```
-
-Fortunately, we've done the heavily lifting, and can now leverage our stub to return an error instead of a profile.
-
-First let's add an optional error to our stub. And if the error is present, return it instead of the profile.
-
-**ProfileNetworkingTests**
-
-```swift
-struct StubProfileManager: ProfileManageable {
-    var profile = Profile(id: "1", firstName: "FirstName", lastName: "LastName")
-    var error: NetworkError? // 
-    
-    func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile, NetworkError>) -> Void) {
-        if let error = error { //
-            completion(.failure(error))
+    class MockProfileManager: ProfileManageable {
+        var profile: Profile?
+        var error: NetworkError?
+        
+        func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile, NetworkError>) -> Void) {
+            if error != nil {
+                completion(.failure(error!))
+                return
+            }
+            profile = Profile(id: "1", firstName: "FirstName", lastName: "LastName")
+            completion(.success(profile!))
         }
-        completion(.success(profile))
     }
+    
+    override func setUp() {
+        super.setUp()
+        vc = AccountSummaryViewController()
+        // vc.loadViewIfNeeded()
+        
+        mockManager = MockProfileManager()
+        vc.profileManager = mockManager
+    }
+```
+
+Discussion:
+
+- Explain what's going on here
+- Point out the `mockManager` type
+
+Now with our mock configured we can test our alert like this.
+
+**AccountSummaryViewControllerTests**
+
+```swift
+func testAlertForServerError() throws {
+    mockManager.error = NetworkError.serverError
+    vc.forceFetchProfile()
+    
+    XCTAssertEqual("Server Error", vc.errorAlert.title)
+    XCTAssertEqual("We could not process your request. Please try again.", vc.errorAlert.message)
+    
+    // Less coupling
+    XCTAssertTrue(vc.errorAlert.title!.contains("Server"))
+    XCTAssertTrue(vc.errorAlert.message!.contains("process your request"))
 }
 ```
 
+### Challenge 🕹
 
+See if you can write the equivalent alert test for `.decodingError`.
+
+- Copy the previous test
+- Update it to pass in the `. decodingError`
+- Decide what level of coupling to add to your test
+
+### Solution 🚀
+
+```swift
+func testAlertForDecodingError() throws {
+    mockManager.error = NetworkError.decodingError
+    vc.forceFetchProfile()
+    
+    XCTAssertEqual("Network Error", vc.errorAlert.title)
+    XCTAssertEqual("Ensure you are connected to the internet. Please try again.", vc.errorAlert.message)
+    
+    // Less coupling
+    XCTAssertTrue(vc.errorAlert.title!.contains("Network"))
+    XCTAssertTrue(vc.errorAlert.message!.contains("Ensure you are connected"))
+}
+```
+
+Discussion:
+
+- What is `loadViewIfNeeded()` and what it does in unit tests
+- Unit testing is a real art (being doing for years, many languages and still learning).
+
+Two maximum that help:
+
+1. Break thing down into smaller pieces.
+2. Dependency inject the things you want to change.
 
 ### What we've learned
 
@@ -881,4 +839,3 @@ struct StubProfileManager: ProfileManageable {
 
 - [UIAlertController](https://developer.apple.com/documentation/uikit/uialertcontroller)
 - [UIAlertControllerExample](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/UIAlertController/UIAlertController.md)
-- [Mocks vs Stubs](https://martinfowler.com/articles/mocksArentStubs.html)

@@ -256,14 +256,11 @@ extension AccountSummaryViewController {
 
 // MARK: Unit testing
 extension AccountSummaryViewController {
-    func forceFetchProfile() {
-        fetchProfile(group: DispatchGroup(), userId: "1")
-    }
-}
-
-// Unit testing
-extension AccountSummaryViewController {
     func titleAndMessageForTesting(for error: NetworkError) -> (String, String) {
             return titleAndMessage(for: error)
+    }
+    
+    func forceFetchProfile() {
+        fetchProfile(group: DispatchGroup(), userId: "1")
     }
 }
