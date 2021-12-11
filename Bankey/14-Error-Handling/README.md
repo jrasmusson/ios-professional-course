@@ -1,6 +1,6 @@
 # Error Handling
 
-![](images/3.png)
+![](images/3a.png)
 
 It's easy to stick to happy path scenarios when building apps. But just as important is adding affordances for when things go wrong.
 
@@ -249,9 +249,18 @@ Good stuff. Network error cases handled.
 
 As good as manually testing network errors are, what's even better is if we can automate them. 
 
-Let's look at a couple of ways we could unit test the displaying or alerts, and while keeping our application intact.
+![](images/6.png)
 
-### Dependency Injection
+The challenge is how do we fake the network? The network is a real thing.
+
+- We can't control what it does
+- We can't make it fail in ways that we want
+
+On can we?
+
+In this section we are going to look at a super powerful unit testing technique called *dependency injection* which is perfect for unit testing situations like this. And in this section you are going to learn how it works, and why it's so powerful for getting to those hard to reach places in our code.
+
+### What is Dependency Injection
 
 ![](images/2.png)
 
@@ -261,7 +270,7 @@ Let's look at a couple of ways we could unit test the displaying or alerts, and 
 
 ### Define the protocol
 
-This is the thing we are going to inject into our ViewController. Create a new section called `Networking` and create a new file in there called `ProfileManager`.
+The protocol is the thing we want to inject into our ViewController. Create a new section called `Networking` and create a new file in there called `ProfileManager`.
 
 ![](images/4.png)
 
@@ -277,16 +286,16 @@ Discussion:
 
 - Why `AnyObject`
 
-### Create the concrete real implementation
+### Merge the protocol with the real implementation
 
-Now we need something to implement this protocol. Something that can do the actually networking.
+Now we already have the real version of this protocol going in our app. In order to unit test it however, we need to merge our protocol with the real thing.
 
-Currently this code is embedded in our `AccountSummaryViewController+Networking` extention. Let's extract it and all related code into it's this newly created file.
+Currently this code is embedded in our `AccountSummaryViewController+Networking` extention. Let's extract it and all related code into it's this newly created file, and make it implement our protocol.
 
 **ProfileManager**
 
 ```swift
-protocol ProfileManageable {
+protocol ProfileManageable: AnyObject {
     func fetchProfile(forUserId userId: String, completion: @escaping (Result<Profile,NetworkError>) -> Void)
 }
 
@@ -345,7 +354,7 @@ Now we just need to update the `AccountSummaryViewController` to use it.
 let refreshControl = UIRefreshControl()
     
 // Networking
-var profileManageable = ProfileManager() //
+var profileManageable: ProfileManageable = ProfileManager()
 
 // MARK: - Networking
 extension AccountSummaryViewController {
@@ -358,7 +367,7 @@ extension AccountSummaryViewController {
 
 Run the app. Everything should still work.
 
-But this is magic. Now that we have this protocol defined, we can *inject* whatever we want.
+But this is magic 🌈. Now that we have this protocol defined, we can *inject* into our view controller whatever we want.
 
 Let's now head over to the unit testing section of our app, and see what tests we can write there.
 
@@ -367,13 +376,10 @@ Let's now head over to the unit testing section of our app, and see what tests w
 Unit testing view controllers can be tricky.
 
 - View hierarchies between tests and production don't always match
-- Getting access to view and view controllers in tests can be tricky
+- Getting access to view and view controllers in tests can be tough
 - And then you've got view controller life cycle stuff to worry about. Gotta know when `viewDidLoad` is called an how that affects your tests.
 
-Let's now look at a few options, and ask ourselves.
-
-1. What do we want to test.
-2. How can we test it.
+Fortunately, we don't have to test everything about the view controller. Only the bits that change or the things we care about. Let's look at a couple of techniques for making our view controllers more testable, and then automating those things we can about in our tests.
 
 ### Looking for effects
 
@@ -382,7 +388,7 @@ Unit testing is about looking for effects. You do something - you expect somethi
 For us, we want to test that:
 
 - when fetchProfile succeeds - profile gets set
-- when fetchProfile fails - an alert pops up
+- when fetchProfile fails - an alert pops up with one of two error messages
 
   
     Case 1: fetchProfile succeeds - happy path

@@ -119,5 +119,21 @@ class ProfileNetworkingTests: XCTestCase {
         
         XCTAssertEqual("Server Error", vc.errorAlert.title)
         XCTAssertEqual("We could not process your request. Please try again.", vc.errorAlert.message)
+        
+        XCTAssertTrue(vc.errorAlert.title!.contains("Server"))
+        XCTAssertTrue(vc.errorAlert.message!.contains("process your request"))
     }
+    
+    func testAlertForDecodingError() throws {
+        stubManager.error = NetworkError.decodingError
+        vc.forceFetchProfile()
+        
+        XCTAssertEqual("Network Error", vc.errorAlert.title)
+        XCTAssertEqual("Ensure you are connected to the internet. Please try again.", vc.errorAlert.message)
+        
+        XCTAssertTrue(vc.errorAlert.title!.contains("Network"))
+        XCTAssertTrue(vc.errorAlert.message!.contains("connected to the internet"))
+
+    }
+
 }
