@@ -23,7 +23,7 @@ class AccountSummaryViewController: UIViewController {
     let refreshControl = UIRefreshControl()
     
     // Networking
-    var profileManageable: ProfileManageable = ProfileManager()
+    var profileManager: ProfileManageable = ProfileManager()
     
     // Error alert
     lazy var errorAlert: UIAlertController = {
@@ -151,7 +151,7 @@ extension AccountSummaryViewController {
     
     private func fetchProfile(group: DispatchGroup, userId: String) {
         group.enter()
-        profileManageable.fetchProfile(forUserId: userId) { result in
+        profileManager.fetchProfile(forUserId: userId) { result in
             switch result {
             case .success(let profile):
                 self.profile = profile
@@ -206,7 +206,7 @@ extension AccountSummaryViewController {
         self.showErrorAlert(title: titleAndMessage.0, message: titleAndMessage.1)
     }
 
-    public func titleAndMessage(for error: NetworkError) -> (String, String) {
+    func titleAndMessage(for error: NetworkError) -> (String, String) {
         let title: String
         let message: String
         switch error {
@@ -258,5 +258,12 @@ extension AccountSummaryViewController {
 extension AccountSummaryViewController {
     func forceFetchProfile() {
         fetchProfile(group: DispatchGroup(), userId: "1")
+    }
+}
+
+// Unit testing
+extension AccountSummaryViewController {
+    func titleAndMessageForTesting(for error: NetworkError) -> (String, String) {
+            return titleAndMessage(for: error)
     }
 }

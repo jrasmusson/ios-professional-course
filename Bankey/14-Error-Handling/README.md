@@ -272,7 +272,7 @@ In this section we are going to look at a super powerful unit testing technique 
 
 The protocol is the thing we want to inject into our ViewController. Create a new section called `Networking` and create a new file in there called `ProfileManager`.
 
-![](images/4.png)
+![](images/4a.png)
 
 **ProfileManager**
 
@@ -361,7 +361,7 @@ extension AccountSummaryViewController {
     private func fetchData() {
 		...        
         group.enter()
-        profileManageable.fetchProfile(forUserId: userId) { //
+        profileManager.fetchProfile(forUserId: userId) { //
 
 ```
 
@@ -379,7 +379,48 @@ Unit testing view controllers can be tricky.
 - Getting access to view and view controllers in tests can be tough
 - And then you've got view controller life cycle stuff to worry about. Gotta know when `viewDidLoad` is called an how that affects your tests.
 
-Fortunately, we don't have to test everything about the view controller. Only the bits that change or the things we care about. Let's look at a couple of techniques for making our view controllers more testable, and then automating those things we can about in our tests.
+Fortunately, we don't have to test everything about the view controller. Only the bits that change or the things we care about. 
+
+Let's look at a couple of techniques for making our view controllers more testable, and then automating those things we can about in our tests.
+
+### Creating the unit test
+
+First let's create a placeholder for all our account summary unit tests.
+
+![](images/8.png)
+
+And then into there copy the following code.
+
+**AccountSummaryViewControllerTests**
+
+```swift
+import Foundation
+import XCTest
+
+@testable import Bankey
+
+class ProfileNetworkingTests: XCTestCase {
+    var vc: AccountSummaryViewController!
+    
+    override func setUp() {
+        super.setUp()
+        vc = AccountSummaryViewController()
+        // vc.loadViewIfNeeded()
+    }
+    
+    func testSomething() throws {
+        
+    }
+}
+```
+
+Discussion
+
+- `vc.loadViewIfNeeded()`
+
+We are just going to leave this here for now, but will return to it when we find something we'd like to test.
+
+But first let's talk a little more about unit testing.
 
 ### Looking for effects
 
@@ -390,50 +431,41 @@ For us, we want to test that:
 - when fetchProfile succeeds - profile gets set
 - when fetchProfile fails - an alert pops up with one of two error messages
 
-  
-    Case 1: fetchProfile succeeds - happy path
-     
-     We can verify that the profile gets set on our view controller by
-     stubbing out the manager, and then checking that the vc.profile got set.
-     */
-    
-    func testFetch() throws {
-        vc.forceFetchProfile()
-        XCTAssertNotNil(stubManager.profile)
-    }
+It all really comes down how do we unit test this code here?
 
-    /*
-     Case 2: fetchProfile fails
-        2a - serverError
-        2b - decodingError
+**AccountSummaryViewController**
+
+```swift
+// MARK: - Networking
+extension AccountSummaryViewController {
+    private func displayError(_ error: NetworkError) {
+        let title: String
+        let message: String
+        switch error {
+        case .serverError:
+            title = "Server Error"
+            message = "We could not process your request. Please try again."
+        case .decodingError:
+            title = "Network Error"
+            message = "Ensure you are connected to the internet. Please try again."
+        }
+        self.showErrorAlert(title: title, message: message)
+    }
+}
+```
+
+How can we ensure that when a `severError` occurs, one kind of alert gets displayed, yet when a decodingError` occurs another gets displayed.
      
-     Only way we know if one error occurs over the other is to check the
-     title and message of our UIAlertView. Getting access to viewControllers
-     in unit tests is tricky. You have a lot of view hierarchy warnings and issues and because
-     view heirarchies in tests don't always match runtime in production, setting up and testing
-     for the presence of view controllers can be tricky.
-     
-     For example if we tried asserting for the presence of the alert and its associated title
-     and message.
-    
-     We'd see warnings like this:
-     
-     Attempt to present <UIAlertController: 0x7feac005ea00> on <Bankey.AccountSummaryViewController: 0x7feac0031200> (from <Bankey.AccountSummaryViewController: 0x7feac0031200>) whose view is not in the window hierarchy.
-     
-     There are a couple of ways to deal with this.
-     
-     1. One is to break your logic down into smaller bits and do your unit tests on smaller pieces.
-     2. Is to create instance variables of the things that are affected as a result of your test,
-     and access those.
-     
-     Let's do both.
-     
- ### Breaking things down into smaller pieces
- 
- The thing we really want to test is this bit here.
- 
- ```swift
- private func displayError(_ error: NetworkError) {
+### The power of extraction
+
+![](images/7.png)
+
+One of the most powerful things you can do while unit testing is extract logic. By extracting things out of your view controllers, and breaking them down into smaller testable bits, you suddenly gain the ability to take things that look big and daunting, and break them down into smaller more manageable peices.
+
+Take this display function here. It's really doing two things.
+
+```swift
+private func displayError(_ error: NetworkError) {
     let title: String
     let message: String
     switch error {
@@ -448,18 +480,18 @@ For us, we want to test that:
 }
 ```
 
-The problem is the function is two fold.
+1. It's determining what the `title` and `message` for the alert.
+2. It's showing the error alert by presenting it on the view controller.
 
-1. The logic we want to test is private.
-2. This function is doing two things - determining messages and displaying.
-
-Let's make this more testable by first
-
-1. Extracint a method that returns a `title` and `message` as a tuple.
-2. Making it public.
+We could make this easier to test by extracting the message setting part into it's own function like this.
 
 ```swift
-public func titleAndMessage(for error: NetworkError) -> (String, String) {
+private func displayError(_ error: NetworkError) {
+    let titleAndMessage = titleAndMessage(for: error)
+    self.showErrorAlert(title: titleAndMessage.0, message: titleAndMessage.1)
+}
+
+func titleAndMessage(for error: NetworkError) -> (String, String) {
     let title: String
     let message: String
     switch error {
@@ -474,10 +506,95 @@ public func titleAndMessage(for error: NetworkError) -> (String, String) {
 }
 ```
 
-OK this is great. We can easily write a unit test for this, and be confident that the right title and message will be displayed given a certain error.
+And then we could write a unit test for it like this.
 
-But what about the alert?
+**AccountSummaryViewControllerTests**
+
+```swift
+func testTitleAndMessageForServerError() throws {
+    let titleAndMessage = vc.titleAndMessage(for: .serverError)
+    XCTAssertEqual("Server Error", titleAndMessage.0)
+    XCTAssertEqual("We could not process your request. Please try again.", titleAndMessage.1)
+}
+```
  
+Run this test, and the test will pass 🎉.
+
+### Challenge
+
+See if you can write the corresponding test for `decodingError`.
+
+- Copy the previous test we just wrote.
+- Adjust the expectations in the assert.
+- And cover the other test case.
+
+### Solution
+
+**AccountSummaryViewControllerTests**
+
+```
+func testTitleAndMessageForNetworkError() throws {
+    let titleAndMessage = vc.titleAndMessage(for: .decodingError)
+    XCTAssertEqual("Network Error", titleAndMessage.0)
+    XCTAssertEqual("Ensure you are connected to the internet. Please try again.", titleAndMessage.1)
+}
+```
+
+OK that wasn't too bad. One thing to note with unit tests is that unit tests are a form of *coupling*.
+
+Coupling means that if you change you code, you need to change your test. The tighter the coupling, the more fragile the test.
+
+What we've done here is fine, we just need to be aware that whever something changes the language in our warning, our test is going to break.
+
+Which we may or may not want.
+
+If you want to test that the right message is being displayed, but you want your unit test to be more loosely coupled, we could write an equivalent test like this.
+
+```swift
+func testTitleAndMessageForServerErrorLessCoupling() throws {
+    let titleAndMessage = vc.titleAndMessage(for: .serverError)
+    XCTAssertTrue(titleAndMessage.0.contains("Server"))
+    XCTAssertTrue(titleAndMessage.1.contains("could not process"))
+}
+    
+func testTitleAndMessageForNetworkErrorLessCoupling() throws {
+    let titleAndMessage = vc.titleAndMessage(for: .decodingError)
+    XCTAssertTrue(titleAndMessage.0.contains("Network"))
+    XCTAssertTrue(titleAndMessage.1.contains("Ensure you are connected"))
+}
+```
+
+Now the message is free to change, but our tests are less brittle. 
+
+### Trading off encapsultion for testability
+
+One other thing you may or may not of noticed here is we made the extracted function non-private.
+
+```swift
+func titleAndMessage(for error: NetworkError) -> (String, String) {...}
+``
+
+Normally when we are writing Object-Oriented (OO) code we try to follow the maxium of keep everything we can private.
+
+In this case we choose to sacrifice some privateness for testability.
+
+This is a trade-off we often make when testing UI related code. Trading off encapsulation for testing.
+
+If we really wanted to keep this private we could. We could add an extension method purely for unit testing that would give us access to this internal method.
+
+```swift
+// Unit testing
+extension AccountSummaryViewController {
+    func titleAndMessageForTesting(for error: NetworkError) -> (String, String) {
+            return titleAndMessage(for: error)
+    }
+}
+```
+
+Or extracted this logic into another component with a public method.
+
+I am generally OK with opening things up for testing. I find it makes the code cleaner and easier to read. But if you or others you are working with are sticklers for OO, feel free to add extension methods like this one above and keep your internals private.
+
 ### Creating instance variables of the things you want to test
 
 In cases like this, one simple trick for getting access for things you want to test is to make them instances variables in the view controller, and the access them in your test after.
