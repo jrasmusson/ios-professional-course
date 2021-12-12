@@ -11,7 +11,7 @@ import XCTest
 
 @testable import Bankey
 
-class ProfileNetworkingTests: XCTestCase {
+class AccounSummaryViewControllerTests: XCTestCase {
     var vc: AccountSummaryViewController!
     var mockManager: MockProfileManager!
     
