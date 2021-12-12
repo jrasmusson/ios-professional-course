@@ -485,7 +485,7 @@ We could make this easier to test by extracting the message setting part into it
 
 ```swift
 private func displayError(_ error: NetworkError) {
-    let titleAndMessage = vc.titleAndMessage(for: error)
+    let titleAndMessage = titleAndMessage(for: error)
     self.showErrorAlert(title: titleAndMessage.0, message: titleAndMessage.1)
 }
 
@@ -523,7 +523,7 @@ With that we can now test our alert message setting like this.
 
 ```swift
 func testTitleAndMessageForServerError() throws {
-    let titleAndMessage = titleAndMessageForTesting(for: .serverError)
+    let titleAndMessage = vc.titleAndMessageForTesting(for: .serverError)
     XCTAssertEqual("Server Error", titleAndMessage.0)
     XCTAssertEqual("We could not process your request. Please try again.", titleAndMessage.1)
 }
