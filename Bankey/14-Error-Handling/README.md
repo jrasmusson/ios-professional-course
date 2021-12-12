@@ -517,7 +517,7 @@ extension AccountSummaryViewController {
 
 Talk to your team. See what they like. Some Object-Orient purists don't like trading off encapsulation for testing by making functions public for testing. Others are OK with it. I don't mind the trade-off. Both ways work and have their advantages. We'll use the extension for now to keep the OO folks happy.
 
-With that we can not test our alert message setting like this.
+With that we can now test our alert message setting like this.
 
 **AccountSummaryViewControllerTests**
 
