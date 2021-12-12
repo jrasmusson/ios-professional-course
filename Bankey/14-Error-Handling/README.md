@@ -485,7 +485,7 @@ We could make this easier to test by extracting the message setting part into it
 
 ```swift
 private func displayError(_ error: NetworkError) {
-    let titleAndMessage = titleAndMessage(for: error)
+    let titleAndMessage = vc.titleAndMessage(for: error)
     self.showErrorAlert(title: titleAndMessage.0, message: titleAndMessage.1)
 }
 
