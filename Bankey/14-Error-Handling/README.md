@@ -399,7 +399,7 @@ import XCTest
 
 @testable import Bankey
 
-class AccounSummaryViewControllerTests: XCTestCase {
+class AccountSummaryViewControllerTests: XCTestCase {
     var vc: AccountSummaryViewController!
     
     override func setUp() {
