@@ -545,7 +545,7 @@ See if you can write the corresponding test for `decodingError`.
 
 ```swift
 func testTitleAndMessageForNetworkError() throws {
-    let titleAndMessage = titleAndMessageForTesting(for: .decodingError)
+    let titleAndMessage = vc.titleAndMessageForTesting(for: .decodingError)
     XCTAssertEqual("Network Error", titleAndMessage.0)
     XCTAssertEqual("Ensure you are connected to the internet. Please try again.", titleAndMessage.1)
 }
@@ -756,6 +756,13 @@ func testAlertForDecodingError() throws {
     XCTAssertEqual("Network Error", vc.errorAlert.title)
     XCTAssertEqual("Ensure you are connected to the internet. Please try again.", vc.errorAlert.message)
 }
+```
+
+### Save your work
+
+```
+> git add .
+> git commit -m "test: Add alert controller unit tests"
 ```
 
 Discussion:
