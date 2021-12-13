@@ -8,6 +8,12 @@ Here are some of the git commands that will serve you well working professionall
 > git checkout -b <branchname>
 ```
 
+## Delete a branch
+
+```
+> git branch -D <branchname>
+```
+
 ## Committing a change
 
 ```
@@ -40,7 +46,8 @@ Vi is found on every unix box in the world, and is super handy to know. Here are
 
 ```
 i - insert mode
-:wq - write quite
+:wq - write quit
+:q! - force quit
 dd - delete line
 dd # - delete # number of lines
 p - put delete lines
@@ -79,12 +86,12 @@ To this when you've screwed up, and want to reset.
 > git reset --hard <SHA>
 ```
 
-## Clean branch
+## Force push
 
-After a reset you can have lingering files. Clean them up with:
+This will reset everything on your remote branch. Use with caution as it will override any other changes others have made. So don't do this on shared branches.
 
 ```
-> git clean -df
+> git push --force (optional)
 ```
 
 ## Squash commits with rebase
@@ -102,7 +109,7 @@ Then go...
 
 And then...
 
-You can not push these remotely.
+You can now push these remotely.
 
 ```
 > git push
