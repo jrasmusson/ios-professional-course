@@ -1,8 +1,6 @@
 # Essential Git Commands
 
-We've use git throughout the course, but there a few commands I would like to explain and explore further. 
-
-We will start with the basics, and then progressively get more complex.
+Here are some of the git commands that will serve you well working professionally on team based projects.
 
 ## Creating a branch
 
