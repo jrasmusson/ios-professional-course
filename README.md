@@ -28,3 +28,4 @@ A course for those who would like to work professionally as iOS engineers.
 - [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
 - [WWDC](https://developer.apple.com/wwdc21/)
 - [Swift Arcade](https://www.youtube.com/channel/UCxnCA5FBYRCFgIZWD0CKCVg/videos)
+- [Shortcut keys](Additional-Resources/README.md)
