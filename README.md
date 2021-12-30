@@ -23,6 +23,10 @@ A course for those who would like to work professionally as iOS engineers.
 
 - [Essential Git Commands](Git/README.md)
 
+## Things worth knowing
+
+- Stack vs Heap
+
 ## Additional Resources
 
 - [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
