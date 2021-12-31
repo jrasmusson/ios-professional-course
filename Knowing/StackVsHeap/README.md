@@ -14,9 +14,9 @@ Let's now look at:
 
 Swift uses two types of memory when accessing elements of it's programs: stacks and heaps.
 
-*Stacks* are fast, light-weight data structures where data a variables are simply thrown onto one contigous block or memory, and then equally quickly pulled off. `structs`, `enums`, and `tuples` are stored on the stack. And they are how Swift achieves much of it's speed.
+*Stacks* are fast, light-weight data structures where data and variables are simply thrown onto one contigous block or memory, and then equally quickly pulled off. `structs`, `enums`, and `tuples` are stored on the stack. And they are how Swift achieves much of it's speed.
 
-*Heaps* are more a more complex form of data model where hierarchical data can dynamically be assigned and stored. `classes` along with `closures` are stored on the heap. And heaps are how complex object graphs are stored.
+*Heaps* are a more complex form of data model where hierarchical data can dynamically be assigned and stored. `classes` along with `closures` are stored on the heap. And heaps are how complex object graphs are stored.
 
 ## What's the diff?
 
@@ -26,7 +26,7 @@ The big difference between stacks and heaps are that things stored on the stack 
 
 Passed-by-value means when you pop something off the stack, what you are getting is a copy of the thing on the stack. You are not getting access to the real thing.
 
-This can be confusing if you are coming from another Object-Oriented language like Java or C++ where things are passed-by-reference. Meaning when you get something off the heap, what you are really getting is a pointer, or a reference oo the real object. A change here will affect the value of that object everywhere else.
+This can be confusing if you are coming from another Object-Oriented language like Java or C++ where things are passed-by-reference. Meaning when you get something off the heap, what you are really getting is a pointer, or a reference to that object. A change here will affect the value of that object instance everywhere else.
 
 
 
@@ -34,7 +34,7 @@ This can be confusing if you are coming from another Object-Oriented language li
 
 This matters in Swift because if you are used to writing algorithms one way using classes, and switch over and try to write the same algorithm using structs (because you were told to favor structs over classes when writing Swift) you will be confused by the results.
 
-Here, for example here is a simple algorithm that matches students to courses by preference. It passes in students, as an array of classes, and then checks the state of student after to see if it has acheived the correct result.
+Here, for example is a simple algorithm that matches students to courses by preference. It passes in students, as an array of classes, and then checks the state of student after to see if it has acheived the correct result.
 
 ![](images/0.png)
 
@@ -125,7 +125,7 @@ class MatcherTest: XCTestCase {
 }
 ```
 
-This algorithm works because `Student` is a *class* and in Swift classes are passed-by-referece on the heap. Meaning a change to student in the algorithm is also sees in the function that called it.
+This algorithm works because `Student` is a *class* and in Swift classes are passed-by-reference on the heap. Meaning a change to student in the algorithm is also seen in the function that called it.
 
 Do the same thing now only with `Student` as a *struct* and you get completely different behavior.
 
@@ -230,11 +230,11 @@ class MatcherTest: XCTestCase {
 }
 ```
 
-Here the same algorithm fails because here `Student` is a *struct* and structs are passed on the stack. Meaning you don't get a pointer to `Student` in the algorithm. You get a copy of student instead. Meaning changes made to student in the algorithm stay local. They do no ripple out.
+Here the same algorithm fails because here `Student` is a *struct* and structs are passed on the stack. Meaning you don't get a pointer to `Student` in the algorithm. You get a copy of student instead. Meaning changes made to student in the algorithm stay local. They do not ripple out.
 
 ## So which is better?
 
-It's not so much about one been better than the other. Swift needs both because Swift straddles two different worlds:
+It's not so much about one being better than the other. Swift needs both because Swift straddles two different worlds:
 
 - Object-Orected (OO) and 
 - Functional programming
@@ -243,14 +243,14 @@ Much of iOS (UIKit) is built around the notion of `class`. `UIViewController`, `
 
 But there is another side of Swift, the functional side, that favors less passing around reference, and is more about writing programs in the style of functions. Writing Swift code as functions means caring less about state. State and state mutation has side-effects. Meaning when we change the state of something in one part of our program, that can sometimes have an adverse effect on another.
 
-This is why you are seeing *SwiftUI* tilt more towards functions and stateless view (all views in SwiftUI are structs), and away from class based implementations that we are more used to in UIKit.
+This is why you are seeing *SwiftUI* tilt more towards functions and state driven views (all views in SwiftUI are structs), and away from class based implementations that we are more used to in UIKit.
 
 ## What this means for you
 
-The important take away for you here is this:
+The key takeaway for you here is this:
 
 - Know that when you are working with `structs` you are passing around copies of objects. That's it.
-- And when you are working with `classes`, you are getting a copy of a pointer to that objects reference. Meaning any change you make to that class, will be seen and felt else where.
+- And when you are working with `classes`, you are getting a copy of a pointer to that object's reference. Meaning any change you make to that class, will be seen and felt elsewhere.
 - Structs are on the stack.
 - Classes are on the heap.
 
@@ -259,12 +259,12 @@ And once you wrap your head around that distinction, knowing where and when to u
 
 ## In Summary
 
-Knowing the different between stacks and heaps will help you make sense of the Swift programming world. Now that you know:
+Knowing the difference between stacks and heaps will help you make better sense of the Swift programming world. Now that you know:
 
 - classes are passed by reference on the heap. and
 - structs are passed as copies of the stack
 
-You will be able to walk comfortably in both worlds. One isn't necessary better than the other. Even SwiftUI still uses classes because it does have to store app state somewhere.
+You will be able to walk comfortably in both worlds. One isn't necessarily better than the other. Even SwiftUI still uses classes because it does have to store app state somewhere.
 
 But knowing the differences and where and when to use each will not only enable you to answer this question in an interview, it will make you a better programmer.
 
