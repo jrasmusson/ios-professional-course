@@ -8,95 +8,270 @@ Let's now look at:
 - why they are important, and then see
 - how they affect us when we are programming
 
-## What is a Stack
+## Two types of memory
 
-- Stack is an efficient way to storing elements of your program in memory.
-- Access to stack is very quick.
-- Instance of variables are copied.
-- And when you pop something from the stack you get a `copy` of what was there - not a `pointer` or `reference` to the real thing
-- Stacks are where `structs` are stored in Swift.
-- And it's the ability to rapidly access elements on stacks which makes `structs` the preferred construct to building programs in Swift.
-- That's what Apple recommends `structs` over `classes` when building programs.
+![](images/2.png)
 
-## What is a Heap
+Swift uses two types of memory when accessing elements of it's programs: stacks and heaps.
 
-- Heap is another way means of storing program elements in memory.
-- Heaps are where references and entire hierarchies or pointers are stored and all their relationships to one anothers
-- `classes` are stored on heaps.
-- So when you have a complex view hierarchy in `UIKit` and you store references to view controllers in memory, all this takes place in the heap
-- The heap is able to store all these complex relationships and access them with ease
-- The heap is slower than the stack
-- But necessary when working with classes
-- Which is why heap still plays a big part of iOS development today
+*Stacks* are fast, light-weight data structures where data a variables are simply thrown onto one contigous block or memory, and then equally quickly pulled off. `structs`, `enums`, and `tuples` are stored on the stack. And they are how Swift achieves much of it's speed.
 
-## Why should I care?
+*Heaps* are more a more complex form of data model where hierarchical data can dynamically be assigned and stored. `classes` along with `closures` are stored on the heap. And heaps are how complex object graphs are stored.
 
-This matters to you as an iOS developer because not knowing how stacks and heaps work can frustrate you when first getting into Swift, and starting to build non-trivial programs.
+## What's the diff?
 
-## Classes passes by reference - Heap
+![](images/3.png)
 
-For example, here is a real life example of an algorithm I needed to write that matched students with courses. It's class based. Which means when I pass `students` and `courses` into the `match` alorithm, I am passing references to those objects. Any changes to make in the algorithm get reflected in the calling program.
+The big difference between stacks and heaps are that things stored on the stack are *passed-by-value* while things stored on the heap are *passed-by-reference*.
 
-All these work takes place on the heap.
+Passed-by-value means when you pop something off the stack, what you are getting is a copy of the thing on the stack. You are not getting access to the real thing.
 
-## Structs pass by copy - Stack
-
-But what if I am new to Swift, I read the `structs` should be favored over classes, and I go to write that same algorithm using `structs` only it doesn't work!
-
-### Stacks and Classes are not passed the same way
-
-This is why it's important to understand what's going on under the hood and why stacks and heaps are different.
-
-If you are coming from another language where objects are typically passed by reference, you are going to naturally assume everything behaves like a class.
-
-But when you come into Swift, things are different. Not only do you have classes, you have these other very similar looks light-weight structures called structs, only they behave different.
-
-And not knowing the difference can lead to frustration and bugs in your program.
-
-## Why favor struct?
-
-Now I know what you're thinking. If classes are easier and how most things work, why use structs at all?
-
-Structs are favored for speed, and no state.
-
-### Speed
-
-- Memory access to a stack is faster than that of the heap.
-- So one beg reasons structs are favored over classes is their ability to be popped off the stack quickly, and accessed quickly in the name of speed.
+This can be confusing if you are coming from another Object-Oriented language like Java or C++ where things are passed-by-reference. Meaning when you get something off the heap, what you are really getting is a pointer, or a reference oo the real object. A change here will affect the value of that object everywhere else.
 
 
-### Stateless
 
-Swift straddles two worlds when it comes to programming paradigms:
+## Why does this matter
 
-- Object-Oriented (OO), and
-- Functional
+This matters in Swift because if you are used to writing algorithms one way using classes, and switch over and try to write the same algorithm using structs (because you were told to favor structs over classes when writing Swift) you will be confused by the results.
 
-Object-Oriented (OO) has been around for a long time, and is a tried and true method for building programs.
+Here, for example here is a simple algorithm that matches students to courses by preference. It passes in students, as an array of classes, and then checks the state of student after to see if it has acheived the correct result.
 
-But things about programs into terms of functions instead of objects has its advantages too. When you don't track and pass around state like one does with OO, you get simpler programs with fewer side-effects.
+![](images/0.png)
 
-Instead of alterating the state of an element in one part of your program, and then having it have an unintended side-effect and inadvertinly affecting another, with functional programming there is no state. There are only inputs and outputs. Fewer side-effects. Fewer bugs.
+**MatcherClass**
 
-## SwiftUI vs UIKit
+```swift
+import XCTest
 
-And this brings us to perhaps the biggest manifestation of them all: SwiftUI (stack based) vs UIKit (heap based).
+@testable import MatcherClass
 
-SwiftUI heavily leverages structs and stacks. There are no references to views in SwiftUI. Every view is a cheap struct. Whenever the state of the app changes, you simply create a new view and through away the old one. That's SwiftUI.
+class Student {
+    let name: String
+    let preferences: [String]
+    var match: String? = nil
+    
+    init(name: String, preferences: [String], match: String? = nil, matched: Bool = false) {
+        self.name = name
+        self.preferences = preferences
+        self.match = match
+    }
+}
 
-This is very different than UIKit where everything is a class. With classes, we are passing things around on the heap. So if you change the state of a control in UIKit, that control gets changed everywhere.
+class Course {
+    let name: String
+    var capacity: Int
+    var hasCapacity: Bool {
+        return capacity != 0
+    }
+    
+    init(name: String, capacity: Int) {
+        self.name = name
+        self.capacity = capacity
+    }
+}
 
-That can be a good or a bad thing. We have gotten very good and build UIKit applications over the years. But there are unintended side effects and complications building apps this way. Which is why the future, and SwiftUI rely way more heavilty on structs. The hope is that this will lead to simpler programs with way less side-effects and bugs.
+class Matcher {
+    var students: [Student]
+    var courses: [Course]
+
+    init(students: [Student], courses: [Course]) {
+        self.students = students
+        self.courses = courses
+    }
+    
+    func match() {
+        for student in students {
+            for pref in student.preferences {
+                let course = courses.first { $0.name == pref }
+                // 🕹 reference - change made here happens everywhere
+                if course!.hasCapacity {
+                    student.match = course?.name
+                    course?.capacity -= 1
+                    break
+                }
+            }
+        }
+    }
+}
+
+class MatcherTest: XCTestCase {
+    var matcher: Matcher!
+    
+    override func setUp() {
+        super.setUp()
+    }
+    
+    func testOneToOne() throws {
+        let peter = Student(name: "Peter", preferences: ["A", "B", "C"])
+        let paul = Student(name: "Paul", preferences: ["A", "B", "C"])
+        let mary = Student(name: "Mary", preferences: ["A", "B", "C"])
+        
+        let students = [peter, paul, mary]
+
+        let courseA = Course(name: "A", capacity: 1)
+        let courseB = Course(name: "B", capacity: 1)
+        let courseC = Course(name: "C", capacity: 1)
+        
+        let courses = [courseA, courseB, courseC]
+
+        let matcher = Matcher(students: students, courses: courses)
+        matcher.match()
+        
+        // No return value necessary - can test on original object
+        XCTAssertEqual(students[0].match, "A")
+        XCTAssertEqual(students[1].match, "B")
+        XCTAssertEqual(students[2].match, "C")
+    }
+}
+```
+
+This algorithm works because `Student` is a *class* and in Swift classes are passed-by-referece on the heap. Meaning a change to student in the algorithm is also sees in the function that called it.
+
+Do the same thing now only with `Student` as a *struct* and you get completely different behavior.
+
+![](images/1.png)
+
+**MatcherStruct**
+
+```swift
+import XCTest
+
+@testable import MatcherStruct
+
+/*
+ With struct or more functional based solutions, values are copied. No references are passed.
+ 
+ So when you call a function, that function makes a copy of the argument you passed in.
+ Any changes to it will have no effect on the original.
+ 
+ This is more performant because structs are cheap and stored on the stack.
+ 
+ Also it is considered safer, and there can be no side-effects. Everything is local.
+ This is why you see SwiftUI leaning so heavily on structs.
+ More functional style of programming.
+ 
+ */
+
+struct Student {
+    let name: String
+    let preferences: [String]
+    var match: String? = nil
+}
+
+struct Course {
+    let name: String
+    var capacity: Int
+    var hasCapacity: Bool {
+        return capacity != 0
+    }
+}
+
+struct Matcher {
+    // These are copies
+    var students: [Student]
+    var courses: [Course]
+    
+    mutating func match() -> [Student] { // mutating
+
+        // Need to collect results
+        var results = [Student]()
+
+        for var student in students {
+            for pref in student.preferences {
+                print("student: \(student) preference: \(pref)")
+                // all changes made here are local
+                var course = courses.first { $0.name == pref }
+                // and when you get a course like this, it is a copy too! No reference.
+                // need to struct this more functionally (stuck here)
+                if course!.hasCapacity {
+                    print("match!")
+                    student.match = course?.name
+                    course?.capacity -= 1
+                    results.append(student)
+                    print("course: \(course?.name) capacity: \(course?.capacity)")
+                    break
+                }
+            }
+        }
+        
+        // must return a copy of the new results
+        return results
+    }
+}
+
+class MatcherTest: XCTestCase {
+    var matcher: Matcher!
+    
+    override func setUp() {
+        super.setUp()
+    }
+    
+    func testOneToOne() throws {
+        let peter = Student(name: "Peter", preferences: ["A", "B", "C"])
+        let paul = Student(name: "Paul", preferences: ["A", "B", "C"])
+        let mary = Student(name: "Mary", preferences: ["A", "B", "C"])
+        
+        let students = [peter, paul, mary]
+
+        let courseA = Course(name: "A", capacity: 1)
+        let courseB = Course(name: "B", capacity: 1)
+        let courseC = Course(name: "C", capacity: 1)
+        
+        let courses = [courseA, courseB, courseC]
+
+        var matcher = Matcher(students: students, courses: courses)
+        let results = matcher.match()
+        
+        // Test the returned copy - not the originals
+        XCTAssertEqual(results[0].match, "A")
+        XCTAssertEqual(results[1].match, "B")
+        XCTAssertEqual(results[2].match, "C")
+    }
+}
+```
+
+Here the same algorithm fails because here `Student` is a *struct* and structs are passed on the stack. Meaning you don't get a pointer to `Student` in the algorithm. You get a copy of student instead. Meaning changes made to student in the algorithm stay local. They do no ripple out.
+
+## So which is better?
+
+It's not so much about one been better than the other. Swift needs both because Swift straddles two different worlds:
+
+- Object-Orected (OO) and 
+- Functional programming
+
+Much of iOS (UIKit) is built around the notion of `class`. `UIViewController`, `UITableView` - all these things are classes. So to build modern iOS apps today we need classes and heaps. And we need to understand how references to objects and classes work with that.
+
+But there is another side of Swift, the functional side, that favors less passing around reference, and is more about writing programs in the style of functions. Writing Swift code as functions means caring less about state. State and state mutation has side-effects. Meaning when we change the state of something in one part of our program, that can sometimes have an adverse effect on another.
+
+This is why you are seeing *SwiftUI* tilt more towards functions and stateless view (all views in SwiftUI are structs), and away from class based implementations that we are more used to in UIKit.
+
+## What this means for you
+
+The important take away for you here is this:
+
+- Know that when you are working with `structs` you are passing around copies of objects. That's it.
+- And when you are working with `classes`, you are getting a copy of a pointer to that objects reference. Meaning any change you make to that class, will be seen and felt else where.
+- Structs are on the stack.
+- Classes are on the heap.
+
+And once you wrap your head around that distinction, knowing where and when to use a `class` vs a `struct` becomes a lot easier.
+
 
 ## In Summary
 
 Knowing the different between stacks and heaps will help you make sense of the Swift programming world. Now that you know:
 
-- classes are for heaps
-- structs are for stacks
+- classes are passed by reference on the heap. and
+- structs are passed as copies of the stack
 
-And the advantages that both bring, you will be able to walk comfortably in both worlds. One isn't necessary better than the other. Evern SwiftUI still uses classes because it does have to store app state somewhere.
+You will be able to walk comfortably in both worlds. One isn't necessary better than the other. Even SwiftUI still uses classes because it does have to store app state somewhere.
 
 But knowing the differences and where and when to use each will not only enable you to answer this question in an interview, it will make you a better programmer.
 
 🕹🚀🎉🌈
+
+##Links that help
+
+- [Understanding Swift Performance WWDC - 2016](https://developer.apple.com/videos/play/wwdc2016/416/)
+- [Value and reference Types](https://developer.apple.com/swift/blog/?id=10)
+- [Is Swift pass by value or pass by reference](https://stackoverflow.com/questions/27364117/is-swift-pass-by-value-or-pass-by-reference)
