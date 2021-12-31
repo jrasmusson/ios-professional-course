@@ -25,7 +25,7 @@ A course for those who would like to work professionally as iOS engineers.
 
 ## Things worth knowing
 
-- Stack vs Heap
+- [Stack vs Heap](Knowing/StackVsHeap/README.md)
 
 ## Additional Resources
 
