@@ -10,7 +10,7 @@ Let's now look at:
 
 ## Two types of memory
 
-![](images/2.png)
+![](images/2a.png)
 
 Swift uses two types of memory when accessing elements of it's programs: stacks and heaps.
 
@@ -20,7 +20,7 @@ Swift uses two types of memory when accessing elements of it's programs: stacks 
 
 ## What's the diff?
 
-![](images/3.png)
+![](images/3a.png)
 
 The big difference between stacks and heaps are that things stored on the stack are *passed-by-value* while things stored on the heap are *passed-by-reference*.
 
