@@ -35,3 +35,11 @@ A course for those who would like to work professionally as iOS engineers.
 - [WWDC](https://developer.apple.com/wwdc21/)
 - [Swift Arcade](https://www.youtube.com/channel/UCxnCA5FBYRCFgIZWD0CKCVg/videos)
 - [Shortcut keys](Additional-Resources/README.md)
+
+## Under construction
+
+![](images/construction.gif)
+
+Some new sections that may be coming soon - not yet released. 
+
+- [Password reset](Bankey/15-Password-Reset/README.md)
