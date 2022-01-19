@@ -40,6 +40,7 @@ A course for those who would like to work professionally as iOS engineers.
 
 ![](images/construction.gif)
 
-Some new sections that may be coming soon - not yet released. 
+## Password Reset
 
-- [Password reset](Bankey/15-Password-Reset/README.md)
+- [Intro](Password-Reset/1-Intro/README.md)
+- [Text Field layout](Password-Reset/2-TextField-Layout/README.md)
