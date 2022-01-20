@@ -39,4 +39,4 @@ A course for those who would like to work professionally as iOS engineers.
 #### Password Reset - New Section Coming soon 🚀
 
 - [Intro](Password-Reset/1-Intro/README.md)
-- [Text Field layout](Password-Reset/2-Creating-TextField/README.md)
+- [Password Text Field](Password-Reset/2-PasswordTextField/README.md)

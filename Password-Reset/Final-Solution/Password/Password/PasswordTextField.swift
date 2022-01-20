@@ -60,7 +60,6 @@ extension PasswordTextField {
     
     func style() {
         translatesAutoresizingMaskIntoConstraints = false
-//        backgroundColor = .tertiarySystemFill
         
         lockImageView.translatesAutoresizingMaskIntoConstraints = false
         
