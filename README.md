@@ -36,11 +36,7 @@ A course for those who would like to work professionally as iOS engineers.
 - [Swift Arcade](https://www.youtube.com/channel/UCxnCA5FBYRCFgIZWD0CKCVg/videos)
 - [Shortcut keys](Additional-Resources/README.md)
 
-## Under construction
-
-![](images/construction.gif)
-
-## Password Reset
+#### Password Reset - New Section Coming soon 🚀
 
 - [Intro](Password-Reset/1-Intro/README.md)
-- [Text Field layout](Password-Reset/2-TextField-Layout/README.md)
+- [Text Field layout](Password-Reset/2-Creating-TextField/README.md)

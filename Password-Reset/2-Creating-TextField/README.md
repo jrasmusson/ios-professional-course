@@ -1,15 +1,17 @@
-# Text Field Layout
+# Creating the PasswordTextField
 
 ## Challenge
 
 - How would you lay this out?
-- Go over elements of the view, ask students to think about the auto layout, and come up with their own design on how they would do this.
+- Grab a piece of paper and see if you can't draw out
+ - The elements needs
+ - Auto layout constraints needed to layout and align
 
 ## New project
 
 - Create a new UIKit project called `Password`
 
-## Creating the PasswordTextField view
+## Creating the view
 
 - Everything in UIKit is a view
 - So we are going to make our own for this control here
