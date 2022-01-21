@@ -150,9 +150,110 @@ OK - not a bad start. Let's next work in the text field.
 
 ### textField
 
-The text field is the crux of this view. It should really be the cneter, and these images and buttons should center off it. Let's pin it to the top, and then adjust our image view so it aligns along the y-axis in the middle.
+The text field is the crux of this view. It should really be the center, and these images and buttons should center off it. Let's pin it to the top, and then adjust our image view so it aligns along the y-axis in the middle.
+
+**PasswordTextField**
+
+```swift
+let textField = UITextField()
+let placeHolderText: String = "New password"
+
+textField.translatesAutoresizingMaskIntoConstraints = false
+textField.isSecureTextEntry = false // true
+textField.placeholder = placeHolderText
+textField.delegate = self
+textField.keyboardType = .asciiCapable
+textField.attributedPlaceholder = NSAttributedString(string:placeHolderText,
+                                                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.secondaryLabel])
+
+addSubview(textField)
+
+// lock
+NSLayoutConstraint.activate([
+    lockImageView.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
+    lockImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+])
+    
+// textfield
+NSLayoutConstraint.activate([
+    textField.topAnchor.constraint(equalTo: topAnchor),
+    textField.leadingAnchor.constraint(equalToSystemSpacingAfter: lockImageView.trailingAnchor, multiplier: 1),
+])
+```
+
+![](images/5.png)
+
+OK not bad. Let's make one more little adjustment. Let's make this text field a little more reusable by passing in that `placeHolder` text.
+
+**PasswordTextField**
+
+```swift
+let placeHolderText: String
+    
+init(placeHolderText: String) {
+    self.placeHolderText = placeHolderText
+    
+    super.init(frame: .zero)
+    
+    style()
+    layout()
+}
+```
+
+**ViewController**
+
+```swift
+class ViewController: UIViewController { 
+    let newPasswordTextField = PasswordTextField(placeHolderText: "New password")
+```
+
+- Discussion. Talk about the initialization of variables in constructors.
+
+### Challenge 🕹 - Add the eye button
+
+See if you can add a plain button to the right of the text field.
+
+Call it
+
+`let eyeButton = UIButton(type: .custom)`
+
+Don't worry about adding images or giving it a target action or anything. Just practice your auto layout, and see if you can place a button spaced just off the wall just like our `lockImageView`, centered along the y-axis to the `textField`.
+
+### Solution ✅
+
+```swift
+let eyeButton = UIButton(type: .custom)
+
+eyeButton.translatesAutoresizingMaskIntoConstraints = false
+eyeButton.setImage(UIImage(systemName: "eye.circle"), for: .normal)
+eyeButton.setImage(UIImage(systemName: "eye.slash.circle"), for: .selected)
+eyeButton.addTarget(self, action: #selector(togglePasswordView), for: .touchUpInside)
+
+addSubview(eyeButton)
+
+// eye
+NSLayoutConstraint.activate([
+    eyeButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
+    eyeButton.leadingAnchor.constraint(equalToSystemSpacingAfter: textField.trailingAnchor, multiplier: 1),
+    eyeButton.trailingAnchor.constraint(equalTo: trailingAnchor)
+])
+
+// MARK: - Actions
+extension PasswordTextField {
+    @objc func togglePasswordView(_ sender: Any) {
+        textField.isSecureTextEntry.toggle()
+        eyeButton.isSelected.toggle()
+    }
+}
+```
+
+![](images/6.png)
+
+OK not bad. Got some image compression going on here. If you were working with a junior developer at this point and they asked you what was going on here what would you say?
+
+- Key words
+- Key concepts
+- How to fix
 
 U R HERE
-
-
 
