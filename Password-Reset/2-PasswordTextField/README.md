@@ -295,13 +295,15 @@ NSLayoutConstraint.activate([
     dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),
     dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
     dividerView.heightAnchor.constraint(equalToConstant: 1),
-    bottomAnchor.constraint(equalToSystemSpacingBelow: dividerView.topAnchor, multiplier: 1)
+    dividerView.topAnchor.constraint(equalToSystemSpacingBelow: textField.bottomAnchor, multiplier: 1)
 ])
 
 override var intrinsicContentSize: CGSize {
     return CGSize(width: 200, height: 50)
 }
 ```
+
+![](images/8.png)
 
 ### Choosing the right colors 🌈
 
@@ -328,11 +330,10 @@ let errorLabel = UILabel()
 errorLabel.translatesAutoresizingMaskIntoConstraints = false
 errorLabel.textColor = .systemRed
 errorLabel.font = .preferredFont(forTextStyle: .footnote)
-errorLabel.text = ""
+errorLabel.text = "Enter your password"
 errorLabel.adjustsFontSizeToFitWidth = true
 errorLabel.minimumScaleFactor = 0.8
 errorLabel.isHidden = false
-errorLabel.text = "Enter your password"
 
 addSubview(errorLabel)
 
@@ -344,18 +345,168 @@ NSLayoutConstraint.activate([
 ])
 ```
 
-#### Discussion:
+![](images/9.png)
 
-- Why no pinning to the bottom?
-- What does `adjustsFontSizeToFitWidth` and `minimumScaleFactor` do?
+### Discussion:
 
+#### Why no pinning to the bottom?
 
+Pinning to the bottom
+
+```swift
+errorLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+```
+
+Would cause our `passwordTextField` to jump depending on whether the `errorLabel` is visible or not.
+
+We can avoid that by giving the view an intrinsic content size, and not pinning it to the bottom. Instead we let it float.
+
+It's subtle point. And one that only comes with playing a view and seeing what is right for that context.
+
+### What does `adjustsFontSizeToFitWidth` and `minimumScaleFactor` do?
+
+These two lines adjust the font size of the label to fit the given width. 
+
+```swift
+errorLabel.adjustsFontSizeToFitWidth = true
+errorLabel.minimumScaleFactor = 0.8
+```
+
+![](images/10.png)
+
+What what happens when we make the text really long and constrain the edges of the view.
+
+**PasswordTextField**
+
+```swift
+errorLabel.text = "Enter your password and again and again and again and again and again"
+// errorLabel.adjustsFontSizeToFitWidth = true
+//errorLabel.minimumScaleFactor = 0.8
+```
+
+**ViewController**
+
+```swift
+NSLayoutConstraint.activate([
+    newPasswordTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
+    view.trailingAnchor.constraint(equalToSystemSpacingAfter: newPasswordTextField.trailingAnchor, multiplier: 1),
+    newPasswordTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+])
+```
+
+![](images/11.png)
+
+It truncates the text cutting the full length off. 
+
+By commentting these two lines in
+
+```swift
+errorLabel.adjustsFontSizeToFitWidth = true
+errorLabel.minimumScaleFactor = 0.8
+```
+
+We let the text shrink to 80% of it's original size and fit whatever space it's got.
+
+If we make it `0`.
+
+```swift
+errorLabel.adjustsFontSizeToFitWidth = true
+errorLabel.minimumScaleFactor = 0
+```
+
+It will reduce the label font to whatever size it takes to fit all the text in.
+
+![](images/12.png)
+
+But for our purposes we will keep it at `0.8`.
+
+```swift
+errorLabel.text = "Enter your password"
+errorLabel.adjustsFontSizeToFitWidth = true
+errorLabel.minimumScaleFactor = 0.8
+```
 
 ## Embedding in a stack view
 
-OK this is looking pretty good. But looking ahead a bit it would be nice if we could embed this in a stack view.
+OK this is looking pretty good. But looking at our final design, I can see that this text field, along with the status view and the other text field, or pretty evenly spaced.
 
-Stack views are nice because this give you nice equal spacing while minimizing the number of required auto layout constraints.
+So let's head over to the `ViewController` and see if you can embed this in a stack view.
+
+![](images/13.png)
+
+## Challenge 🕹
+
+In the `ViewController` create a stack view:
+
+`let stackView = UIStackView()`
+
+- `vertical` axis
+- `spacing` = `20`
+- `centerY` layout
+- `leading` and `trailing` of `16pts` or x2
+
+And add our `newPasswordTextField` to it. Good luck!
+
+## Solution ✅
+
+**ViewController**
+
+```swift
+class ViewController: UIViewController {
+    let stackView = UIStackView()
+    let newPasswordTextField = PasswordTextField(placeHolderText: "New password")
+
+extension ViewController {
+    private func style() {
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 20
+
+private func layout() {
+    stackView.addArrangedSubview(newPasswordTextField)
+    
+    view.addSubview(stackView)
+    
+    NSLayoutConstraint.activate([
+        stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+        view.trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 2)
+    ])
+}
+```
+
+Let's also remove our background color.
+
+**PasswordTextField**
+
+```swift
+extension PasswordTextField {    
+    func style() {
+        translatesAutoresizingMaskIntoConstraints = false
+//        backgroundColor = .systemOrange
+```
+
+![](images/14.png)
+
+### Save your work 💾
+
+Good stuff! Let's save this work.
+
+```
+> git add .
+> git commit -m "feat: add layout for password text field"
+```
+
+
+### Summary
+
+What we learned
+
+- Custom views
+- Auto layout pinning tips
+- Semantic colors
+
+Next...
 
 ### Links that help
 
