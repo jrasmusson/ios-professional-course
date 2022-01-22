@@ -81,7 +81,7 @@ extension PasswordTextField {
 
 
         dividerView.translatesAutoresizingMaskIntoConstraints = false
-        dividerView.backgroundColor = .quaternaryLabel
+        dividerView.backgroundColor = .separator
 
         errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
         errorMessageLabel.textColor = .systemRed

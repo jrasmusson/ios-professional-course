@@ -1,6 +1,6 @@
 # Creating the PasswordTextField
 
-![](images/0.png)
+![](images/3.png)
 
 ## Challenge 🕹
 
@@ -105,7 +105,7 @@ OK. Now we are ready to think about how to transform this orange box into a cool
 Let's look at a couple of options on how we could layout this design.
 
 
-## Laying out the elements
+## Doing the layout
 
 Grab your piece of paper where you did you initial design earlier, and reference it as we go through some different design options here (note to self - pull out iPad and draw).
 
@@ -122,7 +122,7 @@ Now don't worry if your hand drawn images doesn't look exactly like this. I got 
 
 But I choose this layout because I felt I needed a lot of control over where every elements was placed. Let's lay it out.
 
-### lockImageView
+### Adding the lockImageView
 
 **PasswordTextField**
 
@@ -148,7 +148,7 @@ class PasswordTextField: UIView {
 
 OK - not a bad start. Let's next work in the text field.
 
-### textField
+### Adding the textField
 
 The text field is the crux of this view. It should really be the center, and these images and buttons should center off it. Let's pin it to the top, and then adjust our image view so it aligns along the y-axis in the middle.
 
@@ -209,7 +209,7 @@ class ViewController: UIViewController {
 
 - Discussion. Talk about the initialization of variables in constructors.
 
-### Challenge 🕹 - Add the eye button
+### Challenge 🕹 - Adding the eye button
 
 See if you can add a plain button to the right of the text field.
 
@@ -249,11 +249,84 @@ extension PasswordTextField {
 
 ![](images/6.png)
 
-OK not bad. Got some image compression going on here. If you were working with a junior developer at this point and they asked you what was going on here what would you say?
+### Fixing the CHCR
 
-- Key words
-- Key concepts
-- How to fix
+OK not bad. Got some image compression going on here. If you were working with a junior developer and they asked you what was going on here what would you say?
 
-U R HERE
+- Explain CHCR.
+- Explain what is going on here.
+- Share the solution.
+
+```swift
+// CHCR
+lockImageView.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
+textField.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
+eyeButton.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
+```
+
+![](images/7.png)
+
+### Challenge 🕹 Adding the divider
+
+See if you can add this `dividerView` as a `UIView`.
+
+Make it:
+
+- `1pt` height
+- Flush `leading` and `trailing` to edge of view
+- `8pts` (1x) underneath `textField`
+-  `backgroundColor = separator`
+
+
+### Solution ✅
+
+**PasswordTextField**
+
+```swift
+let dividerView = UIView()
+
+dividerView.translatesAutoresizingMaskIntoConstraints = false
+dividerView.backgroundColor = .separator
+
+addSubview(dividerView)
+
+// divider
+NSLayoutConstraint.activate([
+    dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+    dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+    dividerView.heightAnchor.constraint(equalToConstant: 1),
+    bottomAnchor.constraint(equalToSystemSpacingBelow: dividerView.topAnchor, multiplier: 1)
+])
+
+override var intrinsicContentSize: CGSize {
+    return CGSize(width: 200, height: 50)
+}
+```
+
+### Choosing the right colors 🌈
+
+Explain how you want to use semantically defined colors over system colors when styling your elements and controls.
+
+See [this](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/Color/README.md) color guide.
+
+### Challenge 🕹 Adding the error label
+
+See if you can add the error label:
+
+- `4pts` beneath the `dividerView`
+- Flush `leading` and `trailing` edges
+- Preferred font `footnote`
+- `textColor` = `systemRed`
+
+### Solution ✅
+
+## Embedding in a stack view
+
+OK this is looking pretty good. But looking ahead a bit it would be nice if we could embed this in a stack view.
+
+Stack views are nice because this give you nice equal spacing while minimizing the number of required auto layout constraints.
+
+### Links that help
+
+- [Colors](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/Color/README.md)
 
