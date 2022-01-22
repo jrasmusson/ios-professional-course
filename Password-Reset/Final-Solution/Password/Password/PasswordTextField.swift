@@ -27,7 +27,7 @@ class PasswordTextField: UIView {
     let textField = UITextField()
     let eyeButton = UIButton(type: .custom)
     let dividerView = UIView()
-    let errorMessageLabel = UILabel()
+    let errorLabel = UILabel()
     
     let placeHolderText: String
     var customValidation: CustomValidation?
@@ -83,13 +83,13 @@ extension PasswordTextField {
         dividerView.translatesAutoresizingMaskIntoConstraints = false
         dividerView.backgroundColor = .separator
 
-        errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
-        errorMessageLabel.textColor = .systemRed
-        errorMessageLabel.font = .preferredFont(forTextStyle: .footnote)
-        errorMessageLabel.text = ""
-        errorMessageLabel.adjustsFontSizeToFitWidth = true
-        errorMessageLabel.minimumScaleFactor = 0.8
-        errorMessageLabel.isHidden = true
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.textColor = .systemRed
+        errorLabel.font = .preferredFont(forTextStyle: .footnote)
+        errorLabel.text = ""
+        errorLabel.adjustsFontSizeToFitWidth = true
+        errorLabel.minimumScaleFactor = 0.8
+        errorLabel.isHidden = true
     }
     
     func layout() {
@@ -97,7 +97,7 @@ extension PasswordTextField {
         addSubview(textField)
         addSubview(eyeButton)
         addSubview(dividerView)
-        addSubview(errorMessageLabel)
+        addSubview(errorLabel)
         
         // lock
         NSLayoutConstraint.activate([
@@ -123,14 +123,14 @@ extension PasswordTextField {
             dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             dividerView.heightAnchor.constraint(equalToConstant: 1),
-            bottomAnchor.constraint(equalToSystemSpacingBelow: dividerView.topAnchor, multiplier: 1)
+            dividerView.topAnchor.constraint(equalToSystemSpacingBelow: textField.bottomAnchor, multiplier: 1)
         ])
 
         // error
         NSLayoutConstraint.activate([
-            errorMessageLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 4),
-            errorMessageLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            errorMessageLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            errorLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 4),
+            errorLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            errorLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
 
         // CHCR
@@ -168,13 +168,13 @@ extension PasswordTextField {
     }
 
     func clearError() {
-        errorMessageLabel.isHidden = true
-        errorMessageLabel.text = ""
+        errorLabel.isHidden = true
+        errorLabel.text = ""
     }
 
     func showError(_ errorMessage: String) {
-        errorMessageLabel.isHidden = false
-        errorMessageLabel.text = errorMessage
+        errorLabel.isHidden = false
+        errorLabel.text = errorMessage
     }
 
     func validate() -> Bool {

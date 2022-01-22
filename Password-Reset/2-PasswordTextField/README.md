@@ -311,7 +311,7 @@ See [this](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/Colo
 
 ### Challenge 🕹 Adding the error label
 
-See if you can add the error label:
+See if you can add the `errorLabel`:
 
 - `4pts` beneath the `dividerView`
 - Flush `leading` and `trailing` edges
@@ -319,6 +319,37 @@ See if you can add the error label:
 - `textColor` = `systemRed`
 
 ### Solution ✅
+
+**PasswordTextField**
+
+```swift
+let errorLabel = UILabel()
+
+errorLabel.translatesAutoresizingMaskIntoConstraints = false
+errorLabel.textColor = .systemRed
+errorLabel.font = .preferredFont(forTextStyle: .footnote)
+errorLabel.text = ""
+errorLabel.adjustsFontSizeToFitWidth = true
+errorLabel.minimumScaleFactor = 0.8
+errorLabel.isHidden = false
+errorLabel.text = "Enter your password"
+
+addSubview(errorLabel)
+
+// error
+NSLayoutConstraint.activate([
+    errorLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 4),
+    errorLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+    errorLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+])
+```
+
+#### Discussion:
+
+- Why no pinning to the bottom?
+- What does `adjustsFontSizeToFitWidth` and `minimumScaleFactor` do?
+
+
 
 ## Embedding in a stack view
 
