@@ -23,6 +23,17 @@ Good stuff! Let's save this work.
 
 Good luck!
 
+## A Solution ✅
+
+Lots of ways we could lay this out (show on iPad).
+
+One way would be like this.
+
+![](images/3.png)
+
+- Wanted custom control over elements
+- Stack view could probably work
+- But instead went for full control because I wanted to very specificallly place every element in this layout
 
 ## Creating the view
 
@@ -112,23 +123,6 @@ OK. Now we are ready to think about how to transform this orange box into a cool
 
 Let's look at a couple of options on how we could layout this design.
 
-
-## Doing the layout
-
-Grab your piece of paper where you did you initial design earlier, and reference it as we go through some different design options here (note to self - pull out iPad and draw).
-
-- first go over the elements
-- then discuss text field with left and right images/buttons
-- divider
-- error label
-
-Think it would be easiest if we layed it out like this.
-
-![](images/3.png)
-
-Now don't worry if your hand drawn images doesn't look exactly like this. I got here after some iterations and tweaking.
-
-But I choose this layout because I felt I needed a lot of control over where every elements was placed. Let's lay it out.
 
 ### Adding the lockImageView
 
