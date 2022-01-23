@@ -14,6 +14,16 @@ Good luck!
 
 - Create a new UIKit project called `Password`
 
+### Save your work 💾
+
+Good stuff! Let's save this work.
+
+```
+> git add .
+> git commit -m "feat: create new password project"
+```
+
+
 ## Creating the view
 
 - Everything in UIKit is a view
