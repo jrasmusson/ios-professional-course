@@ -1,16 +1,14 @@
 # Creating the PasswordTextField
 
-![](images/3.png)
+![](images/15.png)
 
 ## Challenge 🕹
 
 - How would you lay this out?
-- Grab a piece of paper and see if you can't draw out
- - The elements needed
- - Auto layout constraints needed to layout and align
- - Along with anything else you feel you may need to build this custom component
+- Draw out the auto layout constraints needed to implement this design.
+- Don't worry about the interactions - we'll cover that later. 
 
-Don't worry about the interactions - we'll cover that later. Good luck!
+Good luck!
 
 ## New project
 
@@ -434,7 +432,9 @@ So let's head over to the `ViewController` and see if you can embed this in a st
 
 ![](images/13.png)
 
-## Challenge 🕹
+## Challenge 🕹 Adding the stack view
+
+See if you can add our `newPasswordTextField` to a stack view in our view controller.
 
 In the `ViewController` create a stack view:
 
