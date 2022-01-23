@@ -2,14 +2,6 @@
 
 ![](images/15.png)
 
-## Challenge 🕹
-
-- How would you lay this out?
-- Draw out the auto layout constraints needed to implement this design.
-- Don't worry about the interactions - we'll cover that later. 
-
-Good luck!
-
 ## New project
 
 - Create a new UIKit project called `Password`
@@ -22,6 +14,14 @@ Good stuff! Let's save this work.
 > git add .
 > git commit -m "feat: create new password project"
 ```
+
+## Challenge 🕹
+
+- How would you lay this out?
+- Draw out the auto layout constraints needed to implement this design.
+- Don't worry about the interactions - we'll cover that later. 
+
+Good luck!
 
 
 ## Creating the view
