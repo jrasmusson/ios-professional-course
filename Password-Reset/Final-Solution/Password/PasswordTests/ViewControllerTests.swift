@@ -44,7 +44,7 @@ class ViewControllerTests_NewPassword_Validation: XCTestCase {
         vc.newPasswordText = tooShort
         vc.resetPasswordButtonTapped(sender: UIButton())
         
-        XCTAssertEqual(vc.newPasswordTextField.errorLabel.text!, "Password must meeting the criteria below.")
+        XCTAssertEqual(vc.newPasswordTextField.errorLabel.text!, "Your password must meet the requirements below.")
     }
 
     func testValidPassword() throws {

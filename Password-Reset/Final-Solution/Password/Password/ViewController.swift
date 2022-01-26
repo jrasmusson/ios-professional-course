@@ -76,7 +76,7 @@ extension ViewController {
             // Criteria met
             self.statusView.updateDisplay(text)
             if !self.statusView.validate() {
-                return (false, "Password must meeting the criteria below.")
+                return (false, "Your password must meet the requirements below.")
             }
             
             return (true, "")

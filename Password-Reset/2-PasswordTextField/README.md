@@ -31,9 +31,8 @@ One way would be like this.
 
 ![](images/3.png)
 
-- Wanted custom control over elements
-- Stack view could probably work
-- But instead went for full control because I wanted to very specificallly place every element in this layout
+- Stack view Would probably work
+- But instead went with customer view for full control over layout
 
 ## Creating the view
 
@@ -307,7 +306,7 @@ override var intrinsicContentSize: CGSize {
 
 ![](images/8.png)
 
-### Choosing the right colors 🌈
+### Choosing the right color 🌈
 
 Explain how you want to use semantically defined colors over system colors when styling your elements and controls.
 
