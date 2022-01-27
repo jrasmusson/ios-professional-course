@@ -332,8 +332,6 @@ errorLabel.translatesAutoresizingMaskIntoConstraints = false
 errorLabel.textColor = .systemRed
 errorLabel.font = .preferredFont(forTextStyle: .footnote)
 errorLabel.text = "Enter your password"
-errorLabel.adjustsFontSizeToFitWidth = true
-errorLabel.minimumScaleFactor = 0.8
 errorLabel.isHidden = false
 
 addSubview(errorLabel)
@@ -348,42 +346,17 @@ NSLayoutConstraint.activate([
 
 ![](images/9.png)
 
-### Discussion:
+## Dealing with long text
 
-#### Why no pinning to the bottom?
+What if our error label text gets really long? How should we handle that?
 
-Pinning to the bottom
+There are three options or dealing with long text on a label.
 
-```swift
-errorLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-```
+1. Trucate.
+2. Adjust font size to fit width.
+3. Go multiline.
 
-Would cause our `passwordTextField` to jump depending on whether the `errorLabel` is visible or not.
-
-We can avoid that by giving the view an intrinsic content size, and not pinning it to the bottom. Instead we let it float.
-
-It's subtle point. And one that only comes with playing a view and seeing what is right for that context.
-
-### What does `adjustsFontSizeToFitWidth` and `minimumScaleFactor` do?
-
-These two lines adjust the font size of the label to fit the given width. 
-
-```swift
-errorLabel.adjustsFontSizeToFitWidth = true
-errorLabel.minimumScaleFactor = 0.8
-```
-
-![](images/10.png)
-
-What what happens when we make the text really long and constrain the edges of the view.
-
-**PasswordTextField**
-
-```swift
-errorLabel.text = "Enter your password and again and again and again and again and again"
-// errorLabel.adjustsFontSizeToFitWidth = true
-//errorLabel.minimumScaleFactor = 0.8
-```
+To see each of these in action let's set some more explicit width constraints on our text field.
 
 **ViewController**
 
@@ -395,37 +368,90 @@ NSLayoutConstraint.activate([
 ])
 ```
 
-![](images/11.png)
+And then give our `errorLabel` some long text.
 
-It truncates the text cutting the full length off. 
+**PasswordTextField**
 
-By commentting these two lines in
+```swift
+//        backgroundColor = .systemOrange
+errorLabel.text = "Enter your password and again and again and again and again and again"
+```
+
+### Trucate
+
+Truncate is what we get by default if the text in our label exceeds the allowed width.
+
+![](images/16.png)
+
+This is the option you go with if there simply isn't enough space to fit all the text. Spotify for example does this on their home page when there isn't enough space to fit all the artist and  title imformation for a given song.
+
+### Adjust font size to fit width
+
+Adjust font size to fit width is for when we want the text to reduce itself in size to fit into the allocated space.
+
+We can specify a minimum amount we'd like the font to reduce by setting a `minimumScaleFactor` of `80%`. Meaning the font will reduce its in size `80%` but no more. 
 
 ```swift
 errorLabel.adjustsFontSizeToFitWidth = true
 errorLabel.minimumScaleFactor = 0.8
 ```
 
-We let the text shrink to 80% of it's original size and fit whatever space it's got.
+![](images/17.png)
 
-If we make it `0`.
+If we want the entire body of text into the allocated space regardless of size we can set the scale factor to `0`.
 
 ```swift
 errorLabel.adjustsFontSizeToFitWidth = true
-errorLabel.minimumScaleFactor = 0
+errorLabel.minimumScaleFactor = 0.0
 ```
 
-It will reduce the label font to whatever size it takes to fit all the text in.
+![](images/18.png)
 
-![](images/12.png)
+Pretty small. This option isn't ideal because it can make text very hard to read. Instead a better option is to often go multiline.
 
-But for our purposes we will keep it at `0.8`.
+### Going multiline
+
+We can make a label multiline like this:
 
 ```swift
-errorLabel.text = "Enter your password"
-errorLabel.adjustsFontSizeToFitWidth = true
-errorLabel.minimumScaleFactor = 0.8
+errorLabel.numberOfLines = 0
+errorLabel.lineBreakMode = .byWordWrapping
 ```
+
+And add a little more height to accomodate the extra line like this:
+
+```swift
+override var intrinsicContentSize: CGSize {
+    return CGSize(width: UIView.noIntrinsicMetric, height: 60)
+}
+```
+
+![](images/19.png)
+
+Multiline is nice because it keep the text ledgible and easy to read. To doesn't try to cram everything and generally leads to a nicer overall app experience.
+
+The option you choose will depend on the context your label is being displayed in.
+
+- Let the app truncate if you don't have room.
+- Reduce the font size a little if you really don't have any more space.
+- But go multline if you can as it keeps your app accessible and easy to read.
+
+Let's go with the multine solution here for now and set our label text back to this:
+
+```swift
+errorLabel.text = "Your password must meet the requirements below."
+```
+
+![](images/20.png)
+
+### Why are two words wrapped onto the next line?
+
+You may be wondering why the words `requirements below` were both wrapped to a new line with `requirements` would have obviously fit on the line above.
+
+You aren't imagining things. Apple does this by design. To prevent orphaned words from appearing along on their own line, Apple will sometimes group words together onto a new line.
+
+[UILabel wrong word wrap in iOS 11](https://stackoverflow.com/questions/46200027/uilabel-wrong-word-wrap-in-ios-11)
+
 
 ## Embedding in a stack view
 
