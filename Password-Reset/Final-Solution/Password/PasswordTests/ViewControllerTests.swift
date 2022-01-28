@@ -30,21 +30,21 @@ class ViewControllerTests_NewPassword_Validation: XCTestCase {
         vc.newPasswordText = ""
         vc.resetPasswordButtonTapped(sender: UIButton())
         
-        XCTAssertEqual(vc.newPasswordTextField.errorLabel.text!, "Enter your password.")
+        XCTAssertEqual(vc.newPasswordTextField.errorLabel.text!, "Enter your password")
     }
 
     func testInvalidPassword() throws {
         vc.newPasswordText = "🕹"
         vc.resetPasswordButtonTapped(sender: UIButton())
         
-        XCTAssertEqual(vc.newPasswordTextField.errorLabel.text!, "Enter valid special chars (.,@:?!()$\\/#) with no spaces.")
+        XCTAssertEqual(vc.newPasswordTextField.errorLabel.text!, "Enter valid special chars (.,@:?!()$\\/#) with no spaces")
     }
 
     func testCriteriaNotMet() throws {
         vc.newPasswordText = tooShort
         vc.resetPasswordButtonTapped(sender: UIButton())
         
-        XCTAssertEqual(vc.newPasswordTextField.errorLabel.text!, "Your password must meet the requirements below.")
+        XCTAssertEqual(vc.newPasswordTextField.errorLabel.text!, "Your password must meet the requirements below")
     }
 
     func testValidPassword() throws {
@@ -114,6 +114,6 @@ class ViewControllerTests_Show_Alert: XCTestCase {
         vc.confirmPasswordText = tooShort
         vc.resetPasswordButtonTapped(sender: UIButton())
 
-        XCTAssertEqual(vc.alert.title, "Error")
+        XCTAssertEqual(vc.alert.title, "")
     }
 }

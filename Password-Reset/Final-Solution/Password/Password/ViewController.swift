@@ -146,12 +146,12 @@ extension ViewController {
     
     @objc func resetPasswordButtonTapped(sender: UIButton) {
         view.endEditing(true)
+        
         let isValidNewPassword = newPasswordTextField.validate()
         let isValidConfirmPassword = confirmPasswordTextField.validate()
+        
         if isValidNewPassword && isValidConfirmPassword {
             showAlert(title: "Success", message: "You have successfully changed your password.")
-        } else {
-            showAlert(title: "Error", message: "You have entered an invalid password. Fix criteria and try again.")
         }
     }
     
