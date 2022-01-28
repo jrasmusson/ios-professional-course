@@ -10,8 +10,9 @@ import UIKit
 
 class PasswordStatusView: UIView {
     let stackView = UIStackView()
-    let firstLineLabel = UILabel()
+
     let lengthCriteriaView = PasswordCriteriaView(text: "8-32 characters (no spaces)")
+    let criteriaLabel = UILabel()
     let uppercaseCriteriaView = PasswordCriteriaView(text: "uppercase letter (A-Z)")
     let lowerCaseCriteriaView = PasswordCriteriaView(text: "lowercase (a-z)")
     let digitCriteriaView = PasswordCriteriaView(text: "digit (0-9)")
@@ -46,9 +47,9 @@ extension PasswordStatusView {
         stackView.axis = .vertical
         stackView.spacing = 8
         
-        firstLineLabel.numberOfLines = 0
-        firstLineLabel.lineBreakMode = .byWordWrapping
-        firstLineLabel.attributedText = makeCriteriaMessage()
+        criteriaLabel.numberOfLines = 0
+        criteriaLabel.lineBreakMode = .byWordWrapping
+        criteriaLabel.attributedText = makeCriteriaMessage()
         
         lengthCriteriaView.translatesAutoresizingMaskIntoConstraints = false
         uppercaseCriteriaView.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +60,7 @@ extension PasswordStatusView {
     
     func layout() {
         stackView.addArrangedSubview(lengthCriteriaView)
-        stackView.addArrangedSubview(firstLineLabel)
+        stackView.addArrangedSubview(criteriaLabel)
         stackView.addArrangedSubview(uppercaseCriteriaView)
         stackView.addArrangedSubview(lowerCaseCriteriaView)
         stackView.addArrangedSubview(digitCriteriaView)
