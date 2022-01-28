@@ -62,7 +62,7 @@ extension ViewController {
             // Empty text
             guard let text = text, !text.isEmpty else {
                 self.statusView.reset()
-                return (false, "Enter your password.")
+                return (false, "Enter your password")
             }
             
             // Valid characters
@@ -70,13 +70,13 @@ extension ViewController {
             let invalidSet = CharacterSet(charactersIn: validChars).inverted
             guard text.rangeOfCharacter(from: invalidSet) == nil else {
                 self.statusView.reset()
-                return (false, "Enter valid special chars (.,@:?!()$\\/#) with no spaces.")
+                return (false, "Enter valid special chars (.,@:?!()$\\/#) with no spaces")
             }
             
             // Criteria met
             self.statusView.updateDisplay(text)
             if !self.statusView.validate() {
-                return (false, "Your password must meet the requirements below.")
+                return (false, "Your password must meet the requirements below")
             }
             
             return (true, "")

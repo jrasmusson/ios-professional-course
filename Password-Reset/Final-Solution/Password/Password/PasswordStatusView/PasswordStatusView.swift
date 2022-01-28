@@ -175,10 +175,6 @@ extension PasswordStatusView {
 
 // MARK: Tests
 extension PasswordStatusView {
-//    var shouldResetCriteriaTest: Bool {
-//        return shouldResetCriteria
-//    }
-    
     var shouldResetCriteriaTest: Bool {
         get {
             shouldResetCriteria
@@ -187,5 +183,4 @@ extension PasswordStatusView {
             shouldResetCriteria = newValue
         }
     }
-
 }
