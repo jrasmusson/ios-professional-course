@@ -34,24 +34,52 @@ Let's start first with the smaller of the views - the password criteria.
 
 ## Creating the PasswordCriteriaView
 
-- Create a new view `PasswordCriteriaView`
+- Create a new group called `PasswordStatusView`
+- Create a new file in that dir called `PasswordCriteriaView`
+
+![](images/3.png)
+
 - Use our code snippet
-- Give size of
+- Set background color and give size of
 
 **PasswordCriteriaView**
 
 ```swift
 override var intrinsicContentSize: CGSize {
-    return CGSize(width: UIView.noIntrinsicMetric, height: 40)
+    return CGSize(width: 200, height: 40)
 }
 ```
 
-### Challenge 🕹 Add a stack view
+Then let's comment out the `newPasswordTextField` in our stack and instead add the `criteriaView` to our `ViewController`.
 
-See if you can add a stack view to this view.
+**ViewController**
 
-- pin it fully to the top, leading, trailing, bottom edges with a multiplier of zero - completely flush.
-- `spacing = 8`
+```swift
+class ViewController: UIViewController {
+    let stackView = UIStackView()
+    let newPasswordTextField = PasswordTextField(placeHolderText: "New password")
+    let criteriaView = PasswordCriteriaView()
+
+    criteriaView.translatesAutoresizingMaskIntoConstraints = false
+    
+    //        stackView.addArrangedSubview(newPasswordTextField)
+    stackView.addArrangedSubview(criteriaView)
+```
+
+![](images/4.png)
+
+Good place to start. A simply view sized `200x40`. Let's start adding elements. Starting with the stack view.
+
+### Challenge 🕹 Add a stack view to PasswordCriteriaView
+
+We know we are going to base this layout on a stack view. So let's start by adding a stack view to our `PasswordCriteriaView` and then doing our layout from there.
+
+See if you can add a stack view to `PasswordCriteriaView`.
+
+- Call it `let stackView = UIStackView()`
+- Pin it flush to the `top`, `leading`, `trailing`, `bottom` edges.
+- Axis `.vertical` (default)
+- Give it `spacing = 8`
 
 ### Solution ✅
 
@@ -75,9 +103,19 @@ NSLayoutConstraint.activate([
 
 ```
 
+No change in layout at this point. Could optionally set `backgroundColor` on `stackView` to verify sizing.
+
+```swift
+stackView.backgroundColor = .systemRed
+```
+
+![](images/7.png)
+
+But once confirmed our stack view is instead there we can remove and stick with our view background of orange.
+
 ### Adding an image view
 
-Let's add our `imageView` in there first with only one constraint - the width must equal the height.
+Working our way from left to rights, let's add our `imageView`.
 
 **PasswordCriteriaView**
 
@@ -95,16 +133,33 @@ NSLayoutConstraint.activate([
 ])
 ```
 
-OK not bad.
+![](images/8.png)
+
+What's happening here is we have an image in a stackView with it's default:
+
+- `distribution = .fill`
+
+This is one of the strange/neat/confusing things about stack views. They always want to stretch and fill.
+
+Discussion: Why not add height and width constraints
+
+- Would be temping to fix now by adding height and width constraints (20x20). Why not?
+- Because we always want to size things as naturally as we can first, and only resort to hard constraints when necessary.
+- I know this image is been stretched - because it is the only thing in the stack view.
+- Let's add a label, see what things look like after that, and then decide if we need to take more drastic action.
 
 ### Challenge 🕹 Adding the label
 
+![](images/2.png)
+
 Let's see if you can add the label that is going to sit beside our image.
 
-- Call it `label`.
+- Call it `let label = UILabel()`.
 - Give it a preferred font of `subheadline`
 - text color `secondaryLabel`
 - some text `uppercase letter (A-Z)`
+
+Should require any constraints. Simply adding to stack view.
 
 ### Solution
 
@@ -112,18 +167,22 @@ Let's see if you can add the label that is going to sit beside our image.
 
 ```swift
 let label = UILabel()
+
 label.translatesAutoresizingMaskIntoConstraints = false
 label.font = .preferredFont(forTextStyle: .subheadline)
 label.textColor = .secondaryLabel
+label.text = "uppercase letter (A-Z)"
 
 stackView.addArrangedSubview(label)
 ```
 
-### Fixing the stretch
+![](images/9.png)
 
-OK what's going on here. Remember how to fix? This is CHCR.
+OK not bad. Much better. But I still suspect that my image is bigger than it ought to be. And if we reason about this we realize we haven't told our image or label who should stretch and who should hug. In other words there is the potential ambiguity.
 
-We fix this by removing the ambiguity and telling auto layout which elements should hug (`imageView`) and which should stretch (`label`).
+There technically isn't any ambiguity because we are in a stack view with the property stretch to fill.
+
+But watch what happens if we explicitly set our Content-Hugging-Compression-Resistance or CHCR.
 
 ```swift
 // CHCR
@@ -131,9 +190,13 @@ imageView.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizont
 label.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
 ```
 
+![](images/10.png)
+
+🎉 Voila. Ambiguity gone. Image is respecting its intrinsic content size of (20x20). All without requiring any hard coded width and height constraints.
+
 ### Filling in the rest
 
-OK good stuff. Here is some other code we are going to make use of shortly to swap images, and let us know when we've met criteria.
+OK. At this point our criteria view is layed out. Let's now just add some helper functions to represent the other image states and a constructor to set some text.
 
 **PasswordCriteriaView**
 
@@ -167,8 +230,21 @@ init(text: String) {
 }
 ```
 
-- Let's remove the hard coded text on the label...
+- Let's remove the hard coded text on the label.
+- Fix our compliation error.
 
-And we're good to go. Let's move onto the parent view.
+**ViewController**
 
-U R HERE Do a dry run, figure out how to show, add images.
+```swift
+let criteriaView = PasswordCriteriaView(text: "uppercase letter (A-Z")
+```
+
+And we're good to go. Let's save our work.
+
+
+### Save your work 💾
+
+```
+> git add .
+> git commit -m "feat: add password criteria view"
+```

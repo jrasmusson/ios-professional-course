@@ -20,7 +20,6 @@
 		71CE39C32784BCC300D5395D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CE39C22784BCC300D5395D /* ViewController.swift */; };
 		71CE39C82784BCC400D5395D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71CE39C72784BCC400D5395D /* Assets.xcassets */; };
 		71CE39CB2784BCC400D5395D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71CE39C92784BCC400D5395D /* LaunchScreen.storyboard */; };
-		71CE39D62784C0F100D5395D /* UITextField+Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CE39D52784C0F100D5395D /* UITextField+Password.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +49,6 @@
 		71CE39C72784BCC400D5395D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		71CE39CA2784BCC400D5395D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		71CE39CC2784BCC400D5395D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		71CE39D52784C0F100D5395D /* UITextField+Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Password.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,7 +131,6 @@
 		71CE39D22784BE0E00D5395D /* Files */ = {
 			isa = PBXGroup;
 			children = (
-				71CE39D52784C0F100D5395D /* UITextField+Password.swift */,
 				71CE39CC2784BCC400D5395D /* Info.plist */,
 				71CE39C92784BCC400D5395D /* LaunchScreen.storyboard */,
 				71CE39C72784BCC400D5395D /* Assets.xcassets */,
@@ -258,7 +255,6 @@
 				7107AF502786509800521A65 /* PasswordTextField.swift in Sources */,
 				71A4501F2788854400096D2D /* PasswordCriteriaView.swift in Sources */,
 				71CE39BF2784BCC300D5395D /* AppDelegate.swift in Sources */,
-				71CE39D62784C0F100D5395D /* UITextField+Password.swift in Sources */,
 				71A4501D2787A95700096D2D /* PasswordStatusView.swift in Sources */,
 				71934FCE27906CD000FC4A36 /* UIFont+Utils.swift in Sources */,
 				71959C8127946FF200DE2543 /* PasswordCriteria.swift in Sources */,
