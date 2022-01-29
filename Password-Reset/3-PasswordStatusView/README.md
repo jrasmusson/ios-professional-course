@@ -37,7 +37,7 @@ Let's start first with the smaller of the views - the password criteria.
 - Create a new group called `PasswordStatusView`
 - Create a new file in that dir called `PasswordCriteriaView`
 
-![](images/3.png)
+![](images/3a.png)
 
 - Use our code snippet
 - Set background color and give size of
@@ -78,7 +78,7 @@ See if you can add a stack view to `PasswordCriteriaView`.
 
 - Call it `let stackView = UIStackView()`
 - Pin it flush to the `top`, `leading`, `trailing`, `bottom` edges.
-- Axis `.vertical` (default)
+- Axis `.horizontal` (default)
 - Give it `spacing = 8`
 
 ### Solution ✅
