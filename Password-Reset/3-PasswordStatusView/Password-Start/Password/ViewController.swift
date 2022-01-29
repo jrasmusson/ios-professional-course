@@ -35,9 +35,9 @@ extension ViewController {
         view.addSubview(stackView)
         
         NSLayoutConstraint.activate([
-            newPasswordTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
-            view.trailingAnchor.constraint(equalToSystemSpacingAfter: newPasswordTextField.trailingAnchor, multiplier: 1),
-            newPasswordTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 1),
+            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
 
     }
