@@ -439,14 +439,14 @@ The option you choose will depend on the context your label is being displayed i
 Let's go with the multine solution here for now and set our label text back to this:
 
 ```swift
-errorLabel.text = "Your password must meet the requirements below."
+errorLabel.text = "Your password must meet the requirements below"
 ```
 
 ![](images/20.png)
 
 ### Why are two words wrapped onto the next line?
 
-You may be wondering why the words `requirements below` were both wrapped to a new line with `requirements` would have obviously fit on the line above.
+You may be wondering why the words `requirements below` were both wrapped to a new line when the word `requirements` would have obviously fit on the line above.
 
 You aren't imagining things. Apple does this by design. To prevent orphaned words from appearing along on their own line, Apple will sometimes group words together onto a new line.
 
