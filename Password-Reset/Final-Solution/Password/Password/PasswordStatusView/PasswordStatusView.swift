@@ -69,8 +69,6 @@ extension PasswordStatusView {
         addSubview(stackView)
         
         // Stack layout
-        
-        // Hard pin top
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
             stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
