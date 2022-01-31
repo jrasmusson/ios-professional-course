@@ -11,14 +11,7 @@ class ViewController: UIViewController {
 
     let pageViewController: UIPageViewController
     var pages = [UIViewController]()
-    var currentVC: UIViewController {
-        didSet {
-//            guard let index = pages.firstIndex(of: currentVC) else { return }
-//            nextButton.isHidden = index == pages.count - 1
-//            backButton.isHidden = index == 0
-//            doneButton.isHidden = !(index == pages.count - 1)
-        }
-    }
+    var currentVC: UIViewController
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
