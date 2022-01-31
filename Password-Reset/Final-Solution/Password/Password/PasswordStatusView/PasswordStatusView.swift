@@ -75,11 +75,8 @@ extension PasswordStatusView {
             stackView.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
             stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
             trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 2),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 2)
         ])
-        
-        // Soft pin bottom
-        let stackBottomConstraint = stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        stackBottomConstraint.priority = .defaultLow
     }
     
     private func makeCriteriaMessage() -> NSAttributedString {
