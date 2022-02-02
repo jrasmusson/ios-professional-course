@@ -41,3 +41,4 @@ A course for those who would like to work professionally as iOS engineers.
 - [Intro](Password-Reset/1-Intro/README.md)
 - [Password Text Field](Password-Reset/2-PasswordTextField/README.md)
 - [Password Criteria View](Password-Reset/3-PasswordCriteriaView/README.md)
+- [Password Status View](Password-Reset/4-PasswordStatusView/README.md)

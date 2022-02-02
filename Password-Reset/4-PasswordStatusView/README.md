@@ -1,6 +1,6 @@
 # PasswordStatusView
 
-OK now that we've got our `PasswordCriteriaView` built,
+OK now that we've got our `PasswordCriteriaView`,
 lets use that to continue building our `PasswordStatusView`.
 
 ![](images/0a.png)
@@ -55,6 +55,9 @@ extension PasswordStatusView {
 let criteriaView = PasswordCriteriaView(text: "uppercase letter (A-Z)") // delete
 
 let statusView = PasswordStatusView()
+
+statusView.translatesAutoresizingMaskIntoConstraints = false
+
 stackView.addArrangedSubview(statusView)
 ```
 
