@@ -137,6 +137,28 @@ Because our stack view is pinned to the bottom in our `PasswordStatusView` it st
 
 There are a couple of things we could do here.
 
+### Hard code the heights
+
+One thing we could do is hard code the heights and take away the height ambiguity that way.
+
+**PasswordStatusView**
+
+```swift
+// Hard coded heights
+let height: CGFloat = 20
+NSLayoutConstraint.activate([
+    lengthCriteriaView.heightAnchor.constraint(equalToConstant: height),
+    uppercaseCriteriaView.heightAnchor.constraint(equalToConstant: height),
+    lowerCaseCriteriaView.heightAnchor.constraint(equalToConstant: height),
+    digitCriteriaView.heightAnchor.constraint(equalToConstant: height),
+    specialCharacterCriteriaView.heightAnchor.constraint(equalToConstant: height),
+])
+```
+
+![](images/12.png)
+
+#### Adjust the intrinsic content size
+
 We could try changing the intrinsic content size of our `PasswordStatusView` to take up less space.
 
 **PasswordStatusView**
@@ -148,6 +170,8 @@ override var intrinsicContentSize: CGSize {
 ```
 
 ![](images/4.png)
+
+#### Not fully pin stack view to bottom
 
 We could not pin the stack view to the bottom and let it sort of hang there with it's natural size.
 
