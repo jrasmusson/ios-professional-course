@@ -9,6 +9,7 @@ lets use that to continue building our `PasswordStatusView`.
 
 - Create `PasswordStatusView` file
 - Stub out the view
+- Make `backgroundColor = .systemOrange`
 
 **PasswordStatusView**
 
@@ -68,9 +69,9 @@ stackView.addArrangedSubview(statusView)
 Just like we did before, let's start by adding a stack view to our `PasswordStatusView`. 
 
 - Define `let stackView = UIStackView()`
-- Make it axis `verticial`
+- Make axis `verticial`
 - Give it a spacing of `8 pts`
-- Make `backgroundColor = .systemRed`
+- Make stack view `backgroundColor = .systemRed`
 - Pin `top`, `leading`, `trailing`, `bottom` with system spacing `x2`
 
 ![](images/0a.png)
@@ -120,7 +121,6 @@ digitCriteriaView.translatesAutoresizingMaskIntoConstraints = false
 specialCharacterCriteriaView.translatesAutoresizingMaskIntoConstraints = false
 
 stackView.addArrangedSubview(lengthCriteriaView)
-stackView.addArrangedSubview(criteriaLabel)
 stackView.addArrangedSubview(uppercaseCriteriaView)
 stackView.addArrangedSubview(lowerCaseCriteriaView)
 stackView.addArrangedSubview(digitCriteriaView)
@@ -231,7 +231,6 @@ And then let's round the corners by setting the corner radius on `PasswordStatus
 **ViewController**
 
 ```swift
-statusView.translatesAutoresizingMaskIntoConstraints = false
 statusView.layer.cornerRadius = 5
 statusView.clipsToBounds = true
 ```
@@ -252,17 +251,7 @@ confirmPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
 stackView.addArrangedSubview(newPasswordTextField)
 stackView.addArrangedSubview(statusView)
 stackView.addArrangedSubview(confirmPasswordTextField)
-```
 
-![](images/9.png)
-
-### Discussion - why error label not next line
-
-Add more multiplier.
-
-**ViewController**
-
-```swift
 NSLayoutConstraint.activate([
     stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
     view.trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 2),
@@ -289,12 +278,6 @@ resetButton.setTitle("Reset password", for: [])
 stackView.addArrangedSubview(resetButton)
 ```
 
-Add missing status view.
-
-```swift
-statusView.translatesAutoresizingMaskIntoConstraints = false
-```
-
 ![](images/11.png)
 
 Tada! 🎉 View complete.
@@ -303,5 +286,5 @@ Tada! 🎉 View complete.
 
 ```
 > git add .
-> git commit -m "feat: add preliminary layout for password reset view"
+> git commit -m "feat: add layout status view"
 ```
