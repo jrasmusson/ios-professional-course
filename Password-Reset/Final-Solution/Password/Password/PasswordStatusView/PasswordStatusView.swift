@@ -46,6 +46,7 @@ extension PasswordStatusView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = 8
+        stackView.distribution = .equalCentering
         
         criteriaLabel.numberOfLines = 0
         criteriaLabel.lineBreakMode = .byWordWrapping
