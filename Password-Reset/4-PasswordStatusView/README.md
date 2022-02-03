@@ -139,7 +139,7 @@ There are a couple of things we could do here.
 
 ### Hard code the heights
 
-One thing we could do is hard code the heights and take away the height ambiguity that way.
+One thing we could do is hard code the heights.
 
 **PasswordStatusView**
 
@@ -157,6 +157,8 @@ NSLayoutConstraint.activate([
 
 ![](images/12.png)
 
+This works, but ideally we'd prefer not to hard code heights as it makes the layout more rigid, while also increasing the number of auto layout constraints which may impact performance.
+
 #### Adjust the intrinsic content size
 
 We could try changing the intrinsic content size of our `PasswordStatusView` to take up less space.
@@ -170,6 +172,10 @@ override var intrinsicContentSize: CGSize {
 ```
 
 ![](images/4.png)
+
+This works. It's not as rigid as hard coding, and it lets the elements naturally size themselves which is preferrable.
+
+The only down size here is that if we add or subtract elements from the stack view, the problem will surface again. So better, but not yet ideal.
 
 #### Not fully pin stack view to bottom
 
@@ -191,9 +197,27 @@ NSLayoutConstraint.activate([
 ])
 ```
 
+This works well when you don't know exactly how many items are going to appear in your stack, and you just need it to flex. By not pinning it to the buttom you aren't constraining it to the parent view.
+
+The only downside here is that it can spill over the bottom edge of the view, much may not be what you want if you have many elements.
+
 ![](images/5.png)
 
-Or we could leave it the way it is. Because when we add our label, it is going fill in that extra available size, and we will find out `200pt` is about the right height for this view any ways.
+#### Adjust the stack view distribution
+
+Probably the safest, most reliable thing we can do here is adjust the [stack view distribution](https://developer.apple.com/documentation/uikit/uistackview/distribution/equalcentering) setting.
+
+**PasswordStatusView**
+
+```swift
+stackView.distribution = .equalCentering
+```
+
+image here
+
+By making the stack view elements `equlCentering` we are centering the centers of the stack view elements equal from one another, while maintaining the spacing distance between views.
+
+This give us the best of both worlds. It respects the intrinsic content size of the inner views. It does the best job it can at centering. And it let's us add/remove elemets without having to worry adjusting the layout.
 
 > Stack views are one of these controls you just need to play with. Depending on the requirements of the design, the natural of the contents, and the view itself is sitting in, you sometimes just need to play.
 > 
@@ -310,5 +334,9 @@ Tada! 🎉 View complete.
 
 ```
 > git add .
-> git commit -m "feat: add layout status view"
+> git commit -m "feat: add status view"
 ```
+
+### Links that help
+
+- [UIStackView Distribution equalCentering](https://developer.apple.com/documentation/uikit/uistackview/distribution/equalcentering)
