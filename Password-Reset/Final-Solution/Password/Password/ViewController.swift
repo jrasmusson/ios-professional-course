@@ -37,7 +37,8 @@ extension ViewController {
         stackView.spacing = 20
         
         newPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
-
+        newPasswordTextField.delegate = self
+        
         statusView.translatesAutoresizingMaskIntoConstraints = false
         statusView.layer.cornerRadius = 5
         statusView.clipsToBounds = true
@@ -83,7 +84,6 @@ extension ViewController {
         }
         
         newPasswordTextField.customValidation = newPasswordValidation
-        newPasswordTextField.delegate = self
     }
 
     private func setupConfirmPassword() {

@@ -11,13 +11,42 @@ The inline validation is what occurs as the user is typing. This update the indi
 
 Loss of focus validation is what occurs when the text field losses focus, and the user wants to do they password validation check on the rules as a group.
 
-This interaction not only updates the status view, it also updates the text field label. And let's the user know if there password passes three of four, or whether further changes are required.
+Before we can tackle these problems, we are going to need a solid understanding of:
 
-To simplify the implementation, we are going to tackle these interactions one at a time.
+- how `UITextField` works
+- something called `responder chain`
 
-First we are going to do the simpler inline validation, and update the status view as the user types there password in.
+Let's review those now.
 
-Once we have that working, we will come back and tackle the more complex group based validation, and update both the status view and the text field, upon the text field losing focus or the user hitting return.
+## Meet the UITextField
+
+- [UITextField](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/UITextField/UITextField.md)
+
+Challenges:
+
+1. Create new project (with storyboards).
+2. Add a stack view with a text field and a label vertically.
+3. Update the label with the text field contents as the user types
+4. Print out the contents of the text field when they press enter.
+5. Dismiss the keyboard.
+
+## Get to know the UIKit Responder Chain
+
+- [Responder Chain](https://github.com/jrasmusson/ios-starter-kit/blob/master/advanced/Responder-Chain.md)
+
+### How does communication in UIKit work?
+
+### What does it mean to become firstResponder?
+
+### How does all this relate to UITextField?
+
+OK so at this point you:
+
+- Get the `UITextField`
+- Understand `responder chain`
+- Already know `protocol-delegate`
+
+We have everything we need to solve our first interaction problem. Let's get in there and apply all this knowledge to our design.
 
 ## How the inline interaction works
 
@@ -27,18 +56,227 @@ As the user types, we'll communicate back to our view controller using a protoco
 
 This will then result in an update call being made to the status view, in which each individual criteria will update itself, and display either the reset circle image, or the green checkmark (not the red x).
 
-In order to see how this works its really important to deeply understand how the `UITextField` work.
+Let's head over to the arcade and set this up 🕹!
 
-Let's now quickly review how `UITextField` works, understand the various callback functions, and decide which ones we'll need for our password interactions.
+## Receiving the just-in-time text
 
-## A quick review of the UIText field
+First let's hide the error label.
 
-Demo and walk through thorough UIText field example.
+**PasswordTextField**
 
-- [UITextField](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/UITextField/UITextField.md)
-- [Responder Chain](https://github.com/jrasmusson/ios-starter-kit/blob/master/advanced/Responder-Chain.md)
+```swift
+errorLabel.isHidden = true
+```
+
+![](images/2.png)
+
+Then let's register ourselves and the text field's protocol-delegate.
 
 
+**PasswordTextField**
+
+```swift
+textField.delegate = self
+
+// MARK: - UITextFieldDelegate
+extension PasswordTextField: UITextFieldDelegate {
+
+}
+```
+
+Being the delegate for the text field means implementating the `UITextFieldDelegate` protocol. We don't actually have to do anything. Yet.
+
+Next let's capture the text as the user types by registering a target action on the text field itself.
+
+***PasswordTextField**
+
+```swift
+// extra interaction
+textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+
+extension PasswordTextField {
+    @objc func textFieldEditingChanged(_ sender: UITextField) {
+        print("foo - \(sender.text)")
+    }
+}
+```
+
+Remember this is the extra interaction we are adding because the text field protocol-delegate doesn't quite give us what we want. But this target action does.
+
+If we run this now, we should see the how word being printed out as we type.
+
+![](images/3.png)
+
+Now that we have the text field hooked up. Let's add our own protocol-delegate for communicating this important information back to our view controller.
 
 
+## Talking back to the view controller
 
+We can pass the text, as the user types, back to the view controller via the protocol-delegate.
+
+![](images/1.png)
+
+All we need to do is:
+
+- define our protocol
+- declare the delegate, and then
+- fire the event as the user types
+
+**PasswordTextField**
+
+```swift
+protocol PasswordTextFieldDelegate: AnyObject {
+    func editingChanged(_ sender: PasswordTextField)
+}
+
+weak var delegate: PasswordTextFieldDelegate?
+
+extension PasswordTextField {
+    @objc func textFieldEditingChanged(_ sender: UITextField) {
+        delegate?.editingChanged(self) // add
+    }
+}
+```
+
+And then register ourselves for this callback in our view controller.
+
+**ViewController**
+
+```swift
+newPasswordTextField.delegate = self
+
+// MARK: PasswordTextFieldDelegate
+extension ViewController: PasswordTextFieldDelegate {
+    func editingChanged(_ sender: PasswordTextField) {
+        if sender === newPasswordTextField {
+            // statusView.updateDisplay(sender.textField.text ?? "")
+        }
+    }
+}
+```
+
+Eventually we are going to update our status view from here - passing in the text so the status view can figure out how to update itself.
+
+But we can't do that yet. So let's go set that up now.
+
+## Updating the status view
+
+Updating the status view means checking the criteria of the password being passed it, and seeing which criteria are met.
+
+We have five critera we want out passwords to meet. Let's take them one at a time. Starting with the length of 8-32 characters.
+
+### Length Criteria
+
+We can make the length criteria easy to check, by putting this logic into a dedicated structure that is going to do nothing but checkout our password criteria. Let's call it `PasswordCriteria`.
+
+- Create a new file called `PasswordCritiera`.
+
+**PasswordCriteria**
+
+```swift
+struct PasswordCriteria {
+    static func lengthCriteriaMet(_ text: String) -> Bool {
+        text.count >= 8 && text.count <= 32
+    }
+}
+```
+
+Putting this logic here, and not in the view itself, makes this logic more testable. Which will aid us later when adding unit tests.
+
+But this actually isn't enough to meet that first criteria. We also need to check and see that there are not spaces, and that both of these criteria are met. Let's add two more criteria and use that to satisfy that first condition.
+
+**PasswordCriteria**
+
+```swift
+static func noSpaceCriteriaMet(_ text: String) -> Bool {
+    text.rangeOfCharacter(from: NSCharacterSet.whitespaces) == nil
+}
+    
+static func lengthAndNoSpaceMet(_ text: String) -> Bool {
+    lengthCriteriaMet(text) && noSpaceCriteriaMet(text)
+}
+```
+
+Now with these three static functions, we are in a position to determine whether that 8-32 no space criteria is met. But before we apply that logic, let's talk about one strange interaction our UX designers asked us to implement. The Reset.
+
+### The reset
+
+As the user is typing, our UX designers want the password criteria contorl to toggle between:
+
+- ✅ and ⚪️
+
+But not the ❌. Demo.
+
+They only want the ❌ to appear when the text field loses focus, and there on after when they go back and type in the text field.
+
+To handle this UX nuance/capability, we need a way of tracking when the status view would be reset. So to do that, we'll create this variable.
+
+**PasswordStatusView**
+
+```swift
+// Used to determine if we reset criteria back to empty state (⚪️).
+private var shouldResetCriteria: Bool = true
+```
+
+And use it to determine when the text field has lost focus, and when it should reset.
+
+We set it to true initially, because initally when the user starts typing in the control, we always want it to reset (only show ✅ and ⚪️).
+
+But later on, when the text field has lost focus, we will set it to false.
+
+```swift
+shouldResetCriteria = false
+```
+
+And that's when it should start showing the ❌ too.
+
+So with that explaination, let's how update our view based on the length and space criteria of our password.
+
+**PasswordStatusView**
+
+```swift
+let lengthCriteriaView = PasswordCriteriaView(text: "8-32 characters (no spaces)")
+...
+private var shouldResetCriteria: Bool = true
+
+// MARK: Actions
+extension PasswordStatusView {
+    func updateDisplay(_ text: String) {
+        let lengthAndNoSpaceMet = PasswordCriteria.lengthAndNoSpaceMet(text)
+
+        if shouldResetCriteria {
+            // Inline validation (✅ or ⚪️)
+            lengthAndNoSpaceMet
+                ? lengthCriteriaView.isCriteriaMet = true
+                : lengthCriteriaView.reset()
+
+        } else {
+            // Focus lost (✅ or ❌)
+            lengthCriteriaView.isCriteriaMet = lengthAndNoSpaceMet
+        }
+    }
+}
+```
+
+And then comment in the call from our view controller to update the status view state.
+
+**ViewController**
+
+```swift
+// MARK: PasswordTextFieldDelegate
+extension ViewController: PasswordTextFieldDelegate {
+    func editingChanged(_ sender: PasswordTextField) {
+        if sender === newPasswordTextField {
+            statusView.updateDisplay(sender.textField.text ?? "")
+        }
+    }
+}
+```
+
+![](images/4.png)
+
+🎉 Voila! Great stuff. Let's do it again for uppercase.
+
+U R HERE
+
+Then have then do for lowercase and digit.

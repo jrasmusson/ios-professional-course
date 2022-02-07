@@ -95,7 +95,7 @@ extension PasswordStatusView {
     }
 }
 
-// MARK: Actionss
+// MARK: Actions
 extension PasswordStatusView {
     func updateDisplay(_ text: String) {
         let lengthAndNoSpaceMet = PasswordCriteria.lengthAndNoSpaceMet(text)
@@ -107,7 +107,7 @@ extension PasswordStatusView {
         if shouldResetCriteria {
             // Inline validation (✅ or ⚪️)
             lengthAndNoSpaceMet
-                ? lengthCriteriaView.isCriteriaMet = true
+                ? lengthCriteriaView.isCriteriaMet = true 
                 : lengthCriteriaView.reset()
 
             uppercaseMet
