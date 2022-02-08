@@ -20,17 +20,44 @@ Let's review those now.
 
 ## Meet the UITextField
 
+Goal here is to fold:
+
+1. Get your more familiar with `UITexField`
+2. Give you tools to problem solve.
+
+Tackling a control like this is trickier than it sounds. There are a lot of interactions in there that we are doing to need to deal with. 
+
+That's why I am going to show you my number one technique for building components like this. And that is first getting a thorough understanding how the underlying control, upon which our entire solution is going to work - the `UITextField`.
+
+So what we are going to do first, is we are going to play with the `UITextField`, see what it does, and familiarize ourself with some of the nuances of how it works. We'll do this in a sandbox where we can play.
+
+Then, once we're comfortable with how the `UITextField` works, we'll bring that knowledge back to the app, and incorporate our insights and finding there.
+
+But let's start, by getting you some practice in creating your own sandbox.
+
+## Challenge 🕹 Create a text field sandbox
+
+1. Create new project (with or without storyboards).
+2. Add a text field centered in the middle to the `ViewController`.
+3. Register yourself as the text field's delegate.
+4. Print out the contents of whatever the user types in the textfield.
+
+Give that a go. Come back. And we'll do it together.
+
 - [UITextField](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/UITextField/UITextField.md)
 
-Challenges:
+## Solution ✅
 
-1. Create new project (with storyboards).
-2. Add a stack view with a text field and a label vertically.
-3. Update the label with the text field contents as the user types
-4. Print out the contents of the text field when they press enter.
-5. Dismiss the keyboard.
+If you are unfamilar with controls your are going to be using as part of your solution, creating sandboxes where you can play with `UIKit` control like text fields and others is invaluable.
 
-## Get to know the UIKit Responder Chain
+If you really want to go pro, you can even take this one step further, and add your sand box to your own personal git repos, and remind yourself how a particular control works by simply looking it up.
+
+You can see my repos for the `UITextField` [here](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/UITextField/UITextField.md).
+
+- Copy view controller code into your sand box
+- Walk through text field delegates one at a time
+
+## Getting to know the UIKit Responder Chain
 
 - [Responder Chain](https://github.com/jrasmusson/ios-starter-kit/blob/master/advanced/Responder-Chain.md)
 
