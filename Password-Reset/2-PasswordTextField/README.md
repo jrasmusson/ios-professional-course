@@ -210,7 +210,7 @@ class ViewController: UIViewController {
 
 - Discussion. Talk about the initialization of variables in constructors.
 
-### Challenge 🕹 - Adding the eye button
+### Challenge 🕹 Adding the eye button
 
 See if you can add a plain button to the right of the text field.
 
