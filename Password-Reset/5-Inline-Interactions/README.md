@@ -44,8 +44,6 @@ But let's start, by getting you some practice in creating your own sandbox.
 
 Give that a go. Come back. And we'll do it together.
 
-- [UITextField](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/UITextField/UITextField.md)
-
 ## Solution ✅
 
 If you are unfamilar with controls your are going to be using as part of your solution, creating sandboxes where you can play with `UIKit` control like text fields and others is invaluable.
@@ -54,26 +52,123 @@ If you really want to go pro, you can even take this one step further, and add y
 
 You can see my repos for the `UITextField` [here](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/UITextField/UITextField.md).
 
-- Copy view controller code into your sand box
-- Walk through text field delegates one at a time
+Let's now go over the various delegate methods, and see how each works.
 
-## Getting to know the UIKit Responder Chain
+**ViewController**
+
+```swift
+import UIKit
+
+class ViewController: UIViewController {
+
+    let textField = UITextField()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        style()
+        layout()
+    }
+}
+
+extension ViewController {
+    private func style() {
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.placeholder = "New password"
+        textField.backgroundColor = .systemGray6
+        textField.delegate = self
+
+        // extra interaction
+        textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+    }
+
+    private func layout() {
+        view.addSubview(textField)
+
+        NSLayoutConstraint.activate([
+            textField.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            textField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: textField.trailingAnchor, multiplier: 2)
+        ])
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension ViewController: UITextFieldDelegate {
+
+    // return NO to disallow editing.
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return true
+    }
+
+    // became first responder
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+    }
+
+    // return YES to allow editing to stop and to resign first responder status.
+    // return NO to disallow the editing session to end
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        return true
+    }
+
+    // if implemented, called in place of textFieldDidEndEditing: ?
+    func textFieldDidEndEditing(_ textField: UITextField) {
+    }
+
+    // detect - keypress
+    // return NO to not change text
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let word = textField.text ?? ""
+        let char = string
+        print("Default - shouldChangeCharactersIn: \(word) \(char)")
+        return true
+    }
+
+    // called when 'clear' button pressed. return NO to ignore (no notifications)
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        return true
+    }
+
+    // called when 'return' key pressed. return NO to ignore.
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true) // resign first responder
+        return true
+    }
+}
+
+// MARK: - Extra Actions
+extension ViewController {
+    @objc func textFieldEditingChanged(_ sender: UITextField) {
+        print("Extra - textFieldEditingChanged: \(sender.text)")
+    }
+}
+```
+
+## What is the first responder?
+
+First responder is the designation UIKit gives a control who is first in line to receive a UIKit or Cocoa touch event.
+
+When we use `UITextField`, and the user taps on the text field bringing up the keyboard, that text field becomes the first responder. It is going to respond to any touch events on the screen first, and get dibs on what happens before anyone else.
+
+When we dismiss the keyboard, we give up the first responder designation. We are basically saying we are no longer first in line, anyone can receive events now. We resign the keyboard.
+
+That's what first responder is.
+
+But I would like to go just a little bit deepers and explain to you how first responder works. For that we need to understand something called the responder chain.
+
+## What is the responder chain
 
 - [Responder Chain](https://github.com/jrasmusson/ios-starter-kit/blob/master/advanced/Responder-Chain.md)
 
-### How does communication in UIKit work?
+### Sandbox complete 🏝
 
-### What does it mean to become firstResponder?
+OK. We are in a good spot here. Thanks to our playing in the sandbox we now:
 
-### How does all this relate to UITextField?
+- Understand how `UITextField` works
+- Know what `firstResponder` means
+- Have a deeper understanding of Cocoa touch and the `responder chain`, and
+- We already know `protocol-delegate` works
 
-OK so at this point you:
-
-- Get the `UITextField`
-- Understand `responder chain`
-- Already know `protocol-delegate`
-
-We have everything we need to solve our first interaction problem. Let's get in there and apply all this knowledge to our design.
+We have everything we need to solve our first interaction problem. Let's now head over to the arcade and put some of this new found knowledge to work.
 
 ## How the inline interaction works
 
@@ -81,13 +176,13 @@ As the user types, we'll communicate back to our view controller using a protoco
 
 ![](images/1.png)
 
-This will then result in an update call being made to the status view, in which each individual criteria will update itself, and display either the reset circle image, or the green checkmark (not the red x).
+This will then result in an update call being made to the status view, in which each individual criteria will update itself.
 
-Let's head over to the arcade and set this up 🕹!
+Let's set it up!
 
 ## Receiving the just-in-time text
 
-First let's hide the error label.
+First let's hide the error label that we were permanently displaying on the text field. We'll show it later when an error occurs.
 
 **PasswordTextField**
 
@@ -97,7 +192,7 @@ errorLabel.isHidden = true
 
 ![](images/2.png)
 
-Then let's register ourselves and the text field's protocol-delegate.
+Then let's register ourselves as the text field's delegate.
 
 
 **PasswordTextField**
@@ -111,7 +206,7 @@ extension PasswordTextField: UITextFieldDelegate {
 }
 ```
 
-Being the delegate for the text field means implementating the `UITextFieldDelegate` protocol. We don't actually have to do anything. Yet.
+Being the delegate for the text field means implementating the `UITextFieldDelegate` protocol. We don't actually have to do anything to implement this protocol. Other than implement the interface.
 
 Next let's capture the text as the user types by registering a target action on the text field itself.
 
@@ -121,10 +216,8 @@ Next let's capture the text as the user types by registering a target action on 
 // extra interaction
 textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
 
-extension PasswordTextField {
-    @objc func textFieldEditingChanged(_ sender: UITextField) {
-        print("foo - \(sender.text)")
-    }
+@objc func textFieldEditingChanged(_ sender: UITextField) {
+    print("foo - \(sender.text)")
 }
 ```
 
@@ -188,9 +281,19 @@ But we can't do that yet. So let's go set that up now.
 
 ## Updating the status view
 
+![](images/11.png)
+
 Updating the status view means checking the criteria of the password being passed it, and seeing which criteria are met.
 
-We have five critera we want out passwords to meet. Let's take them one at a time. Starting with the length of 8-32 characters.
+We have five critera we want out passwords to meet.
+
+- 8-32 characters no spaces
+- at least one uppercase letter (A-Z)
+- at least one lowercase letter (a-z)
+- at least one digit (0-9)
+- at least one special character (e.g. !@#$%^)
+
+Let's take them one at a time. Starting with the length of 8-32 characters.
 
 ### Length Criteria
 
@@ -232,7 +335,9 @@ As the user is typing, our UX designers want the password criteria contorl to to
 
 - ✅ and ⚪️
 
-But not the ❌. Demo.
+But not the ❌. 
+
+Demo.
 
 They only want the ❌ to appear when the text field loses focus, and there on after when they go back and type in the text field.
 
@@ -326,8 +431,6 @@ let uppercaseMet = PasswordCriteria.uppercaseMet(text)
 uppercaseMet
     ? uppercaseCriteriaView.isCriteriaMet = true
     : uppercaseCriteriaView.reset()
-
-uppercaseCriteriaView.isCriteriaMet = uppercaseMet
 ```
 
 If we run then, we just now see our uppercase check in play.
@@ -386,9 +489,6 @@ lowercaseMet
 digitMet
     ? digitCriteriaView.isCriteriaMet = true
     : digitCriteriaView.reset()
-    
-lowerCaseCriteriaView.isCriteriaMet = lowercaseMet
-digitCriteriaView.isCriteriaMet = digitMet
 ```
 
 If we run this now, we should now see a lowercase and digit check.
@@ -397,7 +497,7 @@ If we run this now, we should now see a lowercase and digit check.
 
 ### Checking for special characters
 
-Our last password check is one for special characters. The only special characters we want to allow are:
+Our last check is one for special characters. The only special characters we want to allow are:
 
 `@:?!()$#,.\/`
 
@@ -405,7 +505,7 @@ This one is tricky because:
 
 1. We need to escape certain characters for Swift (i.e. `/`).
 2. We need to special format the regex expression to search for the chars we want.
-3. 
+
 To debug this I found it handy to create a Swift playground, and do some manually testing in there. Let's do that now.
 
 - Create a new Swift playground
@@ -473,7 +573,7 @@ For example you can't just enter a back slash into a Swift string. We need to es
 
 So that's the first challenge we need to understand and overcome. We need to escape `\\ backslashes` when adding to String in Swift.
 
-The second challenge is then doing the same thing back for regex. Regex has [certain characters](https://stackoverflow.com/questions/399078/what-special-characters-must-be-escaped-in-regular-expressions) that need to be escaped.
+The second challenge is then doing the same thing back for regex. Regex has [certain characters](https://stackoverflow.com/questions/399078/what-special-characters-must-be-escaped-in-regular-expressions) that need to be escaped too.
 
 For example to detect a forward slash in regex we need to escape it like this:
 
