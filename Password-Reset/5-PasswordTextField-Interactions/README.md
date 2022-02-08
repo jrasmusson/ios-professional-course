@@ -496,5 +496,7 @@ And if we try all our special characters out, we should now be able to detect ea
 ### Save your work 💾
 
 ```
-
+> git add .
+> git commit -m "feat: add inline interactions"
 ```
+
