@@ -557,7 +557,7 @@ This one is tricky because:
 ```swift
 // @:?!()$#,./\
 let text = "."
-let specialCharacterRegex = "[@:?!()$#,.]+" // almost...
+let specialCharacterRegex = "[@:?!()$#,./]+" // almost...
 text.range(of: specialCharacterRegex, options: .regularExpression) != nil
 ```
 
@@ -576,19 +576,11 @@ So that's the first challenge we need to understand and overcome. We need to esc
 
 The second challenge is then doing the same thing back for regex. Regex has [certain characters](https://stackoverflow.com/questions/399078/what-special-characters-must-be-escaped-in-regular-expressions) that need to be escaped too.
 
-For example to detect a forward slash in regex we need to escape it like this:
-
-```swift
-let text = "/"
-let specialCharacterRegex = "[@:?!()$#,.\\/]+"
-text.range(of: specialCharacterRegex, options: .regularExpression) != nil
-```
-
-Then finally the last character we need to handle is the back slash. Which we can escape in regex as follows (4 slashes):
+For example to detect a back slash in regex we need to escape it like this:
 
 ```swift
 let text = "\\"
-let specialCharacterRegex = "[@:?!()$#,.\\/\\\\]+"
+let specialCharacterRegex = "[@:?!()$#,./\\\\]+"
 text.range(of: specialCharacterRegex, options: .regularExpression) != nil
 ```
 
@@ -599,7 +591,7 @@ So bringing it all together we can now define a special character check like thi
 ```swift
 static func specialCharacterMet(_ text: String) -> Bool {
     // regex escaped @:?!()$#,.\/
-    return text.range(of: "[@:?!()$#,.\\/\\\\]+", options: .regularExpression) != nil
+    return text.range(of: "[@:?!()$#,./\\\\]+", options: .regularExpression) != nil
 }
 ```
 
