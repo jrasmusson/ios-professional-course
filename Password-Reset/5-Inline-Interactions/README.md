@@ -174,7 +174,7 @@ We have everything we need to solve our first interaction problem. Let's now hea
 
 As the user types, we'll communicate back to our view controller using a protocol-delegate, passing the back the text as they type it in on the keyboard.
 
-![](images/1.png)
+![](images/1a.png)
 
 This will then result in an update call being made to the status view, in which each individual criteria will update itself.
 
@@ -234,7 +234,7 @@ Now that we have the text field hooked up. Let's add our own protocol-delegate f
 
 We can pass the text, as the user types, back to the view controller via the protocol-delegate.
 
-![](images/1.png)
+![](images/1a.png)
 
 All we need to do is:
 
