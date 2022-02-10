@@ -508,7 +508,7 @@ To debug this I found it handy to create a Swift playground, and do some manuall
 **Playground**
 
 ```swift
-// @:?!()$#,.\/
+// @:?!()$#,./\
 let text = "@"
 let specialCharacterRegex = "[🕹 insert regex here]+"
 text.range(of: specialCharacterRegex, options: .regularExpression) != nil
@@ -534,7 +534,7 @@ If we continue the pattern above these characters are fairly easy to add. For ev
 
 See how many of these special characters you can get to work in the playground:
 
-- `@:?!()$#,.\/`
+- `@:?!()$#,./\`
 
 Keep adding the above characters one at a time to our regex expresssion
 
@@ -555,7 +555,7 @@ This one is tricky because:
 
 
 ```swift
-// @:?!()$#,.\/
+// @:?!()$#,./\
 let text = "."
 let specialCharacterRegex = "[@:?!()$#,.]+" // almost...
 text.range(of: specialCharacterRegex, options: .regularExpression) != nil
