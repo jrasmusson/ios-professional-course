@@ -556,8 +556,9 @@ Good luck!
 If we continue the pattern above these characters are fairly easy to add. For everyone one of these you got, give yourself a point 🕹.
 
 ```swift
+// @:?!()$#,.\/
 let text = "."
-let specialCharacterRegex = "[@:?!()$#,.]+"
+let specialCharacterRegex = "[@:?!()$#,.]+" // almost...
 text.range(of: specialCharacterRegex, options: .regularExpression) != nil
 ```
 
