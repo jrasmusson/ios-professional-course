@@ -497,44 +497,6 @@ If we run this now, we should now see a lowercase and digit check.
 
 ### Checking for special characters
 
-Our last check is one for special characters. The only special characters we want to allow are:
-
-`@:?!()$#,.\/`
-
-This one is tricky because:
-
-1. We need to escape certain characters for Swift (i.e. `/`).
-2. We need to special format the regex expression to search for the chars we want.
-
-To debug this I found it handy to create a Swift playground, and do some manually testing in there. Let's do that now.
-
-- Create a new Swift playground
-- Save on desk top
-- Copy in the following code
-
-**Playground**
-
-```swift
-// @:?!()$#,.\/
-let text = "@"
-let specialCharacterRegex = "[@]+"
-text.range(of: specialCharacterRegex, options: .regularExpression) != nil
-```
-
-The way regex special characters work is we insert whatever special char we want to look for in these brackets:
-
-- `[special chars here]+`
-
-And then one at a time, we can test to see that they work by running the playground
-
-- once with the special char
-
-![](images/8.png)
-
-- once without
-
-![](images/7.png)
-
 ### Challenge 🕹
 
 See how many of these special characters you can get to work in the playground:
@@ -552,6 +514,41 @@ See how many you can get to pass. You get one point for every character you can 
 Good luck!
 
 ### Solution ✅
+
+This one is tricky because:
+
+1. We need to escape certain characters for Swift (i.e. `/`).
+2. We need to special format the regex expression to search for the chars we want.
+
+To debug this I found it handy to create a Swift playground, and do some manually testing in there. Let's do that now.
+
+- Create a new Swift playground
+- Save on desk top
+- Copy in the following code
+
+**Playground**
+
+```swift
+// @:?!()$#,.\/
+let text = "@"
+let specialCharacterRegex = "[🕹 add regex here]+"
+text.range(of: specialCharacterRegex, options: .regularExpression) != nil
+```
+
+The way regex special characters work is we insert whatever special char we want to look for in these brackets:
+
+- `[special chars here]+`
+
+And then one at a time, we can test to see that they work by running the playground
+
+- once with the special char
+
+![](images/8.png)
+
+- once without
+
+![](images/7.png)
+
 
 If we continue the pattern above these characters are fairly easy to add. For everyone one of these you got, give yourself a point 🕹.
 
