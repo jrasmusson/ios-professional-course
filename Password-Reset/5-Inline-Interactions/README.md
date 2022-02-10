@@ -210,7 +210,7 @@ Being the delegate for the text field means implementating the `UITextFieldDeleg
 
 Next let's capture the text as the user types by registering a target action on the text field itself.
 
-***PasswordTextField**
+**PasswordTextField**
 
 ```swift
 // extra interaction
