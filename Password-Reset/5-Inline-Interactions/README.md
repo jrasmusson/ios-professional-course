@@ -499,7 +499,7 @@ If we run this now, we should now see a lowercase and digit check.
 
 Our last check is one for special characters. The only special characters we want to allow are:
 
-`@:?!()$#,.\`
+`@:?!()$#,.\/`
 
 This one is tricky because:
 
@@ -538,7 +538,7 @@ And then one at a time, we can test to see that they work by running the playgro
 
 See how many of these special characters you can get to work in the playground:
 
-- `@:?!()$#,.\`
+- `@:?!()$#,.\/`
 
 Keep adding the above characters one at a time to our regex expresssion
 
