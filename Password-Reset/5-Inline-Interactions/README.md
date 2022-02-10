@@ -499,7 +499,7 @@ If we run this now, we should now see a lowercase and digit check.
 
 Our last check is one for special characters. The only special characters we want to allow are:
 
-`@:?!()$#,./`
+`@:?!()$#,.\`
 
 This one is tricky because:
 
