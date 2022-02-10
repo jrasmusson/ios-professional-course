@@ -510,7 +510,7 @@ To debug this I found it handy to create a Swift playground, and do some manuall
 ```swift
 // @:?!()$#,.\/
 let text = "@"
-let specialCharacterRegex = "[@]+"
+let specialCharacterRegex = "[🕹 insert regex here]+"
 text.range(of: specialCharacterRegex, options: .regularExpression) != nil
 ```
 
