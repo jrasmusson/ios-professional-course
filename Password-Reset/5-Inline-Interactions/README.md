@@ -515,6 +515,7 @@ To debug this I found it handy to create a Swift playground, and do some manuall
 **Playground**
 
 ```swift
+// @:?!()$#,.\/
 let text = "@"
 let specialCharacterRegex = "[@]+"
 text.range(of: specialCharacterRegex, options: .regularExpression) != nil
