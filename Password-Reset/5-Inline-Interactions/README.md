@@ -538,7 +538,7 @@ And then one at a time, we can test to see that they work by running the playgro
 
 See how many of these special characters you can get to work in the playground:
 
-- `@:?!()$#,./`
+- `@:?!()$#,.\`
 
 Keep adding the above characters one at a time to our regex expresssion
 
