@@ -187,8 +187,4 @@ extension PasswordTextField {
         clearError()
         return true
     }
-
 }
-
-
-

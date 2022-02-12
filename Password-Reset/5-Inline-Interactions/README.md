@@ -620,3 +620,10 @@ And if we try all our special characters out, we should now be able to detect ea
 > git commit -m "feat: add inline interactions"
 ```
 
+### Links that help
+
+- [UITextField sandbox](https://github.com/jrasmusson/ios-starter-kit/blob/master/basics/UITextField/UITextField.md)
+- [Responder chain](https://github.com/jrasmusson/ios-starter-kit/blob/master/advanced/Responder-Chain.md)
+- [Responder chain video](https://www.youtube.com/watch?v=le7tzeqN908&t=101s&ab_channel=SwiftArcade)
+- [Regex](https://en.wikipedia.org/wiki/Regular_expression)
+- [Swift Strings and Characters](https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html#:~:text=The%20escaped%20special%20characters%20%5C0,and%20%5C'%20(single%20quotation%20mark))
