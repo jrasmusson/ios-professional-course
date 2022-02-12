@@ -178,12 +178,12 @@ extension PasswordTextField {
         return true
     }
     
-    func clearError() {
+    private func clearError() {
         errorLabel.isHidden = true
         errorLabel.text = ""
     }
 
-    func showError(_ errorMessage: String) {
+    private func showError(_ errorMessage: String) {
         errorLabel.isHidden = false
         errorLabel.text = errorMessage
     }
