@@ -34,7 +34,7 @@ A course for those who would like to work professionally as iOS engineers.
 - [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
 - [WWDC](https://developer.apple.com/wwdc21/)
 - [Swift Arcade](https://www.youtube.com/channel/UCxnCA5FBYRCFgIZWD0CKCVg/videos)
-- [Shortcut keys](Additional-Resources/README.md)
+- [Shortcut Keys](Additional-Resources/README.md)
 
 #### Password Reset - New Section Coming soon 🚀
 
@@ -42,4 +42,5 @@ A course for those who would like to work professionally as iOS engineers.
 - [Password Text Field](Password-Reset/2-PasswordTextField/README.md)
 - [Password Criteria View](Password-Reset/3-PasswordCriteriaView/README.md)
 - [Password Status View](Password-Reset/4-PasswordStatusView/README.md)
-- [Inline interactions](Password-Reset/5-Inline-Interactions/README.md)
+- [Inline Interactions](Password-Reset/5-Inline-Interactions/README.md)
+- [Lost Focus interactions](Password-Reset/6-Lost-Focus-Interactions/README.md)

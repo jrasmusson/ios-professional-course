@@ -153,13 +153,6 @@ extension PasswordTextField: UITextFieldDelegate {
     }
 }
 
-// MARK: - Extra textfield action to return whole changed word
-extension PasswordTextField {
-    @objc func textFieldEditingChanged(_ sender: UITextField) {
-        delegate?.editingChanged(self)
-    }
-}
-
 // MARK: - Actions
 extension PasswordTextField {
     @objc func togglePasswordView(_ sender: Any) {
@@ -167,6 +160,13 @@ extension PasswordTextField {
         eyeButton.isSelected.toggle()
     }
 
+    @objc func textFieldEditingChanged(_ sender: UITextField) {
+        delegate?.editingChanged(self)
+    }
+}
+
+// MARK: - Validation
+extension PasswordTextField {
     func validate() -> Bool {
         if let customValidation = customValidation,
             let customValidationResult = customValidation(text),
@@ -178,13 +178,13 @@ extension PasswordTextField {
         return true
     }
     
-    private func clearError() {
-        errorLabel.isHidden = true
-        errorLabel.text = ""
-    }
-
     private func showError(_ errorMessage: String) {
         errorLabel.isHidden = false
         errorLabel.text = errorMessage
+    }
+
+    private func clearError() {
+        errorLabel.isHidden = true
+        errorLabel.text = ""
     }
 }
