@@ -167,16 +167,6 @@ extension PasswordTextField {
         eyeButton.isSelected.toggle()
     }
 
-    func clearError() {
-        errorLabel.isHidden = true
-        errorLabel.text = ""
-    }
-
-    func showError(_ errorMessage: String) {
-        errorLabel.isHidden = false
-        errorLabel.text = errorMessage
-    }
-
     func validate() -> Bool {
         if let customValidation = customValidation,
             let customValidationResult = customValidation(text),
@@ -186,5 +176,15 @@ extension PasswordTextField {
         }
         clearError()
         return true
+    }
+    
+    func clearError() {
+        errorLabel.isHidden = true
+        errorLabel.text = ""
+    }
+
+    func showError(_ errorMessage: String) {
+        errorLabel.isHidden = false
+        errorLabel.text = errorMessage
     }
 }

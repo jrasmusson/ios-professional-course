@@ -101,4 +101,9 @@ func validate() -> Bool {
 }
 ```
 
+This method looks simple and straight forward, but there is a lot going on in here. Let's unpack it.
+
+On the surface this function is very simple. If there is an error in validation we 
+
+
 
