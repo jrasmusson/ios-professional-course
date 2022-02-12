@@ -199,6 +199,9 @@ func reset() {
 }
 ```
 
+Last but not least, we need to trigger this validation by 
+
+
 If we run this now, we should be able to lose focus, and trigger an error label update in the event the new password text field is blank.
 
 
