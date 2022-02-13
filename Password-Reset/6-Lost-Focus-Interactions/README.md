@@ -338,9 +338,15 @@ If we run this now, we should be now see an error message when the user taps the
 
 ![](images/4.png)
 
-### Triggering the red X
+### Making the red X show up
 
 There just one more little subtly. When the text field loses focus we want to trigger the red x validation also. To do that we add this line here.
+
+**PasswordTextField**
+
+```swift
+var shouldResetCriteria: Bool = true
+```
 
 **ViewController**
 
@@ -348,7 +354,7 @@ There just one more little subtly. When the text field loses focus we want to tr
 func editingDidEnd(_ sender: PasswordTextField) {
     if sender === newPasswordTextField {
         // as soon as we lose focus, make ❌ appear
-        statusView.shouldResetCriteriaTest = false // add
+        statusView.shouldResetCriteria = false // add
         
         _ = newPasswordTextField.validate()
     }
@@ -357,7 +363,31 @@ func editingDidEnd(_ sender: PasswordTextField) {
 
 This line triggers the `statusView` to now toggle between ✅ and ❌ when updating the display. We only what this to occur when the text field loses focus. So we set to `false` here and it stays `false` for as long as this view is displayed.
 
-![](images/6.png)
+Then to trigger the ❌ we add this logic in the status view here.
+
+**PasswordStatusView**
+
+```swift
+// MARK: Actions
+extension PasswordStatusView {
+    func updateDisplay(_ text: String) {
+    	 ...
+        
+        if shouldResetCriteria {
+			...
+        } else {
+            // Focus lost (✅ or ❌)
+            lengthCriteriaView.isCriteriaMet = lengthAndNoSpaceMet
+            uppercaseCriteriaView.isCriteriaMet = uppercaseMet
+            lowerCaseCriteriaView.isCriteriaMet = lowercaseMet
+            digitCriteriaView.isCriteriaMet = digitMet
+            specialCharacterCriteriaView.isCriteriaMet = specialCharacterMet
+        }
+    }
+}
+```
+
+![](images/6a.png)
 
 
 
@@ -452,6 +482,105 @@ func validate(_ text: String) -> Bool {
 ```
 
 Really nice. Quite terse and readable.
+
+We can now use this in our view controller like this:
+
+**ViewController**
+
+```swift
+private func setupNewPassword() {
+    let newPasswordValidation: CustomValidation = { text in
+        
+        // Empty text
+        
+        // Valid characters
+        
+        // Criteria met
+        self.statusView.updateDisplay(text)
+        if !self.statusView.validate(text) {
+            return (false, "Your password must meet the requirements below")
+        }
+        
+        return (true, "")
+    }
+    
+    newPasswordTextField.customValidation = newPasswordValidation
+}
+```
+
+![](images/7.png)
+
+At this point our password text field is fully configured and done.
+
+## Adding validation for the confirm password text field
+
+Adding further validation for our confirm password text field is now easy. Here we want to check:
+
+- empty text
+- passwords not matching
+
+Which we can do in a similar way by setting up a confirm password function and then configuring our validation in there.
+
+**ViewController**
+
+```swift
+private func setup() {
+    setupNewPassword()
+    setupConfirmPassword() // add
+    setupDismissKeyboardGesture()
+}
+
+private func setupConfirmPassword() {
+    let confirmPasswordValidation: CustomValidation = { text in
+        guard let text = text, !text.isEmpty else {
+            return (false, "Enter your password.")
+        }
+
+        guard text == self.newPasswordTextField.text else {
+            return (false, "Passwords do not match.")
+        }
+
+        return (true, "")
+    }
+
+    confirmPasswordTextField.customValidation = confirmPasswordValidation
+    confirmPasswordTextField.delegate = self
+}
+
+func editingDidEnd(_ sender: PasswordTextField) {
+    if sender === newPasswordTextField {
+       ...
+    } else if sender == confirmPasswordTextField {
+        _ = confirmPasswordTextField.validate()
+    }
+}
+```
+
+And now our confirm password text field is configured too.
+
+## Dealing with the keyboard
+
+We've been a bit sloppy in how we've been testing app. As a way of convenience we've been entering text directly into the text field by tying directly on my keyboard.
+
+This is great for prototyping. But it's not how our users will be using the app.
+
+> To flip between computer and simulator key board entry type `Shift+Command+K`.
+
+If we flip to showing the keyboard on the phone, and start entering text on our custom text field, watch what happens. Our text field is completely hidden by the display.
+
+Let's now address that and done what is almost a right of passage for any professional iOS developer - learn how to adjust the display based on the appearance of the keyboard.
+
+Discusson:
+
+- explain how the keyboard works
+- explain how we are going to solve the problem
+
+Image
+
+- before after keyboard math
+
+Code to solve
+
 
 
 
