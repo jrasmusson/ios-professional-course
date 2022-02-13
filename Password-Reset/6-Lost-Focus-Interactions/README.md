@@ -334,17 +334,61 @@ extension ViewController: PasswordTextFieldDelegate {
 }
 ```
 
-
 If we run this now, we should be now see an error message when the user taps the new password text field, and then loses focus.
 
 ![](images/4.png)
 
+### Triggering the red X
+
+There just one more little subtly. When the text field loses focus we want to trigger the red x validation also. To do that we add this line here.
+
+**ViewController**
+
+```swift
+func editingDidEnd(_ sender: PasswordTextField) {
+    if sender === newPasswordTextField {
+        // as soon as we lose focus, make ❌ appear
+        statusView.shouldResetCriteriaTest = false // add
+        
+        _ = newPasswordTextField.validate()
+    }
+}
+```
+
+This line triggers the `statusView` to now toggle between ✅ and ❌ when updating the display. We only what this to occur when the text field loses focus. So we set to `false` here and it stays `false` for as long as this view is displayed.
+
+![](images/6.png)
+
+
+
 
 ## Checking for invalid characters
 
+Now that we have our validation block defined, we can validate whatever we want in there. 
 
+For example, if we wanted to limit what characters someone could type or use for a password and then display an error message, we could do it like this.
 
+**ViewController**
 
+```swift
+// Valid characters
+let validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,@:?!()$\\/#"
+let invalidSet = CharacterSet(charactersIn: validChars).inverted
+guard text.rangeOfCharacter(from: invalidSet) == nil else {
+    self.statusView.reset()
+    return (false, "Enter valid special chars (.,@:?!()$\\/#) with no spaces")
+}
+```
+
+Here we are saying only these characters can be entered, and only with these special characters (which are the same characters we used in our regex for the special char status view check).
+
+![](images/5.png)
+
+## Checking for 3 of 4 critera met
+
+The 3 of 4 critera check is best done in the `PasswordStatusView` because there is where all the information lies required to do that check.
+
+### Challenge 
 
 
 

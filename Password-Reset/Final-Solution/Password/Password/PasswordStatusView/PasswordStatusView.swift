@@ -19,7 +19,7 @@ class PasswordStatusView: UIView {
     let specialCharacterCriteriaView = PasswordCriteriaView(text: "special character (e.g. !@#$%^)")
 
     // Used to determine if we reset criteria back to empty state (⚪️).
-    private var shouldResetCriteria: Bool = true
+    var shouldResetCriteria: Bool = true
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -135,27 +135,44 @@ extension PasswordStatusView {
         }
     }
 
-    @discardableResult func validate() -> Bool {
-        let metCriteria = [uppercaseCriteriaView,
-                           lowerCaseCriteriaView,
-                           digitCriteriaView,
-                           specialCharacterCriteriaView].filter { $0!.isCriteriaMet }
-        let missingCriteria = [uppercaseCriteriaView,
-                               lowerCaseCriteriaView,
-                               digitCriteriaView,
-                               specialCharacterCriteriaView].filter { !$0!.isCriteriaMet }
+//    @discardableResult func validate() -> Bool {
+//        let metCriteria = [uppercaseCriteriaView,
+//                           lowerCaseCriteriaView,
+//                           digitCriteriaView,
+//                           specialCharacterCriteriaView].filter { $0!.isCriteriaMet }
+//        let missingCriteria = [uppercaseCriteriaView,
+//                               lowerCaseCriteriaView,
+//                               digitCriteriaView,
+//                               specialCharacterCriteriaView].filter { !$0!.isCriteriaMet }
+//
+//        guard lengthCriteriaView.isCriteriaMet && metCriteria.count >= 3 else {
+//            // Reassign the value to trigger the ❌ icon if needed
+//            lengthCriteriaView.isCriteriaMet = lengthCriteriaView.isCriteriaMet
+//            missingCriteria.forEach { $0.isCriteriaMet = $0.isCriteriaMet }
+//            shouldResetCriteria = false
+//            return false
+//        }
+//
+//        // ❌ should remain if user went back to edit and meet criteria
+//        if shouldResetCriteria {
+//            missingCriteria.forEach { $0.reset() } // (⚪️)
+//        }
+//
+//        return true
+//    }
 
-        guard lengthCriteriaView.isCriteriaMet && metCriteria.count >= 3 else {
-            // Reassign the value to trigger the ❌ icon if needed
-            lengthCriteriaView.isCriteriaMet = lengthCriteriaView.isCriteriaMet
-            missingCriteria.forEach { $0.isCriteriaMet = $0.isCriteriaMet }
-            shouldResetCriteria = false
+    func validate(_ text: String) -> Bool {
+        let uppercaseMet = PasswordCriteria.uppercaseMet(text)
+        let lowercaseMet = PasswordCriteria.lowercaseMet(text)
+        let digitMet = PasswordCriteria.digitMet(text)
+        let specialCharacterMet = PasswordCriteria.specialCharacterMet(text)
+
+        let checkable = [uppercaseMet, lowercaseMet, digitMet, specialCharacterMet]
+        let metCriteria = checkable.filter { $0 }
+        let lengthAndNoSpaceMet = PasswordCriteria.lengthAndNoSpaceMet(text)
+        
+        guard lengthAndNoSpaceMet && metCriteria.count >= 3 else {
             return false
-        }
-
-        // ❌ should remain if user went back to edit and meet criteria
-        if shouldResetCriteria {
-            missingCriteria.forEach { $0.reset() } // (⚪️)
         }
 
         return true
@@ -167,17 +184,5 @@ extension PasswordStatusView {
         lowerCaseCriteriaView.reset()
         digitCriteriaView.reset()
         specialCharacterCriteriaView.reset()
-    }
-}
-
-// MARK: Tests
-extension PasswordStatusView {
-    var shouldResetCriteriaTest: Bool {
-        get {
-            shouldResetCriteria
-        }
-        set {
-            shouldResetCriteria = newValue
-        }
     }
 }

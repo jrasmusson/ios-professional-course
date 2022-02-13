@@ -77,7 +77,7 @@ extension ViewController {
             
             // Criteria met
             self.statusView.updateDisplay(text)
-            if !self.statusView.validate() {
+            if !self.statusView.validate(text) {
                 return (false, "Your password must meet the requirements below")
             }
             
@@ -148,6 +148,9 @@ extension ViewController: PasswordTextFieldDelegate {
 
     func editingDidEnd(_ sender: PasswordTextField) {
         if sender === newPasswordTextField {
+            // as soon as we lose focus, make ❌ appear
+            statusView.shouldResetCriteria = false
+            
             _ = newPasswordTextField.validate()
         }
     }
