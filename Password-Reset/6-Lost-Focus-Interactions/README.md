@@ -155,46 +155,24 @@ Demo and explain how:
 - that function will be defined as a variable
 - and then pass in different functions depending on whether we are setting up the new password text field, or the confirm password text field
 
-## Swift review - functions as types
+Now there may be some parts of this solution that are going to seem down right confusing - especially the part when it comes to definining and passing around variables as functions.
 
-Explain and demo how functions are actually types in Swift. We can use them to represent variables, and even pass to other functions.
+To prepare you, let's first review a few fundamentals about functions and the Swift language, and then come back and review the proposed solution.
+
+##  📖 Swift fundamentals - Functions as types
+
+Open up Swift function playground and walk students through:
+
+- what Swift functions are
+- how they work
+- how they can be defined and passed around as variables
+
+Then take them to the arcade and see if they can reach a new highscore.
 
 
+## Defining a function for our loss of focus validation
 
-
-
-
-
-# OLD
-
-## How do you make something reuseable?
-
-Reuse in software is great because it let's you take one thing, and the reuse it in multiple different circumstances.
-
-What we want to do here, is we want to reuse our `PasswordTextField` for two different sitations:
-
-- One set of validation rules for new password
-- And another for re-enter password
-
-But how can we do that? How can we make one text field behave one way, and the other another?
-
-There are many different ways we could solve this (protocol-delegate, passing in something through the constructor).
-
-But I want to show you another way you may not have seen before - and that is by passing in a function.
-
-### Passing functions
-
-Passing around functions isn't something we do a lot of in most programming languages. The sytax is often confusing. It can make the code harder to read. 
-
-But in Swift, which is a hybrid between Object-Oriented and functional, functions or closures passing is much more prevalent, and much easier to use.
-
-Let's start with a quick crash course in function passing. And see how this works in Swift.
-
-- Demo how to pass functions in Swift and the syntax that makes this all work.
-
-## Custom validation for our text field
-
-Now that we see how to define and pass closures, let's leverage that and define a `CustomValidation` closure for our `PasswordTextField`.
+Here is the `alias` of the message signature we are going to use to define the text validation for our password field
 
 **PasswordTextField**
 
@@ -210,37 +188,27 @@ class PasswordTextField: UIView {
     typealias CustomValidation = ((_ textValue: String?) -> (Bool, String)?)
 ```
 
-This is an `alias`. And while we haven't talked about these before, this is a really handy way of defining a big long class, structure, or function, in a much more easy to read and understand way.
+We will then represent this function as a variable.
 
-This alias basically describes our text fields validation type. It says if you ever want to refer to a closure of this type, your can simply type:
-
-- `CustomValidation`, instead of
-- `((_ textValue: String?) -> (Bool, String)?)`
-
-which is much harder to read.
-
-So with this type now defined, we can use that to represent a variable.
 
 **PasswordTextField**
 
 ```swift
 let placeHolderText: String
-var customValidation: CustomValidation?
+var customValidation: CustomValidation? // add
 weak var delegate: PasswordTextFieldDelegate?
+```
 
+And define a convenience computed variable to fetch the text field's text.
+
+```swift
 var text: String? {
     get { return textField.text }
     set { textField.text = newValue }
 }
 ```
 
-That's right. Closures can be represented as variables. And here we are defining an optional one to represent the validation rules for this text field.
-
-This is how we are achieving the reuse. We are defining a type. We are going to let anyone pass in here anything they want. And when we execute it, it is going to return us a `Bool`, along with a `String` representing a possible error message.
-
-Don't worry if this is all still confusing. Stay with me. Shortly you will see how this works.
-
-Next let's define the validate method we are going to call when the text field loses focus.
+So now that we have this validation function variable defined, we need a way of calling it. This is where our `validate` function comes in. This is what we are going to call from our view controller.
 
 **PasswordTextField**
 
@@ -270,39 +238,46 @@ extension PasswordTextField {
 }
 ```
 
-On the surface this function is very simple. If there is an error in the validation closure, we make visible and show the text on the error. If not we reset and hide.
+- Explain the above code and the optional unwrapping.
 
-But there is a lot going on in that if statement. Let's unpack it (discuss).
-
-OK. So with our validation closure now setup and define, all we need now is to use it.
-
-Let's head back over to our view controller. And set that up.
+With this defined we now just need to pass in, or define the rules for each text fields validation on the text.
 
 ## Adding validation rule for empty text
 
-Because we are going to be doing some setup on these controls I'd first like to define a `setup` method.
+The view controller is where we are going to define the different validations rules for each text field.
+
+For our new password text field we are going to check for:
+
+- empty text
+- valid characters
+- 3 of 4 criteria met
+
+For our confirm password text field we'll look for:
+
+- empty text
+- passwords not matching
+
+So different rules for different text fields.
+
+Let's take these one at a time, starting with empty text on the new password text field.
+
+Because we are going to be doing some setup on these controls I'd first like to define an alias for the validation we are going to be setting, along with a method to help set that up.
 
 **ViewController**
 
 ```swift
 class ViewController: UIViewController {
     typealias CustomValidation = PasswordTextField.CustomValidation
-
-
-style()
-setup() // add
-layout()
 ```
 
 And then in there I'd like to setup the new text field.
 
 **ViewController**
 
-```swift
-func style() { ... }
-    
+```swift    
 private func setup() {
     setupNewPassword()
+    setupDismissKeyboardGesture()
 }
 ```
 
@@ -326,15 +301,9 @@ private func setupNewPassword() {
 }
 ```
 
-What this is doing is setting the custom validation rules for our text field. This may not seem obvious at first but there are multiple validations occurring in the app:
+Here we check for empty text and return an error if empty text is detected, or true with no error message if it is not.
 
-First we have the validations that occur as the user is typing - those update the status view.
-
-Then we have the validations that occur when the users losts focus - those update the status and the error label on the text field.
-
-This validation we just define here in this closure is updating that error field. By returning a tuple (that we defined as part of our closure) we are enabling any component to decide what error to return and when, in a generic reusable way.
-
-In the event that something goes wrong we also want to reset the status view. We can do that like this:
+We can also reset the status view like this.
 
 **PasswordStatusView**
 
@@ -348,14 +317,32 @@ func reset() {
 }
 ```
 
-Last but not least, we need to trigger this validation by 
+With the heavy lifting done, we now just need to trigger this validation when the text field loses focus. Which we can do in our delegate callback here:
+
+**ViewController**
+
+```swift
+// MARK: PasswordTextFieldDelegate
+extension ViewController: PasswordTextFieldDelegate {
+    func editingChanged(_ sender: PasswordTextField) { ... }
+    
+    func editingDidEnd(_ sender: PasswordTextField) {
+        if sender === newPasswordTextField {
+            _ = newPasswordTextField.validate()
+        }
+    }
+}
+```
 
 
-If we run this now, we should be able to lose focus, and trigger an error label update in the event the new password text field is blank.
+If we run this now, we should be now see an error message when the user taps the new password text field, and then loses focus.
+
+![](images/4.png)
 
 
+## Checking for invalid characters
 
-### Challenge 🕹 Adding validation rules for other
+
 
 
 
