@@ -388,7 +388,70 @@ Here we are saying only these characters can be entered, and only with these spe
 
 The 3 of 4 critera check is best done in the `PasswordStatusView` because there is where all the information lies required to do that check.
 
-### Challenge 
+### Challenge 🕹
+
+Given then following validation code:
+
+**PasswordStatusView**
+
+```swift
+func validate(_ text: String) -> Bool {
+    let uppercaseMet = PasswordCriteria.uppercaseMet(text)
+    let lowercaseMet = PasswordCriteria.lowercaseMet(text)
+    let digitMet = PasswordCriteria.digitMet(text)
+    let specialCharacterMet = PasswordCriteria.specialCharacterMet(text)
+
+    // Ready Player1 🕹
+    // Check for 3 of 4 criteria here...
+    
+    return true
+}
+```
+
+How would you check to see if 3 of the 4 criteria have been met. It's slightly harder than you think. But once you see the solution, it will seem trivial.
+
+Good luck!
+
+### Solution ✅
+
+The trick to checking things like this is to put the data into a state where you can check the state of each variable easily. So let's throw all of these criteria into an array.
+
+```swift
+let checkable = [uppercaseMet, lowercaseMet, digitMet, specialCharacterMet]
+```
+
+Then the question becomes - how can we check each element of the array to see which is `true` and which is `false`?
+
+That we can do with `filter`:
+
+```swift
+let metCriteria = checkable.filter { $0 }
+```
+
+No that we know how many critera are met (the `count` of the array`), we can combine this with our space length check, and bring it all together like this:
+
+**PasswordStatusView**
+
+```swift
+func validate(_ text: String) -> Bool {
+    let uppercaseMet = PasswordCriteria.uppercaseMet(text)
+    let lowercaseMet = PasswordCriteria.lowercaseMet(text)
+    let digitMet = PasswordCriteria.digitMet(text)
+    let specialCharacterMet = PasswordCriteria.specialCharacterMet(text)
+
+    let checkable = [uppercaseMet, lowercaseMet, digitMet, specialCharacterMet]
+    let metCriteria = checkable.filter { $0 }
+    let lengthAndNoSpaceMet = PasswordCriteria.lengthAndNoSpaceMet(text)
+    
+    if lengthAndNoSpaceMet && metCriteria.count >= 3 {
+        return true
+    }
+
+    return false
+}
+```
+
+Really nice. Quite terse and readable.
 
 
 

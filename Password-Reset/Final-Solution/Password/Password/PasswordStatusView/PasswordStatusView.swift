@@ -135,32 +135,6 @@ extension PasswordStatusView {
         }
     }
 
-//    @discardableResult func validate() -> Bool {
-//        let metCriteria = [uppercaseCriteriaView,
-//                           lowerCaseCriteriaView,
-//                           digitCriteriaView,
-//                           specialCharacterCriteriaView].filter { $0!.isCriteriaMet }
-//        let missingCriteria = [uppercaseCriteriaView,
-//                               lowerCaseCriteriaView,
-//                               digitCriteriaView,
-//                               specialCharacterCriteriaView].filter { !$0!.isCriteriaMet }
-//
-//        guard lengthCriteriaView.isCriteriaMet && metCriteria.count >= 3 else {
-//            // Reassign the value to trigger the ❌ icon if needed
-//            lengthCriteriaView.isCriteriaMet = lengthCriteriaView.isCriteriaMet
-//            missingCriteria.forEach { $0.isCriteriaMet = $0.isCriteriaMet }
-//            shouldResetCriteria = false
-//            return false
-//        }
-//
-//        // ❌ should remain if user went back to edit and meet criteria
-//        if shouldResetCriteria {
-//            missingCriteria.forEach { $0.reset() } // (⚪️)
-//        }
-//
-//        return true
-//    }
-
     func validate(_ text: String) -> Bool {
         let uppercaseMet = PasswordCriteria.uppercaseMet(text)
         let lowercaseMet = PasswordCriteria.lowercaseMet(text)
@@ -171,11 +145,11 @@ extension PasswordStatusView {
         let metCriteria = checkable.filter { $0 }
         let lengthAndNoSpaceMet = PasswordCriteria.lengthAndNoSpaceMet(text)
         
-        guard lengthAndNoSpaceMet && metCriteria.count >= 3 else {
-            return false
+        if lengthAndNoSpaceMet && metCriteria.count >= 3 {
+            return true
         }
 
-        return true
+        return false
     }
 
     func reset() {
