@@ -36,3 +36,12 @@ hasAnyMatches(list: numbers, condition: lessThanTen)
 //   [20, 19, 12]    => false
 
 // Learn more 🕹 https://www.udemy.com/course/level-up-in-swift/?referralCode=98AA1A570E12A5A180C3
+
+func betweenOneAndTen(number: Int) -> Bool {
+    return number >= 1 && number <= 10
+}
+
+hasAnyMatches(list: [2,3,4], condition: betweenOneAndTen) // true
+hasAnyMatches(list: [0, 11], condition: betweenOneAndTen) // false
+hasAnyMatches(list: [1, 11], condition: betweenOneAndTen) // true
+hasAnyMatches(list: [0, 10], condition: betweenOneAndTen) // true
