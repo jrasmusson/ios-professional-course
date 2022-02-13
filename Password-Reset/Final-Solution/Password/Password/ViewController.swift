@@ -54,6 +54,7 @@ extension ViewController {
     private func setup() {
         setupNewPassword()
         setupConfirmPassword()
+        setupDismissKeyboardGesture()
         setupKeyboardHiding()
     }
  
@@ -103,6 +104,17 @@ extension ViewController {
         confirmPasswordTextField.delegate = self
     }
 
+    private func setupDismissKeyboardGesture() {
+        let dismissKeyboardTap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_: )))
+        view.addGestureRecognizer(dismissKeyboardTap)
+    }
+    
+    @objc func viewTapped(_ recognizer: UITapGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizer.State.ended {
+            view.endEditing(true) // resign first responder
+        }
+    }
+    
     private func setupKeyboardHiding() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)

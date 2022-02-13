@@ -1,22 +1,171 @@
-# Lost focus Interactions
+# Loss of focus Interaction
 
 In this section we tackle the second set of interactions we need to account for when the user enters their password - loss of focus on the text field.
 
-![](images/0.png)
+![](images/0a.png)
 
 Here we want to:
 
-- trigger additional custom validation on each text field
+- trigger additional custom validation on each text field (error label)
 - check whether that 3 of 4 criteria have been met
 
 ![](images/1.png)
 
-And we wanto to do all this in a way that let's us:
+## Detecting the loss of focus
 
-- reuse the same text field  for both password components
-- makes it easy to unit test after
+Let's start by first detecting when the text field loses focus.
 
-Let's start by adding the custom validation on the text fields, and then deal with the 3 of 4 criteria check after.
+**PasswordTextField**
+
+```swift
+// MARK: - UITextFieldDelegate
+extension PasswordTextField: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("foo - textFieldDidEndEditing: \(textField.text)")
+    }
+
+    // Called when 'return' key pressed. Necessary for dismissing keyboard.
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("foo - textFieldShouldReturn")
+        textField.endEditing(true) // resign first responder
+        return true
+    }
+}
+```
+
+These are the `UITextField` delegates we need to register for in order to detect when the text field loses focus.
+
+We can test there are working by:
+
+- running the app, entering text, and tapping on the other text field
+- typing text in via the keyboard and pressing return
+
+## Dismissing the keyboard with a tap gesture 
+
+It would be nice if our users could more easily dismiss the keyboard by tapping anywhere on the screen.
+
+Let's add a gesture recognizer that resigns whatever is currently the first responder, and dismisses the keyboard with a single tap.
+
+**ViewController**
+
+```swift
+setup()
+style()
+layout()
+
+private func setup() {
+    setupDismissKeyboardGesture()
+}
+
+private func setupDismissKeyboardGesture() {
+    let dismissKeyboardTap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_: )))
+    view.addGestureRecognizer(dismissKeyboardTap)
+}
+    
+@objc func viewTapped(_ recognizer: UITapGestureRecognizer) {
+    if recognizer.state == UIGestureRecognizer.State.ended {
+        view.endEditing(true) // resign first responder
+    }
+}
+```
+
+Discussion:
+
+- explain what gestures are
+- explain how tap gesture works
+
+## Communicating back view protocol-delegate
+
+Let's know send our captured loss of focus text back via the protocol delegate.
+
+### Challenge 🕹
+
+Adds this function to our protocol delegate
+
+**PasswordTextField**
+
+```swift
+protocol PasswordTextFieldDelegate: AnyObject {
+    func editingChanged(_ sender: PasswordTextField)
+    func editingDidEnd(_ sender: PasswordTextField) // add
+}
+```
+
+and print out the text entered into our password text field from within our view controller.
+
+Good luck!
+
+### Solution ✅
+
+Add the function.
+
+**PasswordTextField**
+
+```swift
+protocol PasswordTextFieldDelegate: AnyObject {
+    func editingChanged(_ sender: PasswordTextField)
+    func editingDidEnd(_ sender: PasswordTextField) // add
+}
+```
+
+Call the delegate when the editting ends. Delete old print statements.
+
+**PasswordTextField**
+
+```swift
+// MARK: - UITextFieldDelegate
+extension PasswordTextField: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        delegate?.editingDidEnd(self)
+    }
+
+    // Called when 'return' key pressed. Necessary for dismissing keyboard.
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true) // resign first responder
+        return true
+    }
+}
+```
+
+Implement and print result in the view controller.
+
+**ViewController**
+
+```swift
+func editingDidEnd(_ sender: PasswordTextField) {
+    print("foo - editingDidEnd: \(sender.textField.text)")
+}
+```
+
+![](images/2.png)
+
+Good stuff. At this point we've detected the loss of focus and sent that text back to our view controller. 
+
+## How the validation logic is going to work
+
+![](images/3.png)
+
+Walk people through how this is going to work. 
+
+Demo and explain how:
+
+- this validation logic is about updating the error label and doing the 3 of 4 check
+- each text field will have slightly different rules
+- we are going to capture those rules in validation function
+- that function will be defined as a variable
+- and then pass in different functions depending on whether we are setting up the new password text field, or the confirm password text field
+
+## Swift review - functions as types
+
+Explain and demo how functions are actually types in Swift. We can use them to represent variables, and even pass to other functions.
+
+
+
+
+
+
+
+# OLD
 
 ## How do you make something reuseable?
 
