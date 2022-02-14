@@ -558,29 +558,10 @@ func editingDidEnd(_ sender: PasswordTextField) {
 
 And now our confirm password text field is configured too.
 
-## Dealing with the keyboard
+### 💾 Save your work
 
-We've been a bit sloppy in how we've been testing app. As a way of convenience we've been entering text directly into the text field by tying directly on my keyboard.
-
-This is great for prototyping. But it's not how our users will be using the app.
-
-> To flip between computer and simulator key board entry type `Shift+Command+K`.
-
-If we flip to showing the keyboard on the phone, and start entering text on our custom text field, watch what happens. Our text field is completely hidden by the display.
-
-Let's now address that and done what is almost a right of passage for any professional iOS developer - learn how to adjust the display based on the appearance of the keyboard.
-
-Discusson:
-
-- explain how the keyboard works
-- explain how we are going to solve the problem
-
-Image
-
-- before after keyboard math
-
-Code to solve
-
-
-
+```
+> git add -p
+> git commit -m "feat: add loss of focus interactions"
+```
 
