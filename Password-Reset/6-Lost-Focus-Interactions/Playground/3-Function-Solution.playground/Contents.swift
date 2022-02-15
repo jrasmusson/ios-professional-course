@@ -28,12 +28,14 @@ func lessThanTen(number: Int) -> Bool {
 var numbers = [20, 19, 7, 12]
 hasAnyMatches(list: numbers, condition: lessThanTen)
 
-// - Ready Player 1 🕹
-//
-//   Write a function for above matchers ther returns true if any numbers are between 1 and 10 (inclusive).
-//
-//   [20, 19, 7, 12] => true because of the 7
-//   [20, 19, 12]    => false
+/*
+   Ready Player 1 🕹
+
+   Write a function that returns true if any numbers are between 1 and 10 (inclusive).
+
+   [20, 19, 7, 12] => true because of the 7
+   [20, 19, 12]    => false
+*/
 
 // Learn more 🕹 https://www.udemy.com/course/level-up-in-swift/?referralCode=98AA1A570E12A5A180C3
 

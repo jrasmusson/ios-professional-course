@@ -141,6 +141,7 @@ extension PasswordStatusView {
         let digitMet = PasswordCriteria.digitMet(text)
         let specialCharacterMet = PasswordCriteria.specialCharacterMet(text)
 
+        // Ready Player1 🕹
         let checkable = [uppercaseMet, lowercaseMet, digitMet, specialCharacterMet]
         let metCriteria = checkable.filter { $0 }
         let lengthAndNoSpaceMet = PasswordCriteria.lengthAndNoSpaceMet(text)

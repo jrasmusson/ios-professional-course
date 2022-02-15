@@ -40,11 +40,15 @@ We can test there are working by:
 - running the app, entering text, and tapping on the other text field
 - typing text in via the keyboard and pressing return
 
+### Making the keyboard appear and disappear
+
+- Show how to make the keyboard appear (`Shift + Command + K`)
+
 ## Dismissing the keyboard with a tap gesture 
 
 It would be nice if our users could more easily dismiss the keyboard by tapping anywhere on the screen.
 
-Let's add a gesture recognizer that resigns whatever is currently the first responder, and dismisses the keyboard with a single tap.
+Let's add a gesture recognizer that resigns whatever is currently the first responder, and dismisses the keyboard with a single tap one the view.
 
 **ViewController**
 
@@ -63,9 +67,7 @@ private func setupDismissKeyboardGesture() {
 }
     
 @objc func viewTapped(_ recognizer: UITapGestureRecognizer) {
-    if recognizer.state == UIGestureRecognizer.State.ended {
-        view.endEditing(true) // resign first responder
-    }
+    view.endEditing(true) // resign first responder
 }
 ```
 
@@ -91,7 +93,29 @@ protocol PasswordTextFieldDelegate: AnyObject {
 }
 ```
 
-and print out the text entered into our password text field from within our view controller.
+Fire it here:
+
+```swift
+// MARK: - UITextFieldDelegate
+extension PasswordTextField: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // fire it here
+    }
+}
+```
+
+and print out the text in our view controller:
+
+**ViewController**
+
+```swift
+// MARK: PasswordTextFieldDelegate
+extension ViewController: PasswordTextFieldDelegate {
+   func editingDidEnd(_ sender: PasswordTextField) {
+       // print
+   }
+}
+```
 
 Good luck!
 
@@ -133,7 +157,7 @@ Implement and print result in the view controller.
 
 ```swift
 func editingDidEnd(_ sender: PasswordTextField) {
-    print("foo - editingDidEnd: \(sender.textField.text)")
+    print("foo - ViewController editingDidEnd: \(sender.textField.text)")
 }
 ```
 
@@ -170,7 +194,7 @@ Open up Swift function playground and walk students through:
 Then take them to the arcade and see if they can reach a new highscore.
 
 
-## Defining a function for our loss of focus validation
+## Defining an alias for our validation variable
 
 Here is the `alias` of the message signature we are going to use to define the text validation for our password field
 
@@ -185,7 +209,7 @@ class PasswordTextField: UIView {
      - Parameter: textValue: The value of text to validate
      - Returns: A Bool indicating whether text is valid, and if not a String containing an error message
      */
-    typealias CustomValidation = ((_ textValue: String?) -> (Bool, String)?)
+    typealias CustomValidation = (_ textValue: String?) -> (Bool, String)?
 ```
 
 We will then represent this function as a variable.
@@ -213,6 +237,8 @@ So now that we have this validation function variable defined, we need a way of 
 **PasswordTextField**
 
 ```swift
+// typealias CustomValidation = (_ textValue: String?) -> (Bool, String)?
+
 // MARK: - Validation
 extension PasswordTextField {
     func validate() -> Bool {
@@ -342,12 +368,6 @@ If we run this now, we should be now see an error message when the user taps the
 
 There just one more little subtly. When the text field loses focus we want to trigger the red x validation also. To do that we add this line here.
 
-**PasswordTextField**
-
-```swift
-var shouldResetCriteria: Bool = true
-```
-
 **ViewController**
 
 ```swift
@@ -390,8 +410,6 @@ extension PasswordStatusView {
 ![](images/6a.png)
 
 
-
-
 ## Checking for invalid characters
 
 Now that we have our validation block defined, we can validate whatever we want in there. 
@@ -416,11 +434,33 @@ Here we are saying only these characters can be entered, and only with these spe
 
 ## Checking for 3 of 4 critera met
 
-The 3 of 4 critera check is best done in the `PasswordStatusView` because there is where all the information lies required to do that check.
+To check whether 3 of the 4 criteria have been met we are going to want to call update on our status view:
 
-### Challenge 🕹
+**ViewController**
 
-Given then following validation code:
+```swift
+private func setupNewPassword() {
+    let newPasswordValidation: CustomValidation = { text in
+        
+        // Empty text
+        
+        // Valid characters
+        
+        // Criteria met
+        self.statusView.updateDisplay(text)
+        if !self.statusView.validate(text) {
+            return (false, "Your password must meet the requirements below")
+        }
+        
+        return (true, "")
+    }
+    
+    newPasswordTextField.customValidation = newPasswordValidation
+}
+```
+
+And then define a `validate` function there also to determine how many criteria have been met.
+
 
 **PasswordStatusView**
 
@@ -434,11 +474,18 @@ func validate(_ text: String) -> Bool {
     // Ready Player1 🕹
     // Check for 3 of 4 criteria here...
     
-    return true
+    return false
 }
 ```
 
-How would you check to see if 3 of the 4 criteria have been met. It's slightly harder than you think. But once you see the solution, it will seem trivial.
+
+### Challenge 🕹
+
+Given the above validation code, think for a minute about how you would:
+
+- Check to see if 3 of the 4 criteria have been met. 
+
+Give the some thought. Imagine or pseudo code how you would do this in your mind. Then come back and I will show you an really elegant nice way without having to write a tonne of code.
 
 Good luck!
 
@@ -485,28 +532,6 @@ Really nice. Quite terse and readable.
 
 We can now use this in our view controller like this:
 
-**ViewController**
-
-```swift
-private func setupNewPassword() {
-    let newPasswordValidation: CustomValidation = { text in
-        
-        // Empty text
-        
-        // Valid characters
-        
-        // Criteria met
-        self.statusView.updateDisplay(text)
-        if !self.statusView.validate(text) {
-            return (false, "Your password must meet the requirements below")
-        }
-        
-        return (true, "")
-    }
-    
-    newPasswordTextField.customValidation = newPasswordValidation
-}
-```
 
 ![](images/7.png)
 
@@ -557,6 +582,10 @@ func editingDidEnd(_ sender: PasswordTextField) {
 ```
 
 And now our confirm password text field is configured too.
+
+![](images/8.png)
+
+![](images/8.png)
 
 ### 💾 Save your work
 

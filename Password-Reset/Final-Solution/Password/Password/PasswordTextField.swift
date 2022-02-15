@@ -21,7 +21,7 @@ class PasswordTextField: UIView {
      - Parameter: textValue: The value of text to validate
      - Returns: A Bool indicating whether text is valid, and if not a String containing an error message
      */
-    typealias CustomValidation = ((_ textValue: String?) -> (Bool, String)?)
+    typealias CustomValidation = (_ textValue: String?) -> (Bool, String)?
 
     let lockImageView = UIImageView(image: UIImage(systemName: "lock.fill"))
     let textField = UITextField()
