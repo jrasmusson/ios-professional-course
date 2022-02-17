@@ -12,7 +12,8 @@
  and if the condition is met returns true or false.
  */
 
-func hasAnyMatches(list: [Int], condition: (Int) -> Bool) -> Bool {
+typealias longComplicatedExpression = (Int) -> Bool
+func hasAnyMatches(list: [Int], condition: longComplicatedExpression) -> Bool {
     for item in list {
         if condition(item) {
             return true
