@@ -165,7 +165,7 @@ func editingDidEnd(_ sender: PasswordTextField) {
 
 Good stuff. At this point we've detected the loss of focus and sent that text back to our view controller. 
 
-## How the validation logic is going to work
+## How the custom validation logic is going to work
 
 ![](images/3.png)
 
