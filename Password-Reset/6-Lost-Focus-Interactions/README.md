@@ -76,7 +76,7 @@ Discussion:
 - explain what gestures are
 - explain how tap gesture works
 
-## Communicating back view protocol-delegate
+## Communicating back via protocol-delegate
 
 Let's know send our captured loss of focus text back via the protocol delegate.
 
