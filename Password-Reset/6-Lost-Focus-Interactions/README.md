@@ -310,6 +310,8 @@ private func setup() {
 Like this:
 
 ```swift
+// typealias CustomValidation = (_ textValue: String?) -> (Bool, String)?
+
 private func setupNewPassword() {
     let newPasswordValidation: CustomValidation = { text in
         
