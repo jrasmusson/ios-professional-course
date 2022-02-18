@@ -587,7 +587,7 @@ func editingDidEnd(_ sender: PasswordTextField) {
 
 And now our confirm password text field is configured too.
 
-![](images/8.png)
+![](images/9.png)
 
 ![](images/8.png)
 
