@@ -366,51 +366,6 @@ If we run this now, we should be now see an error message when the user taps the
 
 ![](images/4.png)
 
-### Making the red X show up
-
-There just one more little subtly. When the text field loses focus we want to trigger the red x validation also. To do that we add this line here.
-
-**ViewController**
-
-```swift
-func editingDidEnd(_ sender: PasswordTextField) {
-    if sender === newPasswordTextField {
-        // as soon as we lose focus, make ❌ appear
-        statusView.shouldResetCriteria = false // add
-        
-        _ = newPasswordTextField.validate()
-    }
-}
-```
-
-This line triggers the `statusView` to now toggle between ✅ and ❌ when updating the display. We only what this to occur when the text field loses focus. So we set to `false` here and it stays `false` for as long as this view is displayed.
-
-Then to trigger the ❌ we add this logic in the status view here.
-
-**PasswordStatusView**
-
-```swift
-// MARK: Actions
-extension PasswordStatusView {
-    func updateDisplay(_ text: String) {
-    	 ...
-        
-        if shouldResetCriteria {
-			...
-        } else {
-            // Focus lost (✅ or ❌)
-            lengthCriteriaView.isCriteriaMet = lengthAndNoSpaceMet
-            uppercaseCriteriaView.isCriteriaMet = uppercaseMet
-            lowerCaseCriteriaView.isCriteriaMet = lowercaseMet
-            digitCriteriaView.isCriteriaMet = digitMet
-            specialCharacterCriteriaView.isCriteriaMet = specialCharacterMet
-        }
-    }
-}
-```
-
-![](images/6a.png)
-
 
 ## Checking for invalid characters
 
@@ -531,6 +486,53 @@ func validate(_ text: String) -> Bool {
 ```
 
 Really nice. Quite terse and readable.
+
+If we run this now. And set a break point, we'll see it's working. But our red x's aren't showing up.
+
+### Making the red X show up
+
+There just one more little subtly. When the text field loses focus we want to trigger the red x validation also. To do that we add this line here.
+
+**ViewController**
+
+```swift
+func editingDidEnd(_ sender: PasswordTextField) {
+    if sender === newPasswordTextField {
+        // as soon as we lose focus, make ❌ appear
+        statusView.shouldResetCriteria = false // add
+        
+        _ = newPasswordTextField.validate()
+    }
+}
+```
+
+This line triggers the `statusView` to now toggle between ✅ and ❌ when updating the display. We only what this to occur when the text field loses focus. So we set to `false` here and it stays `false` for as long as this view is displayed.
+
+Then to trigger the ❌ we add this logic in the status view here.
+
+**PasswordStatusView**
+
+```swift
+// MARK: Actions
+extension PasswordStatusView {
+    func updateDisplay(_ text: String) {
+    	 ...
+        
+        if shouldResetCriteria {
+			...
+        } else {
+            // Focus lost (✅ or ❌)
+            lengthCriteriaView.isCriteriaMet = lengthAndNoSpaceMet
+            uppercaseCriteriaView.isCriteriaMet = uppercaseMet
+            lowerCaseCriteriaView.isCriteriaMet = lowercaseMet
+            digitCriteriaView.isCriteriaMet = digitMet
+            specialCharacterCriteriaView.isCriteriaMet = specialCharacterMet
+        }
+    }
+}
+```
+
+![](images/6a.png)
 
 We can now use this in our view controller like this:
 
