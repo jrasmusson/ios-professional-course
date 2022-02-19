@@ -146,8 +146,9 @@ extension ViewController: PasswordTextFieldDelegate {
         if sender === newPasswordTextField {
             // as soon as we lose focus, make ❌ appear
             statusView.shouldResetCriteria = false
-            
             _ = newPasswordTextField.validate()
+        } else if sender == confirmPasswordTextField {
+            _ = confirmPasswordTextField.validate()
         }
     }
 }
