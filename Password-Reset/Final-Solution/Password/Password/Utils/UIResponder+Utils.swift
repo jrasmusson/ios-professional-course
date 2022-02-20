@@ -13,7 +13,6 @@ extension UIResponder {
         static weak var responder: UIResponder?
     }
 
-    /// <#Description#>
     /// Finds the current first responder
     /// - Returns: the current UIResponder if it exists
     static func currentFirst() -> UIResponder? {

@@ -83,21 +83,193 @@ We can do better 🚀.
 
 What we are going to do instead is the following:
 
-![](images/2.png)
+![](images/2a.png)
 
 
-## How to determine which element was affected
+## Which element is hidden?
 
-First thing we need to 
+First thing we need to make all this work is we need to:
 
-## How to determine whether it is obstructed by the keyboards view
+1. Figure out the keyboards height.
+2. Figure out which element if the first responder.
 
-## Updating the view dynamically
+The keyboard height we can get from the `sender.userInfo`. And the current first responder we can get from this extension:
+
+**ViewController**
+
+```swift
+guard let userInfo = sender.userInfo,
+      let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+      let currentTextField = UIResponder.currentFirst() as? UITextField else { return }
+      
+print("foo - frame: \(keyboardFrame)")
+```
+
+**UIResponder+Utils**
+
+```swift
+extension UIResponder {
+
+    private struct Static {
+        static weak var responder: UIResponder?
+    }
+
+    /// Finds the current first responder
+    /// - Returns: the current UIResponder if it exists
+    static func currentFirst() -> UIResponder? {
+        Static.responder = nil
+        UIApplication.shared.sendAction(#selector(UIResponder._trap), to: nil, from: nil, for: nil)
+        return Static.responder
+    }
+
+    @objc private func _trap() {
+        Static.responder = self
+    }
+}
+```
+
+Discussion:
+
+- Run the app. 
+- Set a break point.
+- Explain the first responder.
 
 
+## Determining whether the text field is blocked
+
+To determine whether the current text field is blocked we need to calculate:
+
+- the top of the keyboard Y, and 
+- the bottom of the text field Y
+
+And see whether one is greater than the other.
+
+![](images/4.png)
+
+We can get there relative Y positions like this:
+
+**ViewController**
+
+```swift
+// check if the top of the keyboard is above the bottom of the currently focused textbox
+let keyboardTopY = keyboardFrame.cgRectValue.origin.y
+let convertedTextFieldFrame = view.convert(currentTextField.frame, from: currentTextField.superview)
+let textFieldBottomY = convertedTextFieldFrame.origin.y + convertedTextFieldFrame.size.height
+
+// if textField bottom is below keyboard bottom - bump the frame up
+if textFieldBottomY > keyboardTopY {
+	// adjust view up
+}
+```
+
+In this case it is. If the bottom text field is tapped, it's Y value is greater than the keyboards Y value.
+
+> Remember: The origin increasing downwards in iOS.
+
+So if the bottom text field is tapped, that means it's view will be hidden. So we want to bump the view up. But by how much?
+
+## How to convert from one coordinate system to another
+
+One interesting conversion we need to make before we can compare Y coordinates, is we need to convert from the text fields coordinate system, to our current view's coordinate system.
+
+You see the frame of the text field when it first comes back to use is relative to it's native view origin - `(0,0`.
+
+But once we convert it.
+
+We get it relative to the view controllers view.
+
+![](images/5.png)
+
+What this line here is doing here:
+
+``` swift
+let textFieldFrame = view.convert(currentTextField.frame, from: currentTextField.superview)
+```
+
+It is taking the frame of the `currentTextField` and converting it into the frame of the view's text field.
+
+![](images/6.png)
+
+Same text field. Different coordinate system.
+
+Once converted we can then use it in our view height adjustment calculations.
 
 
+## Adjusting the view up
 
+Instead of hardcoding the adjustment for the height, it's nicer if we take have the keyboard height and subtract it from the Y position of the hidden element.
+
+![](images/7.png)
+
+**ViewController**
+
+```swift
+// if textField bottom is below keyboard bottom - bump the frame up
+if textFieldBottomY > keyboardTopY {
+    let textBoxY = convertedTextFieldFrame.origin.y
+    let newFrameY = (textBoxY - keyboardTopY / 2) * -1
+    view.frame.origin.y = newFrameY
+}
+```
+
+Now when the keyboard appears, and just bumps the view controller up just enough to show the hidden text field, without looking too obtuse or obvious.
+
+![](images/8.png)
+
+## Hooking up the reset button
+
+When the reset button is pressed, we want to:
+
+- give up the keyboard
+- validate both text fields
+- show an success alert if both passwords are valid and match
+
+So first we'll comment in the button's target action.
+
+**ViewController**
+
+```swift
+resetButton.addTarget(self, action: #selector(resetPasswordButtonTapped), for: .primaryActionTriggered)
+```
+
+And then we'll add an actions section like this:
+
+**ViewController**
+
+```swift
+// MARK: Actions
+extension ViewController {
+
+    @objc func resetPasswordButtonTapped(sender: UIButton) {
+        view.endEditing(true)
+
+        let isValidNewPassword = newPasswordTextField.validate()
+        let isValidConfirmPassword = confirmPasswordTextField.validate()
+
+        if isValidNewPassword && isValidConfirmPassword {
+            showAlert(title: "Success", message: "You have successfully changed your password.")
+        }
+    }
+
+    private func showAlert(title: String, message: String) {
+        let alert =  UIAlertController(title: "", message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
+        alert.title = title
+        alert.message = message
+        present(alert, animated: true, completion: nil)
+    }
+}
+```
+
+Now when we run the app, and enter in a valid password, a success alert will pop up looking like this.
+
+## 💾 Save your work 
+
+```
+> git add .
+> git commit -m "feat: handle view adjustments for keyboard"
+```
 
 ### Links that help
 

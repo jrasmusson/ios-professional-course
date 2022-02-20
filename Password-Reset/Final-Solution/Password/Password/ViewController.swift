@@ -153,27 +153,6 @@ extension ViewController: PasswordTextFieldDelegate {
     }
 }
 
-// MARK: Actions
-extension ViewController {
-    
-    @objc func resetPasswordButtonTapped(sender: UIButton) {
-        view.endEditing(true)
-        
-        let isValidNewPassword = newPasswordTextField.validate()
-        let isValidConfirmPassword = confirmPasswordTextField.validate()
-        
-        if isValidNewPassword && isValidConfirmPassword {
-            showAlert(title: "Success", message: "You have successfully changed your password.")
-        }
-    }
-    
-    private func showAlert(title: String, message: String) {
-        alert.title = title
-        alert.message = message
-        present(alert, animated: true, completion: nil)
-    }
-}
-
 // MARK: Keyboard
 extension ViewController {
     @objc func keyboardWillShow(sender: NSNotification) {
@@ -183,19 +162,40 @@ extension ViewController {
 
         // check if the top of the keyboard is above the bottom of the currently focused textbox
         let keyboardTopY = keyboardFrame.cgRectValue.origin.y
-        let textFieldFrame = self.view.convert(currentTextField.frame, from: currentTextField.superview)
-        let textFieldBottomY = textFieldFrame.origin.y + textFieldFrame.size.height
+        let convertedTextFieldFrame = view.convert(currentTextField.frame, from: currentTextField.superview)
+        let textFieldBottomY = convertedTextFieldFrame.origin.y + convertedTextFieldFrame.size.height
 
         // if textField bottom is below keyboard bottom - bump the frame up
         if textFieldBottomY > keyboardTopY {
-            let textBoxY = textFieldFrame.origin.y
+            let textBoxY = convertedTextFieldFrame.origin.y
             let newFrameY = (textBoxY - keyboardTopY / 2) * -1
-            self.view.frame.origin.y = newFrameY
+            view.frame.origin.y = newFrameY
         }
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
-        self.view.frame.origin.y = 0
+        view.frame.origin.y = 0
+    }
+}
+
+// MARK: Actions
+extension ViewController {
+
+    @objc func resetPasswordButtonTapped(sender: UIButton) {
+        view.endEditing(true)
+
+        let isValidNewPassword = newPasswordTextField.validate()
+        let isValidConfirmPassword = confirmPasswordTextField.validate()
+
+        if isValidNewPassword && isValidConfirmPassword {
+            showAlert(title: "Success", message: "You have successfully changed your password.")
+        }
+    }
+
+    private func showAlert(title: String, message: String) {
+        alert.title = title
+        alert.message = message
+        present(alert, animated: true, completion: nil)
     }
 }
 
