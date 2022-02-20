@@ -172,17 +172,20 @@ extension ViewController {
         alert.message = message
         present(alert, animated: true, completion: nil)
     }
+}
 
+// MARK: Keyboard
+extension ViewController {
     @objc func keyboardWillShow(sender: NSNotification) {
         guard let userInfo = sender.userInfo,
               let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
               let currentTextField = UIResponder.currentFirst() as? UITextField else { return }
-        
+
         // check if the top of the keyboard is above the bottom of the currently focused textbox
         let keyboardTopY = keyboardFrame.cgRectValue.origin.y
         let textFieldFrame = self.view.convert(currentTextField.frame, from: currentTextField.superview)
         let textFieldBottomY = textFieldFrame.origin.y + textFieldFrame.size.height
-        
+
         // if textField bottom is below keyboard bottom - bump the frame up
         if textFieldBottomY > keyboardTopY {
             let textBoxY = textFieldFrame.origin.y

@@ -1,14 +1,14 @@
 # ⌨️ Dealing with Keyboards
 
-We've been a bit sloppy in how we've been testing app. As a way of convenience we've been entering text directly into the text field by tying directly on my keyboard.
+Keyboards are the #1 mechanism users use for entering text into smart phone device. Their appearance on the screen however can be a little problematic.
 
-This is great for prototyping. But it's not how our users will be using the app.
+In this section we are going to look at:
 
-> To flip between computer and simulator key board entry type `Shift+Command+K`.
+- how to deal with keyboards
+- how to detect their appearance
+- how to update our display
+- how to make their use feel natural and unobtrusive
 
-If we flip to showing the keyboard on the phone, and start entering text on our custom text field, watch what happens. Our text field is completely hidden by the display.
-
-Let's now address that and done what is almost a right of passage for any professional iOS developer - learn how to adjust the display based on the appearance of the keyboard.
 
 ## The challenge
 
@@ -20,31 +20,85 @@ For example when the user taps the re-enter your password text field, the keyboa
 
 But to make matters worse, this only occurs for *some* elements. The top text field for example is perfectly OK. We don't need to make any adjustments here.
 
+Apple describes desirable keyboard interactions like this.
+
+- [HIG Keyboard guidance](https://developer.apple.com/design/human-interface-guidelines/ios/user-interaction/keyboards/)
+
 The solution to this conundrum is to:
 
-- detect which elements are affected
-- shift the entire parent view up a certain amount if they are
+- detect when the keyboard is present
+- update the view if any elements are hidden or blocked
 - do it in such a way that things look good, and the view returns to a normal state when the keyboard is dismisssed
 
 ![](images/1.png)
 
-There are a few more details we will need to work out along the way. Like detecting the presence of the keyboard. And figuring out the position of the element that was tapped so we can determine whether or not it is obscurred (which means we will probably need the height of the keyboard).
+Let's start by detecting the presence of the keyboard.
+
+## Detecting the keyboards presense
+
+First thing we need to do is detect whether the keyboard is even present. And if it is, shift everything up.
+
+**ViewController**
+
+```swift
+private func setup() {
+    setupNewPassword()
+    setupConfirmPassword()
+    setupDismissKeyboardGesture()
+    setupKeyboardHiding() // add
+}
+
+private func setupKeyboardHiding() {
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+}
+
+// MARK: Keyboard
+extension ViewController {
+    @objc func keyboardWillShow(sender: NSNotification) {
+        view.frame.origin.y = view.frame.origin.y - 200
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        view.frame.origin.y = 0
+    }
+}
+```
+
+Detecting the presense of the keyboard is pretty easy. You simple register yourself as an observer for the keyboard appearing and disappearing via `NotificationCenter`.
+
+And then if you want to ensure nothing is blocked or obfuscated, you simply bump the entire view up.
+
+![](images/3.png)
+
+This method of dealing the keyboard is pretty crude. And while it works, I don't recommend it because
+
+- it doesn't adjust to screen size or height
+- it doesn't work with all layouts or views
+- its just a little too crude for professional work
+
+We can do better 🚀.
+
+## Updating the view like a pro
+
+What we are going to do instead is the following:
 
 ![](images/2.png)
 
-But like all things in life, we will make our lives easier by breaking these problems down into smaller little bits, and tackling them one at a time.
 
-This is a fantastic exercise to work through slowly, because by going through this you are going to learn a lot about how view frame and position themselves, along with a host of really cool technologies to aid us on our way.
+## How to determine which element was affected
 
-But let's start with something simple. Let's just detect whether or not a user has tapped a text field element, and the keyboard is on display.
+First thing we need to 
 
-## Making the keyboard appear
+## How to determine whether it is obstructed by the keyboards view
 
-Let's fire up the app, tap one of those text fields, and make the keyboard appear. This is what we want to detect.
+## Updating the view dynamically
 
-If your keyboard doesn't appear don't panic. You may have it setup like I do where you can enter text directly from your keyboard (easier for development and debugging).
 
-To toggle the presence of the onscreen keyboard in the simulator
 
-## Detecting the presense of the keyboard
 
+
+
+### Links that help
+
+[Human Interface Guidelines - Keyboards](https://developer.apple.com/design/human-interface-guidelines/ios/user-interaction/keyboards/)
