@@ -44,4 +44,4 @@ A course for those who would like to work professionally as iOS engineers.
 - [Password Status View](Password-Reset/4-PasswordStatusView/README.md)
 - [Inline Interactions](Password-Reset/5-Inline-Interactions/README.md)
 - [Lost Focus interactions](Password-Reset/6-Lost-Focus-Interactions/README.md)
-- [Dealing With Keyboards](Password-Reset/7-Dealing-With-Keyboards/README.md)
+- [Dealing With Keyboards](Password-Reset/7-Dealing-Keyboards/README.md)
