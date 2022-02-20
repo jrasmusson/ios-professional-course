@@ -98,12 +98,22 @@ The keyboard height we can get from the `sender.userInfo`. And the current first
 **ViewController**
 
 ```swift
-guard let userInfo = sender.userInfo,
-      let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
-      let currentTextField = UIResponder.currentFirst() as? UITextField else { return }
-      
-print("foo - frame: \(keyboardFrame)")
+// MARK: Keyboard
+extension ViewController {
+    @objc func keyboardWillShow(sender: NSNotification) {
+        guard let userInfo = sender.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+              let currentTextField = UIResponder.currentFirst() as? UITextField else { return }
+
+        print("foo - userInfo: \(userInfo)")
+        print("foo - keyboardFrame: \(keyboardFrame)")
+        print("foo - currentTextField: \(currentTextField)")
+    }
+}
 ```
+
+- Create a dir `Utils`
+- Create a new file `UIResponder+Utils.swift`
 
 **UIResponder+Utils**
 
@@ -158,8 +168,11 @@ let textFieldBottomY = convertedTextFieldFrame.origin.y + convertedTextFieldFram
 
 // if textField bottom is below keyboard bottom - bump the frame up
 if textFieldBottomY > keyboardTopY {
-	// adjust view up
+    // adjust view up
 }
+
+print("foo - currentTextFieldFrame: \(currentTextField.frame)")
+print("foo - convertedTextFieldFrame: \(convertedTextFieldFrame)")
 ```
 
 In this case it is. If the bottom text field is tapped, it's Y value is greater than the keyboards Y value.
@@ -174,13 +187,10 @@ One interesting conversion we need to make before we can compare Y coordinates, 
 
 You see the frame of the text field when it first comes back to use is relative to it's native view origin - `(0,0`.
 
-But once we convert it.
+But once we convert it. We get it relative to the view controllers view.
 
-We get it relative to the view controllers view.
 
-![](images/5.png)
-
-What this line here is doing here:
+That is what this line here is doing here:
 
 ``` swift
 let textFieldFrame = view.convert(currentTextField.frame, from: currentTextField.superview)
