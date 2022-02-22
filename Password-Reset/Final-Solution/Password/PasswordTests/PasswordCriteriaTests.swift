@@ -38,6 +38,14 @@ class PasswordOtherCriteriaTests: XCTestCase {
     func testSpaceNotMet() throws {
         XCTAssertFalse(PasswordCriteria.noSpaceCriteriaMet("a bc"))
     }
+
+    func testLengthAndNoSpaceMet() throws {
+        XCTAssertTrue(PasswordCriteria.lengthAndNoSpaceMet("12345678"))
+    }
+
+    func testLengthAndNoSpaceNotMet() throws {
+        XCTAssertFalse(PasswordCriteria.lengthAndNoSpaceMet("1234567 8"))
+    }
     
     func testUpperCaseMet() throws {
         XCTAssertTrue(PasswordCriteria.uppercaseMet("A"))

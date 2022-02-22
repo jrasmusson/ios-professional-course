@@ -1,6 +1,16 @@
 # ✅ Unit Testing
 
-## Boundary condition tests
+When it comes to unit testing, it's always good to start at the bottom (and test the most detailed things there) and then work your way up to the top, testing different conditions as you go.
+
+Let's start by testing some boundary conditions on `PasswordCriteria` and work our way up from there
+
+## 🕹 Challenge
+
+- Create a new test file: `PasswordCriteriaTests`
+
+Add write some boundary condition checks for the password 8-32 length criteria.
+
+Here is the first test to get you going. Take a stab at filling in the others.
 
 **PasswordCriteriaTests**
 
@@ -18,20 +28,48 @@ class PasswordLengthCriteriaTests: XCTestCase {
     }
 
     func testLong() throws {
-        XCTAssertFalse(PasswordCriteria.lengthCriteriaMet("123456789012345678901234567890123"))
-    }
+        // 🕹
+	}
     
     func testValidShort() throws {
-        XCTAssertTrue(PasswordCriteria.lengthCriteriaMet("12345678"))
+        // 🕹
     }
 
     func testValidLong() throws {
-        XCTAssertTrue(PasswordCriteria.lengthCriteriaMet("12345678901234567890123456789012"))
+        // 🕹
     }
 }
 ```
 
+Movie poster to prevent you from just looking at the answer 😉.
+
+![](images/war.jpg)
+
+## ✅ Solution
+
+**PasswordCriteriaTests**
+
+```swift
+func testLong() throws {
+    XCTAssertFalse(PasswordCriteria.lengthCriteriaMet("123456789012345678901234567890123"))
+}
+    
+func testValidShort() throws {
+    XCTAssertTrue(PasswordCriteria.lengthCriteriaMet("12345678"))
+}
+
+func testValidLong() throws {
+    XCTAssertTrue(PasswordCriteria.lengthCriteriaMet("12345678901234567890123456789012"))
+}
+```
+
 ## Password criteria tests
+
+Something else we could test here is all the other criteria that need to be met:
+
+- no spaces
+
+Here are some tests for spaces
 
 **PasswordCriteriaTests**
 
@@ -43,6 +81,44 @@ class PasswordOtherCriteriaTests: XCTestCase {
     
     func testSpaceNotMet() throws {
         XCTAssertFalse(PasswordCriteria.noSpaceCriteriaMet("a bc"))
+    }
+}
+```
+
+## 🕹 Challenge
+
+Why don't you see if you can write some more for the other criteria we need to check for:
+
+- lengthAndNoSpaceMet
+- uppercaseMet
+- lowercaseMet
+- digitMet
+- specialCharacterMet
+
+Come up with your own naming convention. Think about how many permutations you want to check for in each test. And just practice writing unit tests for various scenarions like the ones above.
+
+Good luck 🚀!
+
+![](images/raiders.jpg)
+
+**PasswordCriteriaTests**
+
+```swift
+class PasswordOtherCriteriaTests: XCTestCase {
+    func testSpaceMet() throws {
+        XCTAssertTrue(PasswordCriteria.noSpaceCriteriaMet("abc"))
+    }
+    
+    func testSpaceNotMet() throws {
+        XCTAssertFalse(PasswordCriteria.noSpaceCriteriaMet("a bc"))
+    }
+
+    func testLengthAndNoSpaceMet() throws {
+        XCTAssertTrue(PasswordCriteria.lengthAndNoSpaceMet("12345678"))
+    }
+
+    func testLengthAndNoSpaceNotMet() throws {
+        XCTAssertFalse(PasswordCriteria.lengthAndNoSpaceMet("1234567 8"))
     }
     
     func testUpperCaseMet() throws {
@@ -79,9 +155,23 @@ class PasswordOtherCriteriaTests: XCTestCase {
 }
 ```
 
-## How to add meaning to your tests with embedded contexts
+Discussion:
 
-To avoid making your unit tests to convoluted or trying to test too many things, embed context in the class name to limit what you are trying to test and to communicate clearer to the reader the context these unit tests are running in.
+- No one way to do this. You could group multiple tests together.
+- Or your could write one test per condition
+- I do both depending on how I feel 
+- What I really shoot for is readability
+- Try to make your tests as readable as possible
+
+## Adding context
+
+To avoid making your unit tests to convoluted or trying to test too many things, break tests up according to their specific test condition or their context.
+
+- Create a new test `PasswordStatusViewTests`
+
+For example let's say we want to test that only ✅ or ⚪️ are displayed in the status view when the user is doing in line validation.
+
+To capture this context, create a specific test class describing the specific context you are trying to test.
 
 **PasswordStatusViewTests**
 
@@ -124,9 +214,17 @@ class PasswordStatusViewTests_ShowCheckmarkOrReset_When_Validation_Is_Inline: XC
 }
 ```
 
+The advantages of doing this are numersou:
+
+1. You make the test clear.
+2. You keep it simple.
+3. It requires less setup.
+4. It's easier to follow.
+
+
 ## 🕹 Challenge 
 
-See if you can write the converse of the above, and test the loss of focus mode where a status view should only flip between: a
+Now you try. See if you can write the converse of the above, and test the loss of focus mode where a status view should only flip between: a
 
 - checkmark ✅, and a
 - red X ❌
@@ -168,7 +266,13 @@ class PasswordStatusViewTests_ShowCheckmarkOrRedX_When_Validation_Is_Loss_Of_Foc
 }
 ```
 
+![](images/empire.jpg)
+
 ## ✅ Solution
+
+There is no one way to do this. So don't worry if you came up with something different.
+
+But here is a new set of test cases for this specific context.
 
 **PasswordStatusViewTests**
 
@@ -207,9 +311,9 @@ class PasswordStatusViewTests_ShowCheckmarkOrRedX_When_Validation_Is_Loss_Of_Foc
 }
 ```
 
-## 🕹 Challenge Unit test this code
+## Unit testing the three of four critiera
 
-Come up with the unit tests for the `PasswordStatusView` three of four check:
+How do you think we should unit test this?
 
 **PasswordStatusView**
 
@@ -233,6 +337,10 @@ func validate(_ text: String) -> Bool {
 }
 ```
 
+## 🕹 Challenge
+
+See if you can come up with the unit tests for the `PasswordStatusView` three of four check:
+
 Figure out:
 
 - what a good set of unit tests would be
@@ -240,9 +348,11 @@ Figure out:
 - how to organize the tests
 - how to test this logic
 
-Do this work in the existing `PasswordStatusViewTests` class.
+Do this work in the existing `PasswordStatusViewTests` class. Call and name these set of tests whatever you want.
 
 Good luck 🚀!
+
+![](images/star.jpg)
 
 ## ✅ Solution
 
@@ -337,22 +447,36 @@ class ViewControllerTests_NewPassword_Validation: XCTestCase {
  - Triggering reset button tap
  - Confirming text is set
 
- ## 🕹 Challenge
+## 🕹 Challenge
  
- See if you can write the other equivalent test cases for:
+See if you can write the other equivalent test cases for:
  
- - invalid password - `Enter valid special chars (.,@:?!()$\\/#) with no spaces`
- - criteria not met - `Your password must meet the requirements below`
- - valid password - No error message
+**ViewControllerTests**
+ 
+```swift
+func testInvalidPassword() throws {
+    // 🕹
+}
 
- Good luck 🚀!
+func testCriteriaNotMet() throws {
+    // 🕹
+}
+
+func testValidPassword() throws {
+    // 🕹
+}
+```
+
+Good luck 🚀!
+
+![](images/alien.jpg)
  
- ## ✅ Solution
+## ✅ Solution
  
- **ViewControllerTests**
+**ViewControllerTests**
  
- ```swift
- func testInvalidPassword() throws {
+```swift
+func testInvalidPassword() throws {
     vc.newPasswordText = "🕹"
     vc.resetPasswordButtonTapped(sender: UIButton())
     
