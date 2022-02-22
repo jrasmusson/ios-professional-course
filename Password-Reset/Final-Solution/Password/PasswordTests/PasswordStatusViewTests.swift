@@ -9,7 +9,7 @@ import XCTest
 
 @testable import Password
 
-class PasswordStatusViewTests_ShouldReset: XCTestCase {
+class PasswordStatusViewTests_ShowCheckmarkOrReset_When_Validation_Is_Inline: XCTestCase {
 
     var statusView: PasswordStatusView!
     let validPassword = "12345678Aa!"
@@ -18,29 +18,60 @@ class PasswordStatusViewTests_ShouldReset: XCTestCase {
     override func setUp() {
         super.setUp()
         statusView = PasswordStatusView()
+        statusView.shouldResetCriteria = true // inline
     }
 
     /*
-     Verify that as the user is typing
-     we flip between ✅ or ⚪️
-     
      if shouldResetCriteria {
          // Inline validation (✅ or ⚪️)
-         lengthAndNoSpaceMet
-             ? lengthCriteriaView.isCriteriaMet = true
-             : lengthCriteriaView.reset()
+     } else {
+         ...
+     }
      */
-    
+
     func testValidPassword() throws {
         statusView.updateDisplay(validPassword)
         XCTAssertTrue(statusView.lengthCriteriaView.isCriteriaMet)
-        XCTAssertTrue(statusView.lengthCriteriaView.isCheckMarkImage)
+        XCTAssertTrue(statusView.lengthCriteriaView.isCheckMarkImage) // ✅
     }
     
     func testTooShort() throws {
         statusView.updateDisplay(tooShort)
         XCTAssertFalse(statusView.lengthCriteriaView.isCriteriaMet)
-        XCTAssertTrue(statusView.lengthCriteriaView.isResetImage)
+        XCTAssertTrue(statusView.lengthCriteriaView.isResetImage) // ⚪️
+    }
+}
+
+class PasswordStatusViewTests_ShowCheckmarkOrRedX_When_Validation_Is_Loss_Of_Focus: XCTestCase {
+
+    var statusView: PasswordStatusView!
+    let validPassword = "12345678Aa!"
+    let tooShort = "123Aa!"
+
+    override func setUp() {
+        super.setUp()
+        statusView = PasswordStatusView()
+        statusView.shouldResetCriteria = false // loss of focus
+    }
+
+    /*
+     if shouldResetCriteria {
+         ...
+     } else {
+         // Focus lost (✅ or ❌)
+     }
+     */
+
+    func testValidPassword() throws {
+        statusView.updateDisplay(validPassword)
+        XCTAssertTrue(statusView.lengthCriteriaView.isCriteriaMet)
+        XCTAssertTrue(statusView.lengthCriteriaView.isCheckMarkImage) // ✅
+    }
+
+    func testTooShort() throws {
+        statusView.updateDisplay(tooShort)
+        XCTAssertFalse(statusView.lengthCriteriaView.isCriteriaMet)
+        XCTAssertTrue(statusView.lengthCriteriaView.isXmarkImage) // ❌
     }
 }
 

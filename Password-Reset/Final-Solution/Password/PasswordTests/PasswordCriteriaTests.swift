@@ -70,5 +70,4 @@ class PasswordOtherCriteriaTests: XCTestCase {
     func testSpecicalCharNotMet() throws {
         XCTAssertFalse(PasswordCriteria.specialCharacterMet("a"))
     }
-
 }
