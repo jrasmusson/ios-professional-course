@@ -75,7 +75,7 @@ class PasswordStatusViewTests_ShowCheckmarkOrRedX_When_Validation_Is_Loss_Of_Foc
     }
 }
 
-class PasswordStatusViewTests_Validate: XCTestCase {
+class PasswordStatusViewTests_Validate_Three_of_Four: XCTestCase {
 
     var statusView: PasswordStatusView!
     let twoOfFour = "12345678A"

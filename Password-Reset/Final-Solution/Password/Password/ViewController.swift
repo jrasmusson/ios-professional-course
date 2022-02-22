@@ -16,11 +16,7 @@ class ViewController: UIViewController {
     let confirmPasswordTextField = PasswordTextField(placeHolderText: "Re-enter new password")
     let resetButton = UIButton(type: .system)
 
-    lazy var alert: UIAlertController = {
-        let alert =  UIAlertController(title: "", message: "", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        return alert
-    }()
+    var alert: UIAlertController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -193,6 +189,11 @@ extension ViewController {
     }
 
     private func showAlert(title: String, message: String) {
+        alert =  UIAlertController(title: "", message: "", preferredStyle: .alert)
+        guard let alert = alert else { return }
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
         alert.title = title
         alert.message = message
         present(alert, animated: true, completion: nil)
