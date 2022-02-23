@@ -167,7 +167,7 @@ Discussion:
 
 To avoid making your unit tests to convoluted or trying to test too many things, break tests up according to their specific test condition or their context.
 
-- Create a new test `PasswordStatusViewTests`
+- Create a new file `PasswordStatusViewTests`
 
 For example let's say we want to test that only ✅ or ⚪️ are displayed in the status view when the user is doing in line validation.
 
@@ -579,6 +579,8 @@ private func showAlert(title: String, message: String) {
 ```
 
 **ViewControllerTests**
+
+- Create a new test file: `ViewControllerTests`
 
 ```swift
 class ViewControllerTests_Show_Alert: XCTestCase {
