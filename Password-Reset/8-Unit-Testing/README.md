@@ -429,6 +429,9 @@ Here at the higher level we want to verify things are connected and properly hoo
 
 Let's start by testing that `Enter your password` gets displayed when a user taps the reset button with an empty text field.
 
+- Create a new file `ViewControllerTests`
+
+
 **ViewControllerTests**
 
 ```swift
@@ -461,8 +464,27 @@ class ViewControllerTests_NewPassword_Validation: XCTestCase {
     }
 }
 ```
+
+Helpers for our unit tests.
+
+**ViewController**
+
+```swift
+// MARK: Tests
+extension ViewController {
+    var newPasswordText: String? {
+        get { return newPasswordTextField.text }
+        set { newPasswordTextField.text = newValue}
+    }
+    
+    var confirmPasswordText: String? {
+        get { return confirmPasswordTextField.text }
+        set { confirmPasswordTextField.text = newValue}
+    }
+}
+```
  
- Discussion:
+Discussion:
  
  - Exposing access to new password text
  - Triggering reset button tap
