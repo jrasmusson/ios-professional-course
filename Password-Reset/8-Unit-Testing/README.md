@@ -214,6 +214,27 @@ class PasswordStatusViewTests_ShowCheckmarkOrReset_When_Validation_Is_Inline: XC
 }
 ```
 
+Add these following helpers to aid us in our tests:
+
+**PasswordStatusView**
+
+```swift
+// MARK: Tests
+extension PasswordCriteriaView {
+    var isCheckMarkImage: Bool {
+        return imageView.image == checkmarkImage
+    }
+
+    var isXmarkImage: Bool {
+        return imageView.image == xmarkImage
+    }
+
+    var isResetImage: Bool {
+        return imageView.image == circleImage
+    }
+}
+```
+
 The advantages of doing this are numersou:
 
 1. You make the test clear.
