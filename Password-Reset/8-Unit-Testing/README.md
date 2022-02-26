@@ -277,7 +277,7 @@ class PasswordStatusViewTests_ShowCheckmarkOrRedX_When_Validation_Is_Loss_Of_Foc
 
     func testValidPassword() throws {
         statusView.updateDisplay(validPassword)
-		// 🕹 Ready Player1
+        // 🕹 Ready Player1
     }
 
     func testTooShort() throws {
@@ -622,8 +622,6 @@ private func showAlert(title: String, message: String) {
 ```
 
 **ViewControllerTests**
-
-- Create a new test file: `ViewControllerTests`
 
 ```swift
 class ViewControllerTests_Show_Alert: XCTestCase {
