@@ -21,6 +21,17 @@ A course for those who would like to work professionally as iOS engineers.
 - [Affordances](Bankey/13-Affordances/README.md)
 - [Error Handling](Bankey/14-Error-Handling/README.md)
 
+## 🛠 Password Reset
+
+- [Intro](Password-Reset/1-Intro/README.md)
+- [Password Text Field](Password-Reset/2-PasswordTextField/README.md)
+- [Password Criteria View](Password-Reset/3-PasswordCriteriaView/README.md)
+- [Password Status View](Password-Reset/4-PasswordStatusView/README.md)
+- [Inline Interactions](Password-Reset/5-Inline-Interactions/README.md)
+- [Lost Focus interactions](Password-Reset/6-Lost-Focus-Interactions/README.md)
+- [Dealing With Keyboards](Password-Reset/7-Dealing-Keyboards/README.md)
+- [Unit Testing](Password-Reset/8-Unit-Testing/README.md)
+
 ## Git
 
 - [Essential Git Commands](Git/README.md)
@@ -36,13 +47,3 @@ A course for those who would like to work professionally as iOS engineers.
 - [Swift Arcade](https://www.youtube.com/channel/UCxnCA5FBYRCFgIZWD0CKCVg/videos)
 - [Shortcut Keys](Additional-Resources/README.md)
 
-#### Password Reset - New Section Coming soon 🚀
-
-- [Intro](Password-Reset/1-Intro/README.md)
-- [Password Text Field](Password-Reset/2-PasswordTextField/README.md)
-- [Password Criteria View](Password-Reset/3-PasswordCriteriaView/README.md)
-- [Password Status View](Password-Reset/4-PasswordStatusView/README.md)
-- [Inline Interactions](Password-Reset/5-Inline-Interactions/README.md)
-- [Lost Focus interactions](Password-Reset/6-Lost-Focus-Interactions/README.md)
-- [Dealing With Keyboards](Password-Reset/7-Dealing-Keyboards/README.md)
-- [Unit Testing](Password-Reset/8-Unit-Testing/README.md)
