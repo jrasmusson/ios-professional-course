@@ -152,18 +152,17 @@ And then adding it to our view and doing Auto Layout just like any other control
 
 ```swift
 private func commonInit() {
-        setupShakeyBell()
-    }
+    setupShakeyBell()
+}
     
-    private func setupShakeyBell() {
-        shakeyBellView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(shakeyBellView)
-        
-        NSLayoutConstraint.activate([
-            shakeyBellView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            shakeyBellView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-    }
+private func setupShakeyBell() {
+    shakeyBellView.translatesAutoresizingMaskIntoConstraints = false
+    addSubview(shakeyBellView)
+    
+    NSLayoutConstraint.activate([
+        shakeyBellView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        shakeyBellView.bottomAnchor.constraint(equalTo: bottomAnchor)
+    ])
 }
 ```
 
