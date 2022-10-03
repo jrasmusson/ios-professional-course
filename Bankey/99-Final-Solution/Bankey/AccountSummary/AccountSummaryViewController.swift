@@ -223,8 +223,11 @@ extension AccountSummaryViewController {
     private func showErrorAlert(title: String, message: String) {
         errorAlert.title = title
         errorAlert.message = message
-        
-        present(errorAlert, animated: true, completion: nil)
+
+        // Don't present one error if another has already been presented
+        if !errorAlert.isBeingPresented {
+            present(errorAlert, animated: true, completion: nil)
+        }
     }
 }
 
