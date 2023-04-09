@@ -745,7 +745,7 @@ Then set the background color of the `AccountSummaryVC` like this.
 ```swift
 private func setupTableView() {
     tableView.backgroundColor = appColor
-``
+```
 
 ### Save work
 
