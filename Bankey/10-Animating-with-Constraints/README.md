@@ -117,8 +117,6 @@ NSLayoutConstraint.activate([
     
 subtitleLeadingAnchor = subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingEdgeOffScreen)
 subtitleLeadingAnchor?.isActive = true
-
-self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
 ```
 
 
