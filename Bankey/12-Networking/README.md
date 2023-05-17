@@ -280,7 +280,7 @@ extension AccountSummaryViewController {
         let vm = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Good morning,",
                                                     name: profile.firstName,
                                                     date: Date())
-        headerViewModel.configure(viewModel: vm)
+        headerView.configure(viewModel: vm)
     }
 }
 ```
