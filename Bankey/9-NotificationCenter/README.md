@@ -24,6 +24,7 @@ lazy var logoutBarButtonItem: UIBarButtonItem = {
 extension AccountSummaryViewController {
     private func setup() {
         setupNavigationBar()
+    }
 
     func setupNavigationBar() {
         navigationItem.rightBarButtonItem = logoutBarButtonItem
